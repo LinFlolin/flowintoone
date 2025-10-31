@@ -3,6 +3,7 @@ import { Slot } from 'expo-router';
 import React from 'react';
 import { ThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useColorScheme } from 'react-native';
+import "../../global.css"
 
 export default function MainLayout() {
   const scheme = useColorScheme();
