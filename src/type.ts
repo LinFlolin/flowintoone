@@ -1,33 +1,33 @@
+// Unified account + profile, linked to auth.users.id (UUID)
+export type Profile = {
+  id: string; // UUID = auth.users.id
+  username?: string | null;
+  fullName?: string | null;
+  avatarUrl?: string | null;
+  bio?: string | null;
+
+  role: "owner" | "customer" | "admin";
+
+  // account fields merged in:
+  plan: "free" | "basic" | "premium" | "enterprise";
+  status: "active" | "inactive" | "suspended" | "cancelled";
+  renewalDate?: string | null;
+  stripeCustomerId?: string | null;
+  notes?: string | null;
+
+  createdAt: string; // timestamptz
+  updatedAt: string; // timestamptz
+};
+
+// Shop now points to Profile.id (UUID)
 export type Shop = {
   id: number;
   name: string;
   address: string;
-  partitaIVA?: string;
-  ownerId: number;
+  partitaIva?: string | null;  // camelCase in TS, snake_case in DB is fine
+  ownerId: string;             // UUID → profiles.id
   category: "artisan" | "shop" | "supplier" | "freelancer";
-  description?: string;
-  image: string;
-  createdAt: string;
-};
-
-export type User = {
-  id: number;
-  username: string;
-  name: string;
-  image: string;
-  bio: string;
-  role: "owner" | "customer" | "admin";
-  createdAt: string;
-};
-
-export type Account = {
-  id: number;
-  userId: number; 
-  plan: "free" | "basic" | "premium" | "enterprise";
-  status: "active" | "inactive" | "suspended" | "cancelled";
-  renewalDate?: string;
-  createdAt: string;
-  updatedAt: string;
-  stripeCustomerId?: string;
-  notes?: string;
+  description?: string | null;
+  image?: string | null;
+  createdAt: string;           // timestamptz
 };

@@ -1,16 +1,41 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, Alert } from "react-native";
 import { Link } from "expo-router";
+import { supabase } from "@/lib/supabase";
 
 export default function SignUpScreen (){
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
 
-  const handleSignUp = () => {
-    console.log("Sign up", { fullName, email, password });
-  };
 
+  const handleSignUp = async () =>{
+    if(!email || !password){
+      Alert.alert('Please check youe email and password');
+      return;
+    }
+    try{
+      setLoading(true);
+      console.log('Log attemt with' , {email})
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+      if (error) Alert.alert(error.message)
+      if (!session) Alert.alert('Please check your inbox for email verification!')
+      setLoading(false);
+
+    }catch(error) {
+      console.log('Log error , something went wrong')
+    }finally {
+      setLoading(false)
+    } 
+
+  }
   return (
     <View className="flex-1 bg-slate-950 px-6 py-12">
       <View className="flex-1 justify-center">
