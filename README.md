@@ -14,7 +14,7 @@ Before starting, install:
 Clone the project and install packages:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/flowintoone.git
+git clone https://github.com/LinFlolin/flowintoone.git
 cd flowintoone
 npm install
 ```
