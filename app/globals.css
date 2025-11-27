@@ -2,14 +2,17 @@
 
 :root {
   --background: #f8f6f0;
+  --Cream : #f8f6f0;
   --Viola:#7217ba;
   --Orange:#f08f00;
   --Green-pastel:#cdd07f;
   --foreground: #171717;
+  --maingradient: linear-gradient(359deg, #F8F4EC 3%, #D8CDB8 34%, #9B9595 60%, #7122B4 100%);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-Cream : var(--Cream);
   --color-Viola: var(--Viola);
   --color-Orange: var(--Orange);
   --color-Green-pastel: var(--Green-pastel);
@@ -19,6 +22,7 @@
   --font-nunito: var(--font-nunito);
 
   --h-screen-minus-1: calc(100vh - 1rem);
+  --maingradient: linear-gradient(359deg, #F8F4EC 3%, #D8CDB8 34%, #9B9595 60%, #7122B4 100%);
 
   
 }
