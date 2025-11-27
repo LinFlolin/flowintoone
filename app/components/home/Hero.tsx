@@ -21,7 +21,7 @@ export default function HeroHome() {
               muted
               playsInline
               preload="metadata"
-              className="md:w-auto md:h-[400px] md:m-2 md:rounded-2xl backdrop-blur-sm "
+              className=" w-screen  md:w-auto md:h-[400px] md:m-2 md:rounded-2xl backdrop-blur-sm "
             >
               <source src="/hero_video.webm" type="video/webm" />
               <source src="/hero_video.mp4" type="video/mp4" />
