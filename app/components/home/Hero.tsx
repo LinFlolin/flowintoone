@@ -1,6 +1,4 @@
-import React from 'react'
-import FadeInOnScroll from "@/ui/FadeInOnScroll";
-
+import FadeInOnScroll from "@app/ui/FadeInOnScroll";
 
 export default function HeroHome() {
   return (
@@ -15,6 +13,7 @@ export default function HeroHome() {
             <a href="/esplora">Esplora Ora</a>
           </button>
         </div>
+        <FadeInOnScroll delay={1000} variant="fade-right">
         <div className="w-auto flex justify-center items-center md:rounded-2xl md:overflow-hidden md:bg-background ">
             <video
               autoPlay
@@ -29,6 +28,7 @@ export default function HeroHome() {
                 Il tuo browser non supporta il video.
             </video>
         </div>
+        </FadeInOnScroll>
       </div>  
   )
 }
