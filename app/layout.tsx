@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import NavigationMenu from "./components/NavigationMenu";
+import { Comfortaa , Nunito } from 'next/font/google'
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+const comfortaa = Comfortaa({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-comfortaa',
+});
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-nunito',
+});
+
 
 export const metadata: Metadata = {
   title: "Flowintoone",
@@ -22,8 +27,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="it">
+      <body className={`${comfortaa.variable} ${nunito.variable}`}>
+        <NavigationMenu />
         {children}
       </body>
     </html>
