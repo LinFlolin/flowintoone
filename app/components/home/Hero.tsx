@@ -13,21 +13,21 @@ export default function HeroHome() {
             <a href="/esplora">Esplora Ora</a>
           </button>
         </div>
-        <FadeInOnScroll delay={1000} variant="fade-right">
-        <div className="w-auto flex justify-center items-center md:rounded-2xl md:overflow-hidden md:bg-background ">
+        <FadeInOnScroll delay={1000}  mobileVariant="none" desktopVariant="fade-up">
+          <div className="w-full flex justify-center items-center md:rounded-2xl md:overflow-hidden md:bg-background">
             <video
               autoPlay
               loop
               muted
               playsInline
               preload="metadata"
-              className=" w-screen  md:w-auto md:h-[400px] md:m-2 md:rounded-2xl backdrop-blur-sm "
+              className="w-full md:w-auto md:h-[400px] md:m-2 md:rounded-2xl backdrop-blur-sm"
             >
               <source src="/hero_video.webm" type="video/webm" />
               <source src="/hero_video.mp4" type="video/mp4" />
-                Il tuo browser non supporta il video.
+              Il tuo browser non supporta il video.
             </video>
-        </div>
+          </div>
         </FadeInOnScroll>
       </div>  
   )

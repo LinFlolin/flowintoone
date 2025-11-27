@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-type Variant =
+type VariantName =
   | "fade-up"
   | "fade-down"
   | "fade-left"
@@ -12,17 +12,28 @@ type Variant =
   | "blur-in"
   | "rotate-in";
 
+// Can be a real animation or "none"
+type Variant = VariantName | "none";
+
 type FadeInOnScrollProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
-  variant?: Variant; // tipo di animazione
+
+  /** Default animation (used if others are null/undefined) */
+  variant?: Variant | null;
+
+  /** Mobile animation (< breakpoint). Use "none" to disable */
+  mobileVariant?: Variant | null;
+
+  /** Desktop animation (>= breakpoint). Use "none" to disable */
+  desktopVariant?: Variant | null;
+
+  /** Tailwind-like breakpoint in px, default 768 */
+  breakpoint?: number;
 };
 
-const variants: Record<
-  Variant,
-  { hidden: string; visible: string }
-> = {
+const variants: Record<VariantName, { hidden: string; visible: string }> = {
   "fade-up": {
     hidden: "opacity-0 translate-y-6",
     visible: "opacity-100 translate-y-0",
@@ -61,11 +72,28 @@ export default function FadeInOnScroll({
   children,
   className = "",
   delay = 0,
-  variant = "fade-up",
+  variant = null,
+  mobileVariant = null,
+  desktopVariant = null,
+  breakpoint = 768,
 }: FadeInOnScrollProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
+  // Detect viewport size
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const update = () => setIsDesktop(window.innerWidth >= breakpoint);
+
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [breakpoint]);
+
+  // Intersection observer (only actually needed when we have animation,
+  // but it's fine to keep it simple)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -84,7 +112,22 @@ export default function FadeInOnScroll({
     return () => observer.disconnect();
   }, []);
 
-  const { hidden, visible } = variants[variant];
+  const fallbackVariant: VariantName = "fade-up";
+
+  const baseVariant: Variant =
+    variant ?? fallbackVariant;
+
+  const currentVariant: Variant =
+    isDesktop === null
+      ? baseVariant
+      : isDesktop
+      ? (desktopVariant ?? baseVariant)
+      : (mobileVariant ?? baseVariant);
+
+  const { hidden, visible } =
+    currentVariant === "none"
+      ? { hidden: "", visible: "" }
+      : variants[currentVariant];
 
   return (
     <div
