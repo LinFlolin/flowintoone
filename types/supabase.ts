@@ -17,29 +17,94 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          created_at: string
           full_name: string | null
           id: string
-          updated_at: string | null
+          notes: string | null
+          plan: string
+          renewal_date: string | null
+          role: string
+          status: string
+          stripe_customer_id: string | null
+          updated_at: string
           username: string | null
-          website: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
           full_name?: string | null
           id: string
-          updated_at?: string | null
+          notes?: string | null
+          plan?: string
+          renewal_date?: string | null
+          role?: string
+          status?: string
+          stripe_customer_id?: string | null
+          updated_at?: string
           username?: string | null
-          website?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
           full_name?: string | null
           id?: string
-          updated_at?: string | null
+          notes?: string | null
+          plan?: string
+          renewal_date?: string | null
+          role?: string
+          status?: string
+          stripe_customer_id?: string | null
+          updated_at?: string
           username?: string | null
-          website?: string | null
         }
         Relationships: []
+      }
+      shops: {
+        Row: {
+          address: string
+          category: string
+          created_at: string
+          description: string | null
+          id: number
+          image: string | null
+          name: string
+          owner_id: string
+          partita_iva: string | null
+        }
+        Insert: {
+          address: string
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          image?: string | null
+          name: string
+          owner_id: string
+          partita_iva?: string | null
+        }
+        Update: {
+          address?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          image?: string | null
+          name?: string
+          owner_id?: string
+          partita_iva?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shops_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
