@@ -2,38 +2,42 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+// Define the possible animation variants type
 type VariantName =
+  | "none"
   | "fade-up"
   | "fade-down"
   | "fade-left"
   | "fade-right"
   | "zoom-in"
   | "zoom-out"
-  | "blur-in"
+  | "blur-in" 
   | "rotate-in";
 
-// Can be a real animation or "none"
 type Variant = VariantName | "none";
+
+// Define the props for the FadeInOnScroll component 
 
 type FadeInOnScrollProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
 
-  /** Default animation (used if others are null/undefined) */
   variant?: Variant | null;
 
-  /** Mobile animation (< breakpoint). Use "none" to disable */
   mobileVariant?: Variant | null;
 
-  /** Desktop animation (>= breakpoint). Use "none" to disable */
   desktopVariant?: Variant | null;
 
-  /** Tailwind-like breakpoint in px, default 768 */
   breakpoint?: number;
 };
 
-const variants: Record<VariantName, { hidden: string; visible: string }> = {
+// Define the animation variants and their corresponding CSS classes
+const variants: Record< VariantName, { hidden: string; visible: string }> = {
+  "none": {
+    hidden: "",
+    visible: "",
+  },
   "fade-up": {
     hidden: "opacity-0 translate-y-6",
     visible: "opacity-100 translate-y-0",
@@ -51,7 +55,7 @@ const variants: Record<VariantName, { hidden: string; visible: string }> = {
     visible: "opacity-100 translate-x-0",
   },
   "zoom-in": {
-    hidden: "opacity-0 scale-90",
+    hidden: "opacity-0 scale-80",
     visible: "opacity-100 scale-100",
   },
   "zoom-out": {
@@ -112,7 +116,7 @@ export default function FadeInOnScroll({
     return () => observer.disconnect();
   }, []);
 
-  const fallbackVariant: VariantName = "fade-up";
+  const fallbackVariant: VariantName = "none";
 
   const baseVariant: Variant =
     variant ?? fallbackVariant;

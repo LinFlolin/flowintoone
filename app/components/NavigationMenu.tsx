@@ -3,14 +3,22 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useScrollTrigger } from "@app/ui/utils/useScrollTrigger";
 
 export default function NavigationMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const scrolled  = useScrollTrigger(5);
 
+  function toggleMenu () {
+    setIsOpen(!isOpen);
+  }
+
+  console.log(isOpen);
   return (
     <>
-      {/* when mobile menu is active it */}
-      <div className="flex justify-between items-center p-4 md:hidden ">
+     <div className={`w-screen fixed z-50 flex justify-between items-center p-2 md:hidden transition-colors duration-500 ${!isOpen && scrolled ? "bg-Cream " : "bg-transparent"}
+      
+      `}>
         <Link href="/">
           <Image
             src="/Logo.png"
@@ -20,19 +28,19 @@ export default function NavigationMenu() {
           />
         </Link>
 
-        {/* BURGER BUTTON */}
-        <button onClick={() => setIsOpen(!isOpen)} className="flex flex-col gap-1">
+        <button onClick={toggleMenu} className="flex flex-col gap-1">
             <span className={`h-0.5 w-6 bg-Viola transition-transform ${isOpen ? "rotate-45 translate-y-1" : ""}`} />
             <span className={`h-0.5 w-6 bg-Viola transition-opacity ${isOpen ? "opacity-0" : "opacity-100"}`} />
             <span className={`h-0.5 w-6 bg-Viola transition-transform ${isOpen ? "-rotate-45 -translate-y-1" : ""}`} />
         </button>
       </div>
-
+      
+    
 
       <nav
         className={
-          `navigation_munu fixed top-0 right-0 z-50 text-white font-bold font-nunito flex flex-col justify-around items-center p-4 shadow-m bg-Green-pastel h-screen w-1/3 transform transition-transform duration-300 
-          ${isOpen ? "translate-x-0" : "translate-x-full"} md:hidden`
+          `md:hidden navigation_munu fixed top-0 right-0 z-50 text-white font-bold font-nunito flex flex-col justify-around items-center p-4 shadow-m bg-Viola h-screen w-1/3 transform transition-transform duration-300 
+          ${isOpen ? "translate-x-0" : "translate-x-full"} `
         }
       >
         <button className="absolute top-4 right-4 text-2xl" onClick={() => setIsOpen(false)}>

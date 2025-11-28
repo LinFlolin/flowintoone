@@ -13,7 +13,7 @@ export default function HeroHome() {
             <a href="/esplora">Esplora Ora</a>
           </button>
         </div>
-        <FadeInOnScroll delay={1000}  mobileVariant="none" desktopVariant="fade-up">
+        <FadeInOnScroll delay={1000}  mobileVariant={null} desktopVariant={null}>
           <div className="w-full flex justify-center items-center md:rounded-2xl md:overflow-hidden md:bg-background">
             <video
               autoPlay
