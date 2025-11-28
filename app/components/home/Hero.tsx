@@ -6,7 +6,7 @@ import FillImage from "@app/ui/FillImage";
 
 export default function HeroHome() {
   return (
-    <div className="bg-linear-to-b from-[#7217ba] from-50% md:from-60% to-[#f8f4ec] md:via-20%  flex flex-col md:flex-row-reverse justify-center items-center  md:h-120  ">
+    <div className="bg-linear-to-b text-Cream from-[#7217ba] from-50% md:from-60% to-[#f8f4ec] md:via-20%  flex flex-col md:flex-row-reverse justify-center items-center  md:h-120  ">
   
         <div className="md:p-1 md:bg-Cream md:rounded-2xl md:shadow-lg md:flex md:items-center md:justify-center">
           <video
