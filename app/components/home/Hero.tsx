@@ -8,17 +8,16 @@ export default function HeroHome() {
   return (
     <div className="bg-linear-to-b text-Cream from-[#7217ba] from-50% md:from-60% to-[#f8f4ec] md:via-20%  flex flex-col md:flex-row-reverse justify-center items-center  md:h-120  ">
   
-        <div className="md:p-1 md:bg-Cream md:rounded-2xl md:shadow-lg md:flex md:items-center md:justify-center">
+        <div className=" md:rounded-2xl md:flex md:items-center md:justify-center">
           <video
             autoPlay
             loop
             muted
             playsInline
             preload="metadata"
-            className="w-full md:w-auto md:h-[400px] md:m-2 md:rounded-2xl backdrop-blur-sm"
+            className="w-full md:border-2 md:w-auto md:h-[400px] md:m-2 md:rounded-2xl md:p-2"
           >
             <source src="/hero_video.webm" type="video/webm" />
-            <source src="/hero_video.mp4" type="video/mp4" />
             Il tuo browser non supporta il video.
           </video>
         </div>
@@ -30,7 +29,7 @@ export default function HeroHome() {
           alt="Flowintoone Logo"
           width={80}
           height={80}
-          className="md:hidden absolute -top-10 bg-Cream rounded-full p-2 place-self-center"
+          className="md:hidden absolute left-50 -top-10 bg-Cream rounded-full p-2 place-self-center"
         />
       </Link>
       </div>

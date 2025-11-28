@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import './swiper.css';
 import NavigationMenu from "./components/NavigationMenu";
 import { Comfortaa , Nunito } from 'next/font/google'
 
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it">
+    <html lang="it" className=" overflow-x-hidden md:overflow-x-visible">
       <body className={`${comfortaa.variable} ${nunito.variable}`}>
         <NavigationMenu />
         {children}
