@@ -23,14 +23,14 @@ export default function HeroHome() {
           </video>
         </div>
     
-      <div className="md:hidden relative w-full flex justify-center ">
+      <div className="md:hidden relative w-full flex justify-center w-screen ">
        <Link href="/" className=" md:hidden">
         <Image
           src="/Logo.png"
           alt="Flowintoone Logo"
           width={80}
           height={80}
-          className="md:hidden absolute self-center-safe self-it -top-10 justify-self-center bg-Cream rounded-full p-2"
+          className="md:hidden absolute -top-10 bg-Cream rounded-full p-2 place-self-center"
         />
       </Link>
       </div>
