@@ -20,11 +20,15 @@ type FadeInOnScrollProps = {
   className?: string;
   delay?: number;
 
+  // Global / default variant
   variant?: Variant | null;
+
+  // Override per breakpoint
   mobileVariant?: Variant | null;
   desktopVariant?: Variant | null;
 
-  breakpoint?: number; // px (e.g. 768 for md)
+  // px (e.g. 768 for md)
+  breakpoint?: number;
 };
 
 const variants: Record<VariantName, { hidden: string; visible: string }> = {
@@ -97,7 +101,6 @@ export default function FadeInOnScroll({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // true when in viewport, false when out
         setIsVisible(entry.isIntersecting);
       },
       { threshold: 0.2 }
@@ -107,27 +110,35 @@ export default function FadeInOnScroll({
     return () => observer.disconnect();
   }, []);
 
+  // Default animation if nothing is passed
   const fallbackVariant: VariantName = "fade-up";
   const baseVariant: Variant = variant ?? fallbackVariant;
 
-  const currentVariant: Variant =
+  // 🔑 Decide which variant to use:
+  // - mobile: mobileVariant ?? baseVariant
+  // - desktop:
+  //      if desktopVariant is provided → use it
+  //      if NOT provided → "none" (❌ no animation)
+  const currentVariantName: VariantName =
     isDesktop === null
-      ? baseVariant
+      ? (baseVariant as VariantName) // initial render (before we know)
       : isDesktop
-        ? (desktopVariant ?? baseVariant)
-        : (mobileVariant ?? baseVariant);
+      ? (desktopVariant ?? "none") // <== desktop defaults to NO animation
+      : (mobileVariant ?? baseVariant ?? "none");
 
   const { hidden, visible } =
-    currentVariant === "none"
+    currentVariantName === "none"
       ? { hidden: "", visible: "" }
-      : variants[currentVariant];
+      : variants[currentVariantName];
+
+  const hasAnimation = currentVariantName !== "none";
 
   return (
     <div
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
       className={`
-        transition-all duration-700 ease-out
+        ${hasAnimation ? "transition-all duration-700 ease-out" : ""}
         ${isVisible ? visible : hidden}
         ${className}
       `}

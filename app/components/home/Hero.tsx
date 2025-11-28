@@ -1,13 +1,14 @@
 import FadeInOnScroll from "@app/ui/FadeInOnScroll";
 import Link from "next/link";
 import Image from "next/image";
+import FillImage from "@app/ui/FillImage";
 
 
 export default function HeroHome() {
   return (
     <div className="bg-linear-to-b from-[#7217ba] from-50% md:from-60% to-[#f8f4ec] md:via-20%  flex flex-col md:flex-row-reverse justify-center items-center  md:h-120  ">
   
-        <div className="w-full flex justify-center items-center md:rounded-2xl md:overflow-hidden md:bg-background">
+        <div className="md:p-1 md:bg-Cream md:rounded-2xl md:shadow-lg md:flex md:items-center md:justify-center">
           <video
             autoPlay
             loop
@@ -34,8 +35,7 @@ export default function HeroHome() {
       </Link>
       </div>
       <div className="max-md:bg-linear-to-b px-8 py-15 from-Viola/70 via-Viola-Light/90 to-Cream/10 flex flex-col items-start md:max-w-2/3 md:px-12 md:p-8 ">
-      
-        <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' desktopVariant='none'>
+        <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' >
           <h1 className="text-4xl my-6 md:text-4xl  md:mb-4 ">"Un’unica vetrina infinite realtà da scoprire</h1>
           <p className=" max-md:hidden text-xl mb-6">
             Flow Into One è la piattaforma digitale che unisce e mette in contatto persone, artigiani, negozi, fornitori e freelance in un unico spazio online.
@@ -49,16 +49,13 @@ export default function HeroHome() {
             <a href="/esplora">Esplora Ora</a>
           </button>
         </FadeInOnScroll>
-        <div className="mh:hidden flex flex-col mt-12"> 
-           <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' desktopVariant='none'>
-            <Image
-              src="/tre_bubble_left.png"
-              alt="Flowintoone Logo"
-              width={100}
-              height={100}              
-              className="self-start mt-6 transform rotate-12 ab"
-            />
+        <div className="md:hidden flex flex-col mt-12"> 
+            <FadeInOnScroll delay={1000}  mobileVariant='zoom-in'>
+              <FillImage SCR_text={'/tre_bubble_left.png'} AlT_text={'Fill fptp'} Width_num={100} Height_num={100} 
+                className={'md:hidden self-start mt-6 transform rotate-12 absolute' } 
+              />
             </FadeInOnScroll>
+
             <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' desktopVariant='none'>
               <h2 className="text-3xl my-6 text-right  ">Cresci insieme a noi</h2> 
               <p className="text-xl mb-6 text-right ">
@@ -71,13 +68,10 @@ export default function HeroHome() {
               </button>
             </FadeInOnScroll>
             <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' desktopVariant='none'>
-             <Image
-              src="/tre_bubble_right.png"
-              alt="Flowintoone Logo"
-              width={100}
-              height={100}    
-              className="float-end mt-6"
-            />
+ 
+             <FillImage SCR_text={'/tre_bubble_right.png'} AlT_text={'Flowintoone tree dots foto'} Width_num={100} Height_num={100} 
+                classNameDiv=" justify-end" className="md:hidden "
+              />
             </FadeInOnScroll>
           </div>
       </div>
