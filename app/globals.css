@@ -4,6 +4,7 @@
   --background: #f8f6f0;
   --Cream : #f8f6f0;
   --Viola:#7217ba;
+  --Viola-Light:#8e44ad;
   --Orange:#f08f00;
   --Green-pastel:#cdd07f;
   --foreground: #171717;
@@ -14,6 +15,7 @@
   --color-background: var(--background);
   --color-Cream : var(--Cream);
   --color-Viola: var(--Viola);
+  --color-Viola-Light: var(--Viola-Light);
   --color-Orange: var(--Orange);
   --color-Green-pastel: var(--Green-pastel);
   --color-foreground: var(--foreground);
@@ -33,6 +35,12 @@
     --foreground: #ededed;
     --font-comfortaa: var(--font-comfortaa);
     --font-comfortaa: var(--font-nunito);
+  }
+  body {
+    /* background: var(--background); */
+    color: var(--foreground);
+    font-family: var(--font-comfortaa), sans-serif;
+
   }
 }
 

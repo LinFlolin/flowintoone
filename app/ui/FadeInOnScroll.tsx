@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-// Define the possible animation variants type
 type VariantName =
   | "none"
   | "fade-up"
@@ -11,12 +10,10 @@ type VariantName =
   | "fade-right"
   | "zoom-in"
   | "zoom-out"
-  | "blur-in" 
+  | "blur-in"
   | "rotate-in";
 
 type Variant = VariantName | "none";
-
-// Define the props for the FadeInOnScroll component 
 
 type FadeInOnScrollProps = {
   children: ReactNode;
@@ -24,16 +21,13 @@ type FadeInOnScrollProps = {
   delay?: number;
 
   variant?: Variant | null;
-
   mobileVariant?: Variant | null;
-
   desktopVariant?: Variant | null;
 
-  breakpoint?: number;
+  breakpoint?: number; // px (e.g. 768 for md)
 };
 
-// Define the animation variants and their corresponding CSS classes
-const variants: Record< VariantName, { hidden: string; visible: string }> = {
+const variants: Record<VariantName, { hidden: string; visible: string }> = {
   "none": {
     hidden: "",
     visible: "",
@@ -55,11 +49,11 @@ const variants: Record< VariantName, { hidden: string; visible: string }> = {
     visible: "opacity-100 translate-x-0",
   },
   "zoom-in": {
-    hidden: "opacity-0 scale-80",
+    hidden: "opacity-0 scale-50",
     visible: "opacity-100 scale-100",
   },
   "zoom-out": {
-    hidden: "opacity-0 scale-110",
+    hidden: "opacity-0 scale-150",
     visible: "opacity-100 scale-100",
   },
   "blur-in": {
@@ -85,7 +79,7 @@ export default function FadeInOnScroll({
   const [isVisible, setIsVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
-  // Detect viewport size
+  // Detect viewport size (mobile / desktop)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -96,18 +90,15 @@ export default function FadeInOnScroll({
     return () => window.removeEventListener("resize", update);
   }, [breakpoint]);
 
-  // Intersection observer (only actually needed when we have animation,
-  // but it's fine to keep it simple)
+  // Observer that activates on every scroll in/out
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
+        // true when in viewport, false when out
+        setIsVisible(entry.isIntersecting);
       },
       { threshold: 0.2 }
     );
@@ -116,17 +107,15 @@ export default function FadeInOnScroll({
     return () => observer.disconnect();
   }, []);
 
-  const fallbackVariant: VariantName = "none";
-
-  const baseVariant: Variant =
-    variant ?? fallbackVariant;
+  const fallbackVariant: VariantName = "fade-up";
+  const baseVariant: Variant = variant ?? fallbackVariant;
 
   const currentVariant: Variant =
     isDesktop === null
       ? baseVariant
       : isDesktop
-      ? (desktopVariant ?? baseVariant)
-      : (mobileVariant ?? baseVariant);
+        ? (desktopVariant ?? baseVariant)
+        : (mobileVariant ?? baseVariant);
 
   const { hidden, visible } =
     currentVariant === "none"
@@ -138,9 +127,8 @@ export default function FadeInOnScroll({
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
       className={`
-        ${hidden}
         transition-all duration-700 ease-out
-        ${isVisible ? visible : ""}
+        ${isVisible ? visible : hidden}
         ${className}
       `}
     >
