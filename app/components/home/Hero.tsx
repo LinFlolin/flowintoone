@@ -23,7 +23,7 @@ export default function HeroHome() {
           </video>
         </div>
     
-      <div className="md:hidden relative w-full flex justify-center w-screen ">
+      <div className="md:hidden relative flex justify-center w-screen ">
        <Link href="/" className=" md:hidden">
         <Image
           src="/Logo.png"
