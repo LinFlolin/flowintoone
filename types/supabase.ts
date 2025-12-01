@@ -64,43 +64,43 @@ export type Database = {
       }
       shops: {
         Row: {
-          address: string
-          category: string
-          created_at: string
-          description: string | null
           id: number
-          image: string | null
-          name: string
-          owner_id: string
-          partita_iva: string | null
+          shop_adress: string | null
+          shop_categorie: string | null
+          shop_description: string | null
+          shop_img_url: string | null
+          shop_likes: number | null
+          shop_name: string
+          shop_slug: string | null
+          shopownerId: string
         }
         Insert: {
-          address: string
-          category: string
-          created_at?: string
-          description?: string | null
           id?: number
-          image?: string | null
-          name: string
-          owner_id: string
-          partita_iva?: string | null
+          shop_adress?: string | null
+          shop_categorie?: string | null
+          shop_description?: string | null
+          shop_img_url?: string | null
+          shop_likes?: number | null
+          shop_name?: string
+          shop_slug?: string | null
+          shopownerId?: string
         }
         Update: {
-          address?: string
-          category?: string
-          created_at?: string
-          description?: string | null
           id?: number
-          image?: string | null
-          name?: string
-          owner_id?: string
-          partita_iva?: string | null
+          shop_adress?: string | null
+          shop_categorie?: string | null
+          shop_description?: string | null
+          shop_img_url?: string | null
+          shop_likes?: number | null
+          shop_name?: string
+          shop_slug?: string | null
+          shopownerId?: string
         }
         Relationships: [
           {
-            foreignKeyName: "shops_owner_id_fkey"
-            columns: ["owner_id"]
-            isOneToOne: false
+            foreignKeyName: "partner_shopownerId_fkey"
+            columns: ["shopownerId"]
+            isOneToOne: true
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },

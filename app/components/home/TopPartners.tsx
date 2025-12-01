@@ -1,21 +1,34 @@
-  // import { supabase } from "@/api/client";
-  // import type { Profile } from "@/types/profile";
-
+import { supabase } from "@/api/client";
 import ShopCardsTemplate from "@app/ui/template/ShopCardsTemplate";
 
-export default function TopPartners() {
+export default async function TopPartners() {
+  const { data: shops, error } = await supabase.from("shops").select("*");
+
+  console.log({ shops, error });
+
+  if (error) {
+    console.error(error);
+    return <div>Error loading shops</div>;
+  }
+
   return (
-   
-    <div className=" px-4 py-10 md:mx-20 mx-2">
-      <h2 className="text-3xl py-6 text-center font-extrabold text-Viola font-comfortaa">Top Partners</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">          
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
-        <ShopCardsTemplate Shop_Name="Partner 1" Shop_Desc="Description for Partner 1" Shop_Img_url="/Logo.png" Shop_link="/" />
+    <div className="px-4 py-10 md:mx-20 mx-2">
+      <h2 className="text-3xl py-6 text-center font-extrabold text-Viola font-comfortaa">
+        Top Partners
+      </h2>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {shops?.map((shop) => (
+          <ShopCardsTemplate
+            key={shop.id}
+            Shop_id={shop.id}
+            Shop_Name={shop.shop_name}
+            Shop_Img_url={shop.shop_img_url ?? "/Logo.png"}
+            Shop_Desc={shop.shop_description ?? ""}
+            Shop_link={`/shops/${shop.shop_slug ?? shop.id}`}
+            Shop_adress={shop.shop_adress ?? ""}
+          />
+        ))}
       </div>
     </div>
   );
