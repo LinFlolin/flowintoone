@@ -1,11 +1,11 @@
-import { supabase } from "@/api/client";
+// src/components/home/TopPartners.tsx (or similar)
+import { shopApi } from "@/api/shops_api";
 import ShopCardsTemplate from "@app/ui/template/ShopCardsTemplate";
 
 export default async function TopPartners() {
-  const { data: shops, error } = await supabase.from("shops").select("*");
 
-  console.log({ shops, error });
-
+  const { shops, error } = await shopApi(); 
+  
   if (error) {
     console.error(error);
     return (
@@ -25,7 +25,7 @@ export default async function TopPartners() {
       </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {shops?.map((shop) => (
+        {shops.map((shop) => (
           <ShopCardsTemplate
             key={shop.id}
             Shop_id={shop.id}
