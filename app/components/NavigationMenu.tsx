@@ -49,7 +49,7 @@ export default function NavigationMenu() {
         <Link href="/chi-siamo" onClick={() => setIsOpen(false)}>Chi siamo</Link>
         <Link href="/esplora" onClick={() => setIsOpen(false)}>Esplora</Link>
         <Link href="/news" onClick={() => setIsOpen(false)}>News</Link>
-        <Link href="/log-in" onClick={() => setIsOpen(false)}>Log in</Link>
+        <Link href="/authentication" onClick={() => setIsOpen(false)}>Log in</Link>
       </nav>
 
       {/* DESKTOP MENU */}
@@ -64,7 +64,7 @@ export default function NavigationMenu() {
         </Link>
 
         <Link className="hover:text-Orange focus:text-Orange" href="/news">News</Link>
-        <Link className="hover:text-Orange focus:text-Orange" href="/log-in">Log in</Link>
+        <Link className="hover:text-Orange focus:text-Orange" href="/authentication">Log in</Link>
       </nav>
     </>
   );
