@@ -8,7 +8,14 @@ export default async function TopPartners() {
 
   if (error) {
     console.error(error);
-    return console.error(error);
+    return (
+      <div className="px-4 py-10 md:mx-20 mx-2">
+        <h2 className="text-3xl py-6 text-center font-extrabold text-Viola font-comfortaa">
+          Top Partners
+        </h2>
+        <p className="text-red-500 text-sm">Error loading shops</p>
+      </div>
+    );
   }
 
   return (
