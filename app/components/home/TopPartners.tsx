@@ -8,7 +8,7 @@ export default async function TopPartners() {
 
   if (error) {
     console.error(error);
-    return <div>Error loading shops</div>;
+    return console.error(error);;
   }
 
   return (
