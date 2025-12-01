@@ -6,21 +6,21 @@ import FillImage from "@app/ui/FillImage";
 
 export default function HeroHome() {
   return (
-    <div className="bg-linear-to-b text-Cream from-[#7217ba] from-50% md:from-60% to-[#f8f4ec] md:via-20%  flex flex-col md:flex-row-reverse justify-center items-center  md:h-120  ">
+    <div className="bg-linear-to-b text-Cream z-20 from-[#7217ba] from-50% md:from-60% to-[#f8f4ec] md:via-20%  flex flex-col md:flex-row-reverse justify-center items-center  md:h-120  ">
   
-        <div className=" md:rounded-2xl md:flex md:items-center md:justify-center">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="w-full md:border-2 md:w-auto md:h-[400px] md:m-2 md:rounded-2xl md:p-2"
-          >
-            <source src="/hero_video.webm" type="video/webm" />
-            Il tuo browser non supporta il video.
-          </video>
-        </div>
+      <div className=" md:rounded-2xl md:flex md:items-center md:justify-center">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="w-full md:border-2 md:w-auto md:h-[400px] md:m-2 md:rounded-2xl md:p-2"
+        >
+        <source src="/hero_video.webm" type="video/webm" />
+          Il tuo browser non supporta il video.
+        </video>
+      </div>
     
       <div className="md:hidden relative flex justify-center w-screen ">
        <Link href="/" className=" md:hidden">
@@ -29,12 +29,12 @@ export default function HeroHome() {
           alt="Flowintoone Logo"
           width={80}
           height={80}
-          className="md:hidden absolute left-50 -top-10 bg-Cream rounded-full p-2 place-self-center"
+          className="md:hidden absolute -top-10 bg-Cream rounded-full p-2 place-self-center"
         />
       </Link>
       </div>
       <div className="max-md:bg-linear-to-b px-8 py-15 from-Viola/70 via-Viola-Light/90 to-Cream/10 flex flex-col items-start md:max-w-2/3 md:px-12 md:p-8 ">
-        <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' >
+        <FadeInOnScroll delay={300}  mobileVariant='zoom-in' desktopVariant='fade-up' >
           <h1 className="text-4xl my-6 md:text-4xl  md:mb-4 ">"Un’unica vetrina infinite realtà da scoprire</h1>
           <p className=" max-md:hidden text-xl mb-6">
             Flow Into One è la piattaforma digitale che unisce e mette in contatto persone, artigiani, negozi, fornitori e freelance in un unico spazio online.
@@ -43,7 +43,7 @@ export default function HeroHome() {
             Scopri nuove storie, prodotti unici e talenti nascosti , tutto in un solo luogo ”
           </p>
         </FadeInOnScroll>
-        <FadeInOnScroll delay={1000} variant="fade-up">
+        <FadeInOnScroll delay={1000} variant="fade-up"  desktopVariant='fade-up'>
           <button  className="bg-Orange font-bold px-6 py-3 rounded-full hover:bg-Green-pastel shadow-md  hover:text-Viola transition max-md:self-end">
             <a href="/esplora">Esplora Ora</a>
           </button>
@@ -69,8 +69,7 @@ export default function HeroHome() {
             <FadeInOnScroll delay={1000}  mobileVariant='zoom-in' desktopVariant='none'>
  
              <FillImage SCR_text={'/tre_bubble_right.png'} AlT_text={'Flowintoone tree dots foto'} Width_num={100} Height_num={100} 
-                classNameDiv=" justify-end" className="md:hidden "
-              />
+                classNameDiv=" justify-end" className="md:hidden "/>
             </FadeInOnScroll>
           </div>
       </div>
