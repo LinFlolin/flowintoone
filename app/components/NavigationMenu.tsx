@@ -25,9 +25,6 @@ export default function NavigationMenu() {
           />
         </Link>
         <button onClick={toggleMenu} className="flex flex-col gap-1">
-            {/* <span className={`h-0.5 w-6 bg-Viola transition-transform ${isOpen ? "rotate-45 translate-y-1" : ""}`} />
-            <span className={`h-0.5 w-6 bg-Viola transition-opacity ${isOpen ? "opacity-0" : "opacity-100"}`} />
-            <span className={`h-0.5 w-6 bg-Viola transition-transform ${isOpen ? "-rotate-45 -translate-y-1" : ""}`} /> */}
             <Image
               src="/menu_mobile.png"
               alt="Flowintoone Logo"
@@ -57,7 +54,7 @@ export default function NavigationMenu() {
 
       {/* DESKTOP MENU */}
       
-      <nav className="navigation_munu_desktop hidden md:bg-background md:flex md:font-bold md:h-15 md:flex-row md:gap-6 md:text-Viola md:items-center md:p-4 md:justify-evenly md:shadow-sm md:sticky md:top-0 md:w-full ">
+      <nav className="navigation_munu_desktop hidden md:bg-background md:flex md:font-bold md:h-15 md:flex-row md:gap-6 md:text-Viola md:items-center md:p-4 md:justify-evenly md:shadow-sm md:sticky md:top-0 md:w-full md:z-50 ">
       
         <Link className="hover:text-Orange focus:text-Orange" href="/chi-siamo">Chi siamo</Link>
         <Link className="hover:text-Orange focus:text-Orange" href="/esplora">Esplora</Link>
