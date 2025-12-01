@@ -3,6 +3,7 @@ import "./globals.css";
 import './swiper.css';
 import NavigationMenu from "./components/NavigationMenu";
 import { Comfortaa , Nunito } from 'next/font/google'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const comfortaa = Comfortaa({
   subsets: ['latin'],
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="it" className=" overflow-x-hidden md:overflow-x-visible">
       <body className={`${comfortaa.variable} ${nunito.variable}`}>
+        <SpeedInsights />
         <NavigationMenu />
         {children}
       </body>

@@ -114,11 +114,7 @@ export default function FadeInOnScroll({
   const fallbackVariant: VariantName = "fade-up";
   const baseVariant: Variant = variant ?? fallbackVariant;
 
-  // 🔑 Decide which variant to use:
-  // - mobile: mobileVariant ?? baseVariant
-  // - desktop:
-  //      if desktopVariant is provided → use it
-  //      if NOT provided → "none" (❌ no animation)
+  
   const currentVariantName: VariantName =
     isDesktop === null
       ? (baseVariant as VariantName) // initial render (before we know)
