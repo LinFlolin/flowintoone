@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      layouts: {
+        Row: {
+          code: string
+          created_at: string | null
+          default_config: Json | null
+          description: string | null
+          id: string
+          name: string
+          required_plan: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          default_config?: Json | null
+          description?: string | null
+          id?: string
+          name: string
+          required_plan?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          default_config?: Json | null
+          description?: string | null
+          id?: string
+          name?: string
+          required_plan?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -64,7 +94,11 @@ export type Database = {
       }
       shops: {
         Row: {
+          colors: Json | null
+          config: Json | null
+          fonts: Json | null
           id: number
+          layout_id: string | null
           shop_adress: string | null
           shop_categorie: string | null
           shop_description: string | null
@@ -75,7 +109,11 @@ export type Database = {
           shopownerId: string
         }
         Insert: {
+          colors?: Json | null
+          config?: Json | null
+          fonts?: Json | null
           id?: number
+          layout_id?: string | null
           shop_adress?: string | null
           shop_categorie?: string | null
           shop_description?: string | null
@@ -86,7 +124,11 @@ export type Database = {
           shopownerId?: string
         }
         Update: {
+          colors?: Json | null
+          config?: Json | null
+          fonts?: Json | null
           id?: number
+          layout_id?: string | null
           shop_adress?: string | null
           shop_categorie?: string | null
           shop_description?: string | null
@@ -99,6 +141,27 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "partner_shopownerId_fkey"
+            columns: ["shopownerId"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shops_layout_fk"
+            columns: ["layout_id"]
+            isOneToOne: false
+            referencedRelation: "layouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shops_layout_id_fkey"
+            columns: ["layout_id"]
+            isOneToOne: false
+            referencedRelation: "layouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shops_owner_fk"
             columns: ["shopownerId"]
             isOneToOne: true
             referencedRelation: "profiles"
