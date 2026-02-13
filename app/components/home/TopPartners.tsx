@@ -1,11 +1,10 @@
-// src/components/home/TopPartners.tsx (or similar)
-import { shopApi } from "@/api/shops_api";
+import { getMyShop } from "@/api/shops_api";
 import ShopCardsTemplate from "@app/ui/template/ShopCardsTemplate";
 
 export default async function TopPartners() {
 
   const { shops, error } = await shopApi(); 
-
+  
   if (error) {
     console.error(error);
     return (
@@ -25,17 +24,15 @@ export default async function TopPartners() {
       </h2>
       
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {shops.map((shop) => (
-          <ShopCardsTemplate
-            key={shop.id}
-            Shop_id={shop.id}
-            Shop_Name={shop.shop_name}
-            Shop_Img_url={shop.shop_img_url ?? "/Logo.png"}
-            Shop_Desc={shop.shop_description ?? ""}
-            Shop_link={`/shops/${shop.shop_slug ?? shop.id}`}
-            Shop_adress={shop.shop_adress ?? ""}
-          />
-        ))}
+        <ShopCardsTemplate
+          key={shop.id}
+          Shop_id={shop.id}
+          Shop_Name={shop.shop_name}
+          Shop_Img_url={shop.shop_img_url ?? "/Logo.png"}
+          Shop_Desc={shop.shop_description ?? ""}
+          Shop_link={`/shops/${shop.shop_slug ?? shop.id}`}
+          Shop_adress={shop.shop_adress ?? ""}
+        />
       </div>
     </div>
   );
