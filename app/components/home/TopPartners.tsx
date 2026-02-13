@@ -5,7 +5,7 @@ import ShopCardsTemplate from "@app/ui/template/ShopCardsTemplate";
 export default async function TopPartners() {
 
   const { shops, error } = await shopApi(); 
-  
+
   if (error) {
     console.error(error);
     return (
@@ -20,10 +20,10 @@ export default async function TopPartners() {
 
   return (
     <div className="px-4 py-10 md:mx-20 mx-2">
-      <h2 className="text-3xl py-6 text-center font-extrabold text-Viola font-comfortaa">
+      <h2 className="text-3xl py-6 md:text-center font-extrabold text-Viola font-comfortaa">
         Top Partners
       </h2>
-
+      
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {shops.map((shop) => (
           <ShopCardsTemplate
