@@ -46,6 +46,41 @@ export type Database = {
           },
         ]
       }
+      business_page_settings: {
+        Row: {
+          business_id: string
+          config: Json
+          created_at: string
+          page_type: string
+          theme_key: string
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          config?: Json
+          created_at?: string
+          page_type?: string
+          theme_key?: string
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          config?: Json
+          created_at?: string
+          page_type?: string
+          theme_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_page_settings_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: true
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           business_type: string

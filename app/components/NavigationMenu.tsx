@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useScrollTrigger } from "@app/ui/utils/useScrollTrigger";
 
+
 export default function NavigationMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const scrolled  = useScrollTrigger(5);
