@@ -9,8 +9,7 @@ export default async function Home() {
       <HeroHome />
       <WhoWeAre />
       <BecomePartner />
-      <QA />
-      
+      <QA />      
    </div>
   );
 }
