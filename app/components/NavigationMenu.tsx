@@ -1,18 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { supabase } from "@/api/client";
 import { useScrollTrigger } from "@app/ui/utils/useScrollTrigger";
 
 
 export default function NavigationMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const scrolled  = useScrollTrigger(5);
 
   function toggleMenu () {
     setIsOpen(!isOpen);
   }
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <>
@@ -34,8 +50,6 @@ export default function NavigationMenu() {
             />
         </button>
       </div>
-      
-    
 
       <nav
         className={
@@ -50,7 +64,17 @@ export default function NavigationMenu() {
         <Link href="/chi-siamo" onClick={() => setIsOpen(false)}>Chi siamo</Link>
         <Link href="/esplora" onClick={() => setIsOpen(false)}>Esplora</Link>
         <Link href="/news" onClick={() => setIsOpen(false)}>News</Link>
-        <Link href="/authentication" onClick={() => setIsOpen(false)}>Log in</Link>
+        {user ? (
+          <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+            <div className="w-10 h-10 rounded-full bg-white text-Viola flex items-center justify-center font-bold">
+              {user.email?.charAt(0).toUpperCase()}
+            </div>
+          </Link>
+        ) : (
+          <Link href="/authentication" onClick={() => setIsOpen(false)}>
+            Log in
+          </Link>
+        )}
       </nav>
 
       {/* DESKTOP MENU */}
@@ -65,7 +89,20 @@ export default function NavigationMenu() {
         </Link>
 
         <Link className="hover:text-Orange focus:text-Orange" href="/news">News</Link>
-        <Link className="hover:text-Orange focus:text-Orange" href="/authentication">Log in</Link>
+        {user ? (
+          <Link href="/dashboard">
+            <div className="w-10 h-10 rounded-full bg-Viola text-white flex items-center justify-center font-bold">
+              {user.email?.charAt(0).toUpperCase()}
+            </div>
+          </Link>
+        ) : (
+          <Link
+            className="hover:text-Orange focus:text-Orange"
+            href="/authentication"
+          >
+            Log in
+          </Link>
+        )}
       </nav>
     </>
   );
