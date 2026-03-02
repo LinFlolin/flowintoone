@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Chi_siamo() {
   return (
-    <div>Chi_siamo</div>
+    <div className="p-16 bg-amber-500 ">Chi_siamo</div>
   )
 }

@@ -1,6 +1,6 @@
 import type { SectionType, Variant } from "@/app/themes/presets";
 
-// ✅ importa i componenti dalla tua cartella reale
+
 import HeroV1 from "@/app/sections/components/hero/HeroV1";
 import HeroV2 from "@/app/sections/components/hero/HeroV2";
 
@@ -18,7 +18,6 @@ import ContactV1 from "@/app/sections/components/contact/ContactV1";
 
 import FooterV1 from "@/app/sections/components/footer/FooterV1";
 
-// Tipo registry: non tutte le sezioni hanno v2 → Partial
 export type SectionRegistry = {
   [K in SectionType]: Partial<Record<Variant, React.ComponentType<any>>>;
 };

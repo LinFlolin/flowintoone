@@ -7,6 +7,7 @@ import NavigationMenu from "./components/NavigationMenu";
 export default async function Home() {
   return (
    <div className="h-screen w-screen">
+      <NavigationMenu />
       <HeroHome />
       <WhoWeAre />
       <BecomePartner />

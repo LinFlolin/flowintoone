@@ -12,20 +12,16 @@ export type SectionType =
 
 export type Variant = "v1" | "v2";
 
-// 2) config di una singola sezione
 export type SectionConfig = {
   type: SectionType;
   variant: Variant;
-  // opzionale: props custom per quella sezione
   props?: Record<string, unknown>;
 };
 
-// 3) config di un tema
 export type ThemePreset = {
   sections: readonly SectionConfig[];
 };
 
-// 4) preset veri e propri
 export const THEME_PRESETS: Record<string, ThemePreset> = {
   theme1: {
     sections: [
@@ -50,7 +46,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
 };
 export type PageConfig = {
-  sections: SectionConfig[];
+  overrides?: Partial<
+    Record<
+      SectionType,
+      {
+        variant?: Variant;
+        props?: Record<string, unknown>;
+      }
+    >
+  >;
+  disabled?: SectionType[];
 };
-// 5) ThemeKey tipizzato automaticamente dai preset (theme1 | theme2)
+
 export type ThemeKey = keyof typeof THEME_PRESETS;
