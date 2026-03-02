@@ -1,25 +1,23 @@
 "use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/api/client";
 
+  export default function Page() {
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-export default function Page() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  async function handleLogin(e: React.FormEvent) {
+    async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setErrorMsg(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -31,10 +29,31 @@ export default function Page() {
       return;
     }
 
-    router.push("/dashboard"); // change to your real dashboard route
+    const session = data.session;
+    if (!session) {
+      setErrorMsg("No session returned");
+      return;
+    }
+
+    const r = await fetch("/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      }),
+    });
+
+    if (!r.ok) {
+      setErrorMsg("Failed to set session cookies");
+      return;
+    }
+
+    router.push("/dashboard");
     router.refresh();
   }
 
+  
   return (
     <div className="bg-linear-to-b text-Cream from-[#7217ba] from-90% md:from-60% to-[#f8f4ec] h-screen flex justify-center items-center">
       <div className="flex justify-center items-center flex-col bg-Cream h-1/2 w-1/4 text-Viola rounded-3xl shadow-2xl shadow-White/30">

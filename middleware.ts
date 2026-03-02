@@ -28,7 +28,7 @@ export async function middleware(req: NextRequest) {
   // If not logged in -> redirect to your login page
   if (!user) {
     const url = req.nextUrl.clone();
-    url.pathname = "/authentication"; // <-- your login route
+    url.pathname = "/authentication"; 
     url.searchParams.set("redirectedFrom", req.nextUrl.pathname);
     return NextResponse.redirect(url);
   }

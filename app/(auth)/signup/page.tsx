@@ -41,7 +41,7 @@ export default function Page() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/authentication`,
+        emailRedirectTo: `${window.location.origin}/callback?next=/dashboard`,
       },
     });
 
