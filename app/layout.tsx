@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className=" overflow-x-hidden md:overflow-x-visible">
+    <html lang="it" className=" overflow-x-hidden md:overflow-x-visible" data-scroll-behavior="smooth">
       <body className={`${comfortaa.variable} ${nunito.variable}`}>
         <SpeedInsights />
         {children}

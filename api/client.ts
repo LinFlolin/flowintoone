@@ -11,4 +11,4 @@ if (!anon) {
   throw new Error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY – check Vercel env vars.");
 }
 
-export const supabase = createClient<Database>(url, anon);
+export const supabase  = createClient<Database>(url, anon);
