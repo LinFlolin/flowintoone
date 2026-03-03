@@ -2,6 +2,9 @@ import { createSupabaseServerClient } from "@/api/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import FormUi from "../FormUi";
+import Link from "next/link";
+import BusinessDashboardClient from "./(BusinessDashboardClient)/BusinessDashboardClient";
 
 export default async function DashboardBusiness() {
   const cookieStore = cookies();
@@ -58,16 +61,8 @@ export default async function DashboardBusiness() {
   }
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen bg-linear-to-b text-Cream z-20 from-[#7217ba]">
-      <div className="bg-Cream/80 rounded-lg shadow-lg p-8 flex items-center w-4/5 h-4/5">
-        <div className="w-1/6 from-40% to-[#f8f4ec] ">
-          
-        </div>
-        <div className="w-full">
-          <h1 className="text-2xl font-bold text-[#7217ba]">{business.name}</h1>
-          <p className="text-sm text-gray-600 mt-2">Business Type: {business.business_type}</p>
-        </div>
-      </div>
-    </div>
+    <FormUi >
+      <BusinessDashboardClient business={business} profile={profile} />
+    </FormUi>
   );
 }

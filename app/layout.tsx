@@ -32,6 +32,7 @@ export default function RootLayout({
     <html lang="it" className=" overflow-x-hidden md:overflow-x-visible" data-scroll-behavior="smooth">
       <body className={`${comfortaa.variable} ${nunito.variable}`}>
         <SpeedInsights />
+        <NavigationMenu />
         {children}
       </body>
     </html>

@@ -3,6 +3,7 @@ import React from 'react'
 import {supabase } from '@/api/client'
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
+import FormUi from '../FormUi';
 
 export default async function DashboardUser() {
   const cookieStore = cookies();
@@ -21,8 +22,8 @@ export default async function DashboardUser() {
 
  
   return (
-    <div>
+    <FormUi>
       {user?.email}
-    </div>
+    </FormUi>
   )
 }

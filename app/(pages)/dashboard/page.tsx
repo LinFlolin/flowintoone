@@ -30,7 +30,6 @@ export default async function Page() {
     );
   }
 
-  // 2) Try to find a membership (optional)
   const { data: membership, error: mErr } = await supabase
     .from("business_memberships")
     .select("business_id, role")
@@ -43,14 +42,12 @@ export default async function Page() {
     console.warn("membership error:", mErr.message);
   }
 
-  // Default display name for basic users
   let displayName =
     user.user_metadata?.full_name ||
     user.user_metadata?.name ||
     user.email ||
     "User";
 
-  // If membership exists, fetch business name and upgrade displayName
   if (membership?.business_id) {
     const { data: business } = await supabase
       .from("businesses")
@@ -64,8 +61,8 @@ export default async function Page() {
   const isBusinessMember = !!membership?.business_id;
 
   return (
-    <div>
+    <>
       {isBusinessMember ? (<DashboardBusiness />) : (<DashboardUser />)}
-    </div>
+    </>
   );
 }
