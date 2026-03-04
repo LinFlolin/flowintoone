@@ -1,14 +1,9 @@
 import { createSupabaseServerClient } from "@/api/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import FormUi from "../FormUi";
-import Link from "next/link";
 import BusinessDashboardClient from "./(BusinessDashboardClient)/BusinessDashboardClient";
 
 export default async function DashboardBusiness() {
-  const cookieStore = cookies();
-
   const supabase = createSupabaseServerClient();
 
   const { data: userData } = await supabase.auth.getUser();
@@ -16,13 +11,17 @@ export default async function DashboardBusiness() {
 
   if (!user) redirect("/authentication");
 
-  const { data: membership, error: mErr } = await supabase
-    .from("business_memberships")
-    .select("business_id, role")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+ const [{ data: profileUser }, { data: membership, error: mErr }] =
+  await Promise.all([
+    supabase.from("profiles").select("avatar_url, full_name").eq("id", user.id).maybeSingle(),
+    supabase
+      .from("business_memberships")
+      .select("business_id, role")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+  ]);
 
   if (mErr) return <div>Error: {mErr.message}</div>;
 
@@ -61,8 +60,13 @@ export default async function DashboardBusiness() {
   }
 
   return (
-    <FormUi >
-      <BusinessDashboardClient business={business} profile={profile} />
+    <FormUi>
+      <BusinessDashboardClient
+        business={business}
+        profile={profile}
+        avatarUrl={profileUser?.avatar_url ?? null}
+        fullName={profileUser?.full_name ?? null}
+      />
     </FormUi>
   );
 }
