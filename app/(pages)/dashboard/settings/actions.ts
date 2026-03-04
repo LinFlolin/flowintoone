@@ -14,9 +14,6 @@ function getSupabaseAdmin() {
 
 export async function setTheme(businessId: string, themeKey: ThemeKey) {
   const supabase = getSupabaseAdmin();
-
-  // keep config, or reset it (choose one behavior)
-  // Here: reset overrides when switching theme (simple)
   const emptyConfig: PageConfig = {};
 
   await supabase.from("business_page_settings").upsert({
