@@ -76,8 +76,6 @@ export default function NavigationMenu() {
           </Link>
         )}
       </nav>
-
-      {/* DESKTOP MENU */}
       
       <nav className="navigation_munu_desktop hidden md:bg-background md:flex md:font-bold md:h-15 md:flex-row md:gap-6 md:text-Viola md:items-center md:p-4 md:justify-evenly md:shadow-sm md:sticky md:top-0 md:w-full md:z-50 ">
       
@@ -107,3 +105,4 @@ export default function NavigationMenu() {
     </>
   );
 }
+
