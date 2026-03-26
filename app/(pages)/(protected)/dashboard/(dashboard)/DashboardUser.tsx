@@ -8,7 +8,7 @@ import { createSupabaseServerClient } from '@/api/server';
 
 export default async function DashboardUser() {
   const cookieStore = cookies();
-  const supabase = createSupabaseServerClient();
+  const supabase =await createSupabaseServerClient();
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;
 

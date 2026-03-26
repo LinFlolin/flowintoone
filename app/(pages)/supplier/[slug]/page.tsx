@@ -1,11 +1,11 @@
 import { supabase } from "@/api/client";
-import { SECTION_REGISTRY } from "@/app/sections/registry";
+import { SECTION_REGISTRY } from "@app/(page-theme-component)/sections/registry";
 import {
   THEME_PRESETS,
   type ThemeKey,
   type SectionConfig,
   type PageConfig,
-} from "@/app/themes/presets";
+} from "@app/(page-theme-component)/themes/presets";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

@@ -4,7 +4,7 @@ import FormUi from "../FormUi";
 import BusinessDashboardClient from "./(BusinessDashboardClient)/BusinessDashboardClient";
 
 export default async function DashboardBusiness() {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;

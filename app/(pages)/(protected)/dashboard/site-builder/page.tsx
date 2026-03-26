@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { supabase } from "@/api/client";
-import { THEME_PRESETS, type ThemeKey, type SectionType } from "@/app/themes/presets";
+import { THEME_PRESETS, type ThemeKey, type SectionType } from "@app/(page-theme-component)/themes/presets";
 import { setSectionVariant, setTheme, toggleSection } from "../settings/actions";
 
 const ALL_SECTIONS: SectionType[] = [

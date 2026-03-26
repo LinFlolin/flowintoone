@@ -1,40 +1,47 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/api/client";
 
-export default function Page() {
+export default function UpdatePasswordPage() {
   const router = useRouter();
-  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+
+    async function checkRecoverySession() {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (!mounted) return;
+
+      if (error || !data.session) {
+        setErrorMsg("Invalid or expired reset link.");
+      }
+
+      setCheckingSession(false);
+    }
+
+    checkRecoverySession();
+
     return () => {
-      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+      mounted = false;
     };
   }, []);
 
-  async function handleSignup(e: React.FormEvent) {
+  async function handleUpdatePassword(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
-
-    const cleanEmail = email.trim();
-
-    if (!cleanEmail) {
-      setErrorMsg("Please enter your email.");
-      return;
-    }
 
     if (password.length < 6) {
       setErrorMsg("Password must be at least 6 characters.");
@@ -48,12 +55,8 @@ export default function Page() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
-      email: cleanEmail,
+    const { error } = await supabase.auth.updateUser({
       password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/callback?next=/dashboard`,
-      },
     });
 
     setLoading(false);
@@ -63,13 +66,12 @@ export default function Page() {
       return;
     }
 
-    setSuccessMsg(
-      "Account created! Check your email to confirm your account, then come back to log in."
-    );
+    setSuccessMsg("Password updated successfully.");
 
-    redirectTimer.current = setTimeout(() => {
+    setTimeout(() => {
       router.push("/login");
-    }, 1500);
+      router.refresh();
+    }, 1200);
   }
 
   return (
@@ -89,41 +91,33 @@ export default function Page() {
         </Link>
 
         <form
-          onSubmit={handleSignup}
+          onSubmit={handleUpdatePassword}
           className="flex flex-col gap-6 mt-6 w-full items-center"
         >
-          <p className="font-extrabold">Sign up</p>
+          <p className="font-extrabold">Set new password</p>
 
           <input
             className="bg-transparent border-b-2 border-Viola w-3/4 text-center text-Viola focus:outline-none focus:border-Orange transition-colors duration-300"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-          />
-
-          <input
-            className="bg-transparent border-b-2 border-Viola w-3/4 text-center text-Viola focus:outline-none focus:border-Orange transition-colors duration-300"
-            placeholder="Password"
+            placeholder="New password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
+            disabled={checkingSession}
           />
 
           <input
             className="bg-transparent border-b-2 border-Viola w-3/4 text-center text-Viola focus:outline-none focus:border-Orange transition-colors duration-300"
-            placeholder="Confirm password"
+            placeholder="Confirm new password"
             type="password"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             autoComplete="new-password"
+            disabled={checkingSession}
           />
 
           {errorMsg && (
-            <p className="text-red-600 text-sm text-center w-3/4">
-              {errorMsg}
-            </p>
+            <p className="text-red-600 text-sm text-center w-3/4">{errorMsg}</p>
           )}
 
           {successMsg && (
@@ -134,10 +128,14 @@ export default function Page() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || checkingSession}
             className="bg-Orange text-Cream font-bold py-2 px-4 rounded-full mt-4 hover:bg-Viola-Light transition-colors duration-300 disabled:opacity-60"
           >
-            {loading ? "Creating..." : "Create account"}
+            {checkingSession
+              ? "Checking..."
+              : loading
+              ? "Updating..."
+              : "Update password"}
           </button>
         </form>
 
@@ -146,7 +144,7 @@ export default function Page() {
             href="/login"
             className="text-[12px] text-Viola hover:text-Orange transition-colors duration-300"
           >
-            Already have an account? Log in
+            Back to login
           </Link>
         </div>
       </div>

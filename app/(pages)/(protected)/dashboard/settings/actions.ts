@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@supabase/supabase-js";
-import type { ThemeKey, PageConfig, SectionType, Variant } from "@/app/themes/presets";
+import type { ThemeKey, PageConfig, SectionType, Variant } from "@app/(page-theme-component)/themes/presets";
 import { Database } from "@/types/supabase";
 
 function getSupabaseAdmin() {

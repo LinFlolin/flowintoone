@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,69 +8,72 @@ import { supabase } from "@/api/client";
 
 export default function Page() {
   const router = useRouter();
-  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (redirectTimer.current) clearTimeout(redirectTimer.current);
-    };
-  }, []);
+  async function handleLogin(e: React.FormEvent) {
+  e.preventDefault();
+  setLoading(true);
+  setErrorMsg(null);
 
-  async function handleSignup(e: React.FormEvent) {
-    e.preventDefault();
-    setErrorMsg(null);
-    setSuccessMsg(null);
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-    const cleanEmail = email.trim();
-
-    if (!cleanEmail) {
-      setErrorMsg("Please enter your email.");
-      return;
-    }
-
-    if (password.length < 6) {
-      setErrorMsg("Password must be at least 6 characters.");
-      return;
-    }
-
-    if (password !== confirm) {
-      setErrorMsg("Passwords do not match.");
-      return;
-    }
-
-    setLoading(true);
-
-    const { error } = await supabase.auth.signUp({
-      email: cleanEmail,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/callback?next=/dashboard`,
-      },
-    });
-
+  if (error) {
     setLoading(false);
-
-    if (error) {
-      setErrorMsg(error.message);
-      return;
-    }
-
-    setSuccessMsg(
-      "Account created! Check your email to confirm your account, then come back to log in."
-    );
-
-    redirectTimer.current = setTimeout(() => {
-      router.push("/login");
-    }, 1500);
+    setErrorMsg(error.message);
+    return;
   }
+
+  const session = data.session;
+  if (!session) {
+    setLoading(false);
+    setErrorMsg("No session returned");
+    return;
+  }
+
+  const r = await fetch("/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      access_token: session.access_token,
+      refresh_token: session.refresh_token,
+    }),
+  });
+
+  if (!r.ok) {
+    setLoading(false);
+    setErrorMsg("Failed to set session cookies");
+    return;
+  }
+
+  const { data: membership, error: membershipError } = await supabase
+    .from("business_memberships")
+    .select("business_id, role")
+    .eq("user_id", data.user.id)
+    .maybeSingle();
+
+  setLoading(false);
+
+  if (membershipError) {
+    setErrorMsg(membershipError.message);
+    return;
+  }
+
+  // 👉 If user has a business → dashboard
+  if (membership?.business_id) {
+    router.push("/dashboard");
+  } else {
+    // 👉 Otherwise → onboarding
+    router.push("/create-profile");
+  }
+
+  router.refresh();
+}
 
   return (
     <div className="bg-linear-to-b text-Cream from-[#7217ba] from-90% md:from-60% to-[#f8f4ec] h-screen flex justify-center items-center">
@@ -89,10 +92,10 @@ export default function Page() {
         </Link>
 
         <form
-          onSubmit={handleSignup}
+          onSubmit={handleLogin}
           className="flex flex-col gap-6 mt-6 w-full items-center"
         >
-          <p className="font-extrabold">Sign up</p>
+          <p className="font-extrabold">Login</p>
 
           <input
             className="bg-transparent border-b-2 border-Viola w-3/4 text-center text-Viola focus:outline-none focus:border-Orange transition-colors duration-300"
@@ -108,45 +111,32 @@ export default function Page() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="new-password"
+            autoComplete="current-password"
           />
 
-          <input
-            className="bg-transparent border-b-2 border-Viola w-3/4 text-center text-Viola focus:outline-none focus:border-Orange transition-colors duration-300"
-            placeholder="Confirm password"
-            type="password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            autoComplete="new-password"
-          />
-
-          {errorMsg && (
-            <p className="text-red-600 text-sm text-center w-3/4">
-              {errorMsg}
-            </p>
-          )}
-
-          {successMsg && (
-            <p className="text-green-700 text-sm text-center w-3/4">
-              {successMsg}
-            </p>
-          )}
+          {errorMsg && <p className="text-red-600 text-sm">{errorMsg}</p>}
 
           <button
             type="submit"
             disabled={loading}
             className="bg-Orange text-Cream font-bold py-2 px-4 rounded-full mt-4 hover:bg-Viola-Light transition-colors duration-300 disabled:opacity-60"
           >
-            {loading ? "Creating..." : "Create account"}
+            {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
 
         <div className="mt-4 flex flex-col gap-1 items-center">
           <Link
-            href="/login"
+            href="/password-reset"
             className="text-[12px] text-Viola hover:text-Orange transition-colors duration-300"
           >
-            Already have an account? Log in
+            Forgot password?
+          </Link>
+          <Link
+            href="/signup"
+            className="text-[12px] text-Viola hover:text-Orange transition-colors duration-300"
+          >
+            Don't have an account? Sign up
           </Link>
         </div>
       </div>
