@@ -44,3 +44,13 @@ body {
 h1, h2, h3  {
   font-family: var(--font-nunito), sans-serif;
 }
+.my-carousel-progress {
+  background: #ccc;
+}
+
+.my-carousel-progress-bar {
+  background: rgb(169, 218, 96);
+  height: 2px;
+  transition: width 400ms ease;
+  width: 0;
+}

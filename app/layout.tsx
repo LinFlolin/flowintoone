@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import './swiper.css';
-import NavigationMenu from "./components/NavigationMenu";
+import NavigationMenu from "./components/Flowcomponent/home/NavigationMenu";
 import { Comfortaa , Nunito } from 'next/font/google'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 

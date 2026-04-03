@@ -1,7 +1,33 @@
 import React from 'react'
+import Image from 'next/image'
+import { validateHeaderName } from 'http'
+import FadeInOnScroll from '@app/ui/FadeInOnScroll'
 
 export default function Chi_siamo() {
   return (
-    <div className="p-16 bg-amber-500 ">Chi_siamo</div>
+    <>
+      <div className="bg-linear-to-b h-60vh text-Cream z-20 from-[#f8f4ec] to-[#7217ba] from-20% md:from-0% md:to-60% flex flex-col md:flex-row-reverse justify-center items-center ">
+        <div className="flex w-full my-10 h-[80vh] justify-around items-center px-4 md:px-16">
+          <div className="flex flex-col md:flex-col items-end ">
+            <FadeInOnScroll mobileVariant='zoom-in' desktopVariant='fade-up' delay={50}>
+              <Image src="/Group-45-1.png" alt="Chi siamo" width={150} height={150} className="rounded-xl m-6 self-end" />
+            </FadeInOnScroll>
+            <div>
+              <h1 className="text-2xl md:text-6xl font-bold mb-4">Chi siamo</h1>
+              <p className="text-lg md:text-xl mb-6 max-w-2xl">
+                Flow Into One è una piattaforma che mette in contatto persone con artigiani, negozi e freelance.
+                Crediamo nella trasparenza e vogliamo rendere semplice e sicuro scoprire realtà autentiche e di qualità, senza dipendere dagli algoritmi dei social. 
+              </p>
+              <button className="bg-Cream text-[#7217ba] px-6 py-3 rounded-full font-semibold hover:bg-[#FFA500] hover:text-Cream transition-colors duration-300" >
+                <a href="/chi-siamo" className="text-[#7217ba] hover:text-Cream">Scopri di più</a>
+              </button>
+            </div>
+          </div>
+          <FadeInOnScroll mobileVariant='zoom-in' desktopVariant='zoom-in' delay={50}>
+            <Image src="/Aboutus.jpg" alt="Chi siamo" width={400} height={400} className="rounded-xl self-end shadow-lg shadow-Cream " />
+          </FadeInOnScroll>
+        </div>      
+      </div>
+    </>
   )
 }
