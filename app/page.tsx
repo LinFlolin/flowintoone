@@ -6,11 +6,14 @@ import QA from "./components/Flowcomponent/home/QA";
 import WhoWeAre from "./components/Flowcomponent/home/WhoWeAre";
 export default async function Home() {
   return (
-   <div className="">
-      <HeroHome />
-      <WhoWeAre />
-      <BecomePartner />
-      <QA />      
-   </div>
+  //  <div className="">
+  //     <HeroHome />
+  //     <WhoWeAre />
+  //     <BecomePartner />
+  //     <QA />      
+  //  </div>
+  <div>
+      
+  </div>
   );
 }
