@@ -15,7 +15,7 @@ type VariantName =
 
 type Variant = VariantName | "none";
 
-type FadeInOnScrollProps = {
+type AnimationOnScrollProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
@@ -70,7 +70,7 @@ const variants: Record<VariantName, { hidden: string; visible: string }> = {
   },
 };
 
-export default function FadeInOnScroll({
+export default function AnimationOnScroll({
   children,
   className = "",
   delay = 0,
@@ -78,7 +78,7 @@ export default function FadeInOnScroll({
   mobileVariant = null,
   desktopVariant = null,
   breakpoint = 768,
-}: FadeInOnScrollProps) {
+}: AnimationOnScrollProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
