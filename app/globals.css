@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 :root {
+  --Dark-Viola: #250e2c;
+  --Grape-Viola: #837ab6;
+  --Light-Viola: #9d85b6;
+  --Pink-Viola: #cc8db3;
+  --Pink-Pastel: #f6a5c0;
+  --Pink-Pastel-light: #f7c2ca;
+
   --background: #f8f6f0;
   --Cream : #f8f6f0;
   --Viola:#7217ba;
@@ -9,6 +16,7 @@
   --Green-pastel:#cdd07f;
   --foreground: #171717;
   --maingradient: linear-gradient(359deg, #F8F4EC 3%, #D8CDB8 34%, #9B9595 60%, #7122B4 100%);
+  --gradient: linear-gradient(90deg,rgba(37, 14, 44, 1) 0%, rgba(131, 122, 182, 1) 35%, rgba(246, 165, 192, 1) 100%);
 }
 
 @theme inline {
@@ -20,12 +28,22 @@
   --color-Green-pastel: var(--Green-pastel);
   --color-foreground: var(--foreground);
 
+
+
+  --color-DarkViola: var(--Dark-Viola);
+  --color-GrapeViola: var(--Grape-Viola);
+  --color-lightViola: var(--Light-Viola);
+  --color-pinkViola: var(--Pink-Viola);
+  --color-pinkPastel: var(--Pink-Pastel);
+  --color-pinkPastel-light: var(--Pink-Pastel-light);
+
+
   --font-comfortaa: var(--font-comfortaa);
   --font-nunito: var(--font-nunito);
 
   --spacing-screen-custom: calc(100vh - 4rem);
   --maingradient: linear-gradient(359deg, #F8F4EC 3%, #D8CDB8 34%, #9B9595 60%, #7122B4 100%);
-
+  --gradient: linear-gradient(90deg,rgba(37, 14, 44, 1) 0%, rgba(131, 122, 182, 1) 35%, rgba(246, 165, 192, 1) 100%);
   
 }
 
