@@ -27,7 +27,7 @@ export default async function Home() {
           </button>
         </section>
       </AnimationOnScroll>
-      <AnimationOnScroll delay={200}  mobileVariant='zoom-in' desktopVariant='fade-up' >
+      <AnimationOnScroll delay={0}  mobileVariant='zoom-in' desktopVariant='fade-up' >
         <section className="snap-center h-screen text-white flex flex-col items-center justify-center p-6">
           <h1 className="text-3xl font-bold">Lorem Ipsum</h1>
           <p className="font-light text-sm text-center">
@@ -35,6 +35,31 @@ export default async function Home() {
           </p>
         </section>
       </AnimationOnScroll>
+       <AnimationOnScroll delay={0}  mobileVariant='zoom-in' desktopVariant='fade-up' >
+        <section className="snap-center h-screen text-white flex flex-col items-center justify-center p-6">
+          <h1 className="text-3xl font-bold">Lorem Ipsum</h1>
+          <p className="font-light text-sm text-center">
+            "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+          </p>
+        </section>
+      </AnimationOnScroll>
+       <AnimationOnScroll delay={0}  mobileVariant='zoom-in' desktopVariant='fade-up' >
+        <section className="snap-center h-screen text-white flex flex-col items-center justify-center p-6">
+          <h1 className="text-3xl font-bold">Lorem Ipsum</h1>
+          <p className="font-light text-sm text-center">
+            "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+          </p>
+        </section>
+      </AnimationOnScroll>
+       <AnimationOnScroll delay={0}  mobileVariant='zoom-in' desktopVariant='fade-up' >
+        <section className="snap-center h-screen text-white flex flex-col items-center justify-center p-6">
+          <h1 className="text-3xl font-bold">Lorem Ipsum</h1>
+          <p className="font-light text-sm text-center">
+            "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+          </p>
+        </section>
+      </AnimationOnScroll>
+
 
     </div>
   );
