@@ -33,6 +33,7 @@ export const DASHBOARD_QUICK_ACCESS: Array<{
   href?: string;
   icon: DashboardIconName;
   tone: string;
+  backgroundClassName: string;
 }> = [
   {
     label: "My profile",
@@ -40,6 +41,7 @@ export const DASHBOARD_QUICK_ACCESS: Array<{
     href: "/dashboard/profile",
     icon: "profile",
     tone: "bg-heather/10 text-heather",
+    backgroundClassName: "bg-heather/5",
   },
   {
     label: "My storefront",
@@ -47,17 +49,20 @@ export const DASHBOARD_QUICK_ACCESS: Array<{
     href: "/dashboard/storefront",
     icon: "storefront",
     tone: "bg-viridian/15 text-[#477b7b]",
+    backgroundClassName: "bg-viridian/5",
   },
   {
     label: "My products",
     description: "Add and manage your creations.",
     icon: "products",
     tone: "bg-candy/15 text-[#a95d76]",
+    backgroundClassName: "bg-candy/5",
   },
   {
     label: "Settings",
     description: "Update your preferences and account details.",
     icon: "settings",
     tone: "bg-azur/15 text-[#537da9]",
+    backgroundClassName: "bg-azur/5",
   },
 ];

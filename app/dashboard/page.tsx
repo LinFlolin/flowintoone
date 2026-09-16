@@ -116,18 +116,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   <DashboardIcon name={item.icon} className="size-4 shrink-0" />
                   <span>{item.label}</span>
                   {!item.href && (
-                    <span className="ml-auto hidden text-[10px] font-bold uppercase tracking-[0.1em] text-ink/35 lg:inline">
+                    <span className="ml-auto hidden text-[10px] font-bold uppercase tracking-[0.1em] text-ink/55 lg:inline">
                       Soon
                     </span>
                   )}
                 </>
               );
-              const className = `inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-medium transition-colors ${
+              const className = `inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors ${
                 index === 0
                   ? "bg-heather/15 text-heather"
                   : item.href
-                    ? "text-ink/65 hover:bg-heather/10 hover:text-heather"
-                    : "cursor-default text-ink/35"
+                    ? "text-ink/80 hover:bg-heather/10 hover:text-heather"
+                    : "cursor-default text-ink/55"
               }`;
 
               return item.href ? (
@@ -329,10 +329,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                       <p className="mt-1.5 text-[15px] leading-6 text-ink/55">{item.description}</p>
                     </>
                   );
-                  const className = `min-h-44 rounded-[1.4rem] border border-heather/25 p-6 text-left 2xl:min-h-48 2xl:p-7 ${
+                  const className = `min-h-44 rounded-[1.4rem] border border-heather/25 p-6 text-left 2xl:min-h-48 2xl:p-7 ${item.backgroundClassName} ${
                     item.href
-                      ? "bg-white/60 transition-transform hover:-translate-y-0.5 focus-visible:outline-2"
-                      : "bg-white/40"
+                      ? "transition-transform hover:-translate-y-0.5 hover:brightness-[0.98] focus-visible:outline-2"
+                      : ""
                   }`;
 
                   return item.href ? (
