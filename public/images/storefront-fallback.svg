@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Flowintoone storefront placeholder</title>
+  <desc id="desc">Soft abstract shapes in the Flowintoone color palette</desc>
+  <rect width="1200" height="800" fill="#E6D4BF"/>
+  <circle cx="210" cy="170" r="260" fill="#E18299" opacity=".52"/>
+  <circle cx="1030" cy="190" r="310" fill="#80A6D2" opacity=".55"/>
+  <path d="M-70 730C160 480 360 455 585 630S990 820 1280 515V850H-70Z" fill="#679F9F" opacity=".62"/>
+  <path d="M350 0c85 138 105 265 19 380-59 79-80 170-50 272" fill="none" stroke="#877499" stroke-width="34" stroke-linecap="round" opacity=".48"/>
+</svg>

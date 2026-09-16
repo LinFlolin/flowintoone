@@ -13,7 +13,7 @@ export type HomepageBusiness = {
   businessName: string;
   category: string | null;
   city: string | null;
-  imageSrc: string | null;
+  imageSrc: string;
 };
 
 export type HomepageEvent = {
@@ -131,7 +131,7 @@ export async function getHomepageBusinesses(): Promise<
           businessName: business.name,
           category: relatedCategory?.name ?? null,
           city: business.city,
-          imageSrc: business.cover_image_url ?? business.logo_url,
+          imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
         };
       }),
       error: null,

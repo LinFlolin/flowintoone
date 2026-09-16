@@ -11,6 +11,7 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
       protocol: supabaseUrl.protocol === "http:" ? "http" : "https",
       hostname: supabaseUrl.hostname,
       port: supabaseUrl.port,
+      pathname: "/storage/v1/object/public/storefront-images/**",
     });
   } catch {
     // Environment validation in the data layer provides the visible error state.
@@ -18,6 +19,11 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
 }
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "11mb",
+    },
+  },
   images: {
     remotePatterns,
   },

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StorefrontImageFields } from "@/components/dashboard/StorefrontImageFields";
 import { StorefrontNameField } from "@/components/dashboard/StorefrontNameField";
 import { StorefrontSubmitButtons } from "@/components/dashboard/StorefrontSubmitButtons";
 import { requireUser } from "@/lib/auth/session";
@@ -19,6 +20,8 @@ type StorefrontBusiness = {
   website_url: string | null;
   instagram_url: string | null;
   contact_email: string | null;
+  logo_url: string | null;
+  cover_image_url: string | null;
   status: string;
 };
 
@@ -37,7 +40,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
     supabase
       .from("businesses")
       .select(
-        "id, name, slug, description, category_id, city, country, website_url, instagram_url, contact_email, status",
+        "id, name, slug, description, category_id, city, country, website_url, instagram_url, contact_email, logo_url, cover_image_url, status",
       )
       .eq("owner_id", userId)
       .order("created_at", { ascending: true })
@@ -110,6 +113,11 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
           <StorefrontNameField
             initialName={business?.name ?? ""}
             initialSlug={business?.slug ?? null}
+          />
+
+          <StorefrontImageFields
+            logoUrl={business?.logo_url ?? null}
+            coverUrl={business?.cover_image_url ?? null}
           />
 
           <label className="text-sm font-semibold text-ink">
