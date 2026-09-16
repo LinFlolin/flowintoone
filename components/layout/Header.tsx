@@ -69,7 +69,7 @@ export function Header() {
               className={`h-px w-full bg-current transition-opacity ${isOpen ? "opacity-0" : ""}`}
             />
             <span
-              className={`h-px w-full bg-current transition-transform ${isOpen ? "-translate-y-[6px] -rotate-45" : ""}`}
+              className={`h-px w-full bg-current transition-transform ${isOpen ? "translate-y-[6px] rotate-45" : ""}`}
             />
           </span>
         </button>

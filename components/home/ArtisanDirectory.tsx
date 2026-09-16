@@ -1,11 +1,13 @@
 import Link from "next/link";
-import { ArtisanCard, type ArtisanSummary } from "@/components/artisans/ArtisanCard";
+import { ArtisanCard } from "@/components/artisans/ArtisanCard";
+import type { HomepageBusiness } from "@/lib/data/homepage";
 
 type ArtisanDirectoryProps = {
-  artisans?: ArtisanSummary[];
+  artisans: HomepageBusiness[];
+  error?: string | null;
 };
 
-export function ArtisanDirectory({ artisans = [] }: ArtisanDirectoryProps) {
+export function ArtisanDirectory({ artisans, error = null }: ArtisanDirectoryProps) {
   return (
     <section
       id="artisans"
@@ -28,10 +30,17 @@ export function ArtisanDirectory({ artisans = [] }: ArtisanDirectoryProps) {
           </p>
         </div>
 
-        {artisans.length > 0 ? (
+        {error ? (
+          <div className="mt-12 rounded-[2rem] border border-heather/15 bg-cream px-6 py-14 text-center">
+            <h3 className="text-xl font-semibold tracking-[-0.03em] text-ink">
+              We could not load our makers.
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-ink/60">{error} Please try again soon.</p>
+          </div>
+        ) : artisans.length > 0 ? (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {artisans.map((artisan) => (
-              <ArtisanCard key={artisan.slug} artisan={artisan} />
+              <ArtisanCard key={artisan.id} artisan={artisan} />
             ))}
           </div>
         ) : (

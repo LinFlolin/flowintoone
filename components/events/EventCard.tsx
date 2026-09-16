@@ -1,14 +1,7 @@
-export type EventSummary = {
-  id: string;
-  title: string;
-  location: string;
-  date: string;
-  type: "Market" | "Event";
-  href: string;
-};
+import type { HomepageEvent } from "@/lib/data/homepage";
 
 type EventCardProps = {
-  event: EventSummary;
+  event: HomepageEvent;
 };
 
 export function EventCard({ event }: EventCardProps) {
@@ -29,7 +22,7 @@ export function EventCard({ event }: EventCardProps) {
           {event.type}
         </span>
         <h3 className="mt-3 text-lg font-semibold tracking-[-0.025em] text-ink">{event.title}</h3>
-        <p className="mt-2 text-sm text-ink/60">{event.location}</p>
+        {event.location && <p className="mt-2 text-sm text-ink/60">{event.location}</p>}
         <a
           href={event.href}
           className="mt-4 inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"

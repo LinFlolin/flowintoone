@@ -1,19 +1,13 @@
 import Link from "next/link";
-import { EventCard, type EventSummary } from "@/components/events/EventCard";
+import { EventCard } from "@/components/events/EventCard";
+import type { HomepageEvent } from "@/lib/data/homepage";
 
 type UpcomingEventsProps = {
-  events?: EventSummary[];
+  events: HomepageEvent[];
+  error?: string | null;
 };
 
-export function UpcomingEvents({ events = [] }: UpcomingEventsProps) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const upcomingEvents = events
-    .filter((event) => new Date(event.date) >= today)
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .slice(0, 3);
-
+export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
   return (
     <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-10" aria-labelledby="events-heading">
       <div className="mx-auto max-w-[1200px]">
@@ -40,9 +34,18 @@ export function UpcomingEvents({ events = [] }: UpcomingEventsProps) {
           </Link>
         </div>
 
-        {upcomingEvents.length > 0 ? (
+        {error ? (
+          <div className="mt-12 rounded-[2rem] border border-heather/15 bg-sandstone/20 px-6 py-12 text-center sm:px-10">
+            <p className="text-xl font-semibold tracking-[-0.03em] text-ink">
+              We could not load upcoming events.
+            </p>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/60">
+              {error} Please try again soon.
+            </p>
+          </div>
+        ) : events.length > 0 ? (
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {upcomingEvents.map((event) => (
+            {events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>
