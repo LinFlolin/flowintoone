@@ -141,7 +141,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
       <Header />
       <main className="bg-cream pb-24">
         <section className="px-5 pt-8 sm:px-8 sm:pt-12 lg:px-10">
-          <div className="mx-auto max-w-[1200px]">
+          <div className="mx-auto max-w-[75%]">
             <Link
               href="/#artisans"
               className="inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
