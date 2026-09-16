@@ -77,12 +77,6 @@ with check (
   and split_part(name, '/', 1) = (select auth.uid())::text
   and array_length(string_to_array(name, '/'), 1) = 3
   and split_part(name, '/', 3) ~ '^(logo|cover)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.webp$'
-  and exists (
-    select 1
-    from public.businesses as business
-    where business.id::text = split_part(name, '/', 2)
-      and business.owner_id = (select auth.uid())
-  )
 );
 
 drop policy if exists "flowintoone_storefront_images_delete_own" on storage.objects;
@@ -93,12 +87,8 @@ to authenticated
 using (
   bucket_id = 'storefront-images'
   and split_part(name, '/', 1) = (select auth.uid())::text
-  and exists (
-    select 1
-    from public.businesses as business
-    where business.id::text = split_part(name, '/', 2)
-      and business.owner_id = (select auth.uid())
-  )
+  and array_length(string_to_array(name, '/'), 1) = 3
+  and split_part(name, '/', 3) ~ '^(logo|cover)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.webp$'
 );
 
 -- Enforce publish completeness for every new or updated row, including writes

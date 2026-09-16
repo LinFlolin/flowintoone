@@ -15,8 +15,8 @@ The application does not execute the migration automatically. It:
 - limits stored objects to 5 MB WebP output; the application accepts JPEG, PNG,
   and WebP source images and converts them before upload;
 - allows public reads but no public writes;
-- permits an authenticated user to insert and delete only below
-  `auth-user-id/owned-business-id/`;
+- permits an authenticated user to insert and delete only below their own
+  `auth-user-id/business-id/` namespace;
 - accepts only unique `logo-<uuid>.webp` and `cover-<uuid>.webp` object names;
 - deliberately provides no object UPDATE policy;
 - adds a non-destructive `NOT VALID` check for future published business writes;
@@ -26,6 +26,14 @@ The server checks file size and declared type, decodes the actual image content,
 rejects unsupported data, resizes it, and writes WebP output. Replacing an image
 uploads a unique object first, updates the database URL, and only then removes the
 previous owned object.
+
+If the original Phase 3 migration was already applied and uploads fail with
+`new row violates row-level security policy`, apply the follow-up migration:
+
+`supabase/migrations/20260916160000_fix_storefront_image_storage_policy.sql`
+
+It keeps authorization inside the authenticated user's Storage namespace and
+avoids a cross-table RLS lookup during object insertion.
 
 ## First upload
 
