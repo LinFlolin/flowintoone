@@ -68,3 +68,9 @@ point it to the app's `/auth/confirm` handler:
 Password recovery redirects through `/auth/callback` and ends at
 `/update-password`. Configure custom SMTP before production; the built-in sender
 is intended only for limited testing.
+
+## 5. Profile 2.0
+
+The optional location fields and private avatar Storage configuration are documented
+in `docs/profile-2-setup.md`. Apply its migration separately; it remains compatible
+with the profile trigger described above.

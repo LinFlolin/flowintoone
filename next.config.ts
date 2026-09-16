@@ -13,6 +13,12 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
       port: supabaseUrl.port,
       pathname: "/storage/v1/object/public/storefront-images/**",
     });
+    remotePatterns.push({
+      protocol: supabaseUrl.protocol === "http:" ? "http" : "https",
+      hostname: supabaseUrl.hostname,
+      port: supabaseUrl.port,
+      pathname: "/storage/v1/object/sign/profile-avatars/**",
+    });
   } catch {
     // Environment validation in the data layer provides the visible error state.
   }
