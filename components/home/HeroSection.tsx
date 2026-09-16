@@ -43,7 +43,7 @@ export function HeroSection() {
           />
           <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] rounded-br-[5rem] sm:rounded-[2.25rem] sm:rounded-br-[7rem]">
             <Image
-              src="/images/categories/art-prints.jpg"
+              src="/images/Hero-image.jpg"
               alt="An independent artist arranging botanical prints at a studio table"
               fill
               priority

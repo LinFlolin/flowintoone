@@ -3,7 +3,7 @@ import type { HomepageCategory } from "@/lib/data/homepage";
 
 const fallbackImages: Record<string, { src: string; alt: string }> = {
   ceramics: {
-    src: "/images/categories/ceramico-flora.png",
+    src: "/images/categories/ceramico.jpg",
     alt: "Pastel handmade ceramic vessels and tableware with flowers",
   },
   jewelry: {
