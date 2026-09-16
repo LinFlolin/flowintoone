@@ -45,7 +45,7 @@ export function StorefrontGalleryField({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const activeExistingCount = imageUrls.length - removedUrls.length;
-  const availableSlots = MAX_GALLERY_IMAGES - activeExistingCount;
+  const availableSlots = Math.max(0, MAX_GALLERY_IMAGES - activeExistingCount);
   const removedSet = useMemo(() => new Set(removedUrls), [removedUrls]);
 
   function revokeSelectedPreviews() {
@@ -178,7 +178,7 @@ export function StorefrontGalleryField({
           name="galleryImages"
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
           multiple
-          disabled={availableSlots === 0}
+          disabled={availableSlots <= 0}
           aria-describedby="gallery-image-help"
           onChange={(event) => handleFiles(Array.from(event.target.files ?? []), event.currentTarget)}
         />

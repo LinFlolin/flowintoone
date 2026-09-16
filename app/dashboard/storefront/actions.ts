@@ -114,7 +114,8 @@ async function prepareImage(file: File | null, kind: ImageKind): Promise<Pending
     return { kind, image: await processStorefrontImage(file, kind) };
   } catch (error) {
     if (error instanceof StorefrontImageValidationError) {
-      const label = kind === "logo" ? "Logo" : kind === "cover" ? "Cover image" : "Gallery image";
+      const label =
+        kind === "logo" ? "Logo" : kind === "cover" ? "Cover image" : "Gallery image";
       storefrontRedirect("error", `${label}: ${error.message}`);
     }
 
@@ -221,10 +222,17 @@ export async function saveStorefrontAction(formData: FormData) {
   ) {
     storefrontRedirect("error", "One or more text fields are too long.");
   }
-  if (contactEmail.length > 254 || (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail))) {
+  if (
+    contactEmail.length > 254 ||
+    (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail))
+  ) {
     storefrontRedirect("error", "Enter a valid public contact email.");
   }
-  if ([website.value, instagram.value, etsy.value].some((value) => (value?.length ?? 0) > 2048)) {
+  if (
+    [website.value, instagram.value, etsy.value].some(
+      (value) => (value?.length ?? 0) > 2048,
+    )
+  ) {
     storefrontRedirect("error", "Links must be 2,048 characters or fewer.");
   }
   if (website.error || instagram.error || etsy.error) {
@@ -298,20 +306,28 @@ export async function saveStorefrontAction(formData: FormData) {
     storefrontRedirect("error", "Create the draft before publishing it.");
   }
 
-  const removedGalleryUrls = oldGalleryImageUrls.filter((url) => requestedGalleryRemovals.has(url));
+  const removedGalleryUrls = oldGalleryImageUrls.filter((url) =>
+    requestedGalleryRemovals.has(url),
+  );
   const keptGalleryUrls = oldGalleryImageUrls.filter((url) => !requestedGalleryRemovals.has(url));
 
   if (keptGalleryUrls.length + galleryFiles.length > 6) {
     storefrontRedirect("error", "A storefront gallery can contain up to six images.");
   }
 
-  const pendingImages = (
-    await Promise.all([
-      prepareImage(getOptionalFile(formData, "logoImage"), "logo"),
-      prepareImage(getOptionalFile(formData, "coverImage"), "cover"),
-      ...galleryFiles.map((file) => prepareImage(file, "gallery")),
-    ])
-  ).filter((image): image is PendingImage => image !== null);
+  const imageCandidates: Array<{ file: File | null; kind: ImageKind }> = [
+    { file: getOptionalFile(formData, "logoImage"), kind: "logo" },
+    { file: getOptionalFile(formData, "coverImage"), kind: "cover" },
+    ...galleryFiles.map((file) => ({ file, kind: "gallery" as const })),
+  ];
+  const pendingImages: PendingImage[] = [];
+
+  // Decode sequentially to keep peak memory predictable when several large
+  // gallery sources are submitted in the same Server Action.
+  for (const candidate of imageCandidates) {
+    const prepared = await prepareImage(candidate.file, candidate.kind);
+    if (prepared) pendingImages.push(prepared);
+  }
 
   let slug =
     (existingSlug && name === existingName ? existingSlug : normalizeStorefrontSlug(name)) ||

@@ -27,7 +27,7 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: "11mb",
+      bodySizeLimit: "42mb",
     },
   },
   images: {

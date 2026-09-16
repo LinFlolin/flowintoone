@@ -61,3 +61,9 @@ Use two disposable authenticated accounts after applying the migration:
    `.webp` object and the old object is removed only after the update succeeds.
 6. Confirm the draft URL returns 404. Complete all required fields, publish, and
    confirm the same URL returns 200 and is linked from the homepage.
+
+## Storefront 2.0
+
+The narrative fields, Etsy link, and six-image gallery are documented separately in
+`docs/storefront-2-setup.md`. Apply its additive migration after the Phase 3 Storage
+migrations above.

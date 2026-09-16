@@ -350,7 +350,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
             <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.15em] text-ink/45">
-                  Publishing essentials
+                  Publishing essentials — last saved state
                 </p>
                 <ul className="mt-4 grid gap-2 sm:grid-cols-2">
                   {publishingChecklist.map((item) => (
@@ -369,6 +369,9 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                     </li>
                   ))}
                 </ul>
+                <p className="mt-3 text-xs leading-5 text-ink/45">
+                  This checklist refreshes after each successful save.
+                </p>
               </div>
 
               {business?.status === "published" ? (
