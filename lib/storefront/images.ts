@@ -6,7 +6,7 @@ export const STOREFRONT_IMAGE_BUCKET = "storefront-images";
 export const STOREFRONT_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 export const STOREFRONT_IMAGE_ACCEPT = ["image/jpeg", "image/png", "image/webp"] as const;
 
-type StorefrontImageKind = "logo" | "cover";
+export type StorefrontImageKind = "logo" | "cover" | "gallery";
 
 export type ProcessedStorefrontImage = {
   bytes: Buffer;
@@ -46,7 +46,11 @@ export async function processStorefrontImage(
     }
 
     const dimensions =
-      kind === "logo" ? { width: 800, height: 800 } : { width: 2400, height: 1600 };
+      kind === "logo"
+        ? { width: 800, height: 800 }
+        : kind === "gallery"
+          ? { width: 2000, height: 1600 }
+          : { width: 2400, height: 1600 };
     const bytes = await image
       .rotate()
       .resize({ ...dimensions, fit: "inside", withoutEnlargement: true })

@@ -11,6 +11,7 @@ import {
   storefrontImagePath,
   storefrontObjectPathFromPublicUrl,
   type ProcessedStorefrontImage,
+  type StorefrontImageKind,
 } from "@/lib/storefront/images";
 import { normalizeStorefrontSlug } from "@/lib/storefront/slug";
 
@@ -21,7 +22,7 @@ type SupabaseErrorDetails = {
   hint?: string;
 };
 
-type ImageKind = "logo" | "cover";
+type ImageKind = StorefrontImageKind;
 
 type PendingImage = {
   kind: ImageKind;
@@ -61,6 +62,12 @@ function getOptionalFile(formData: FormData, name: string) {
   return entry instanceof File && entry.size > 0 ? entry : null;
 }
 
+function getOptionalFiles(formData: FormData, name: string) {
+  return formData
+    .getAll(name)
+    .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+}
+
 function normalizeOptionalUrl(value: string) {
   if (!value) return { value: null, error: null };
 
@@ -78,6 +85,23 @@ function normalizeOptionalUrl(value: string) {
   }
 }
 
+function normalizeOptionalEtsyUrl(value: string) {
+  const normalized = normalizeOptionalUrl(value);
+  if (normalized.error || !normalized.value) return normalized;
+
+  const hostname = new URL(normalized.value).hostname.toLowerCase();
+  if (
+    hostname !== "etsy.com" &&
+    !hostname.endsWith(".etsy.com") &&
+    hostname !== "etsy.me" &&
+    !hostname.endsWith(".etsy.me")
+  ) {
+    return { value: null, error: "Enter a valid Etsy shop URL." };
+  }
+
+  return normalized;
+}
+
 function storefrontRedirect(type: "error" | "message", message: string): never {
   const params = new URLSearchParams({ [type]: message });
   redirect(`/dashboard/storefront?${params.toString()}`);
@@ -90,13 +114,14 @@ async function prepareImage(file: File | null, kind: ImageKind): Promise<Pending
     return { kind, image: await processStorefrontImage(file, kind) };
   } catch (error) {
     if (error instanceof StorefrontImageValidationError) {
-      storefrontRedirect("error", `${kind === "logo" ? "Logo" : "Cover image"}: ${error.message}`);
+      const label = kind === "logo" ? "Logo" : kind === "cover" ? "Cover image" : "Gallery image";
+      storefrontRedirect("error", `${label}: ${error.message}`);
     }
 
     console.error(`[storefront:image-process] ${kind} image processing failed`);
     storefrontRedirect(
       "error",
-      `The ${kind === "logo" ? "logo" : "cover image"} could not be processed. Try another image.`,
+      `The ${kind === "logo" ? "logo" : kind === "cover" ? "cover image" : "gallery image"} could not be processed. Try another image.`,
     );
   }
 }
@@ -164,13 +189,21 @@ export async function saveStorefrontAction(formData: FormData) {
   const submittedBusinessId = getField(formData, "businessId");
   const intent = getField(formData, "intent") === "publish" ? "publish" : "save";
   const name = getField(formData, "name");
+  const tagline = getField(formData, "tagline");
   const description = getField(formData, "description");
+  const materials = getField(formData, "materials");
+  const creativeProcess = getField(formData, "creativeProcess");
   const categoryId = getField(formData, "categoryId");
   const city = getField(formData, "city");
   const country = getField(formData, "country");
   const contactEmail = getField(formData, "contactEmail").toLowerCase();
   const website = normalizeOptionalUrl(getField(formData, "websiteUrl"));
   const instagram = normalizeOptionalUrl(getField(formData, "instagramUrl"));
+  const etsy = normalizeOptionalEtsyUrl(getField(formData, "etsyUrl"));
+  const galleryFiles = getOptionalFiles(formData, "galleryImages");
+  const requestedGalleryRemovals = new Set(
+    formData.getAll("removeGalleryUrl").map((value) => String(value)),
+  );
 
   if (name.length < 2 || name.length > 100) {
     storefrontRedirect("error", "Business name must be between 2 and 100 characters.");
@@ -178,22 +211,32 @@ export async function saveStorefrontAction(formData: FormData) {
   if (!categoryId) {
     storefrontRedirect("error", "Select a category.");
   }
-  if (description.length > 2000 || city.length > 120 || country.length > 120) {
+  if (
+    tagline.length > 160 ||
+    description.length > 4000 ||
+    materials.length > 2000 ||
+    creativeProcess.length > 3000 ||
+    city.length > 120 ||
+    country.length > 120
+  ) {
     storefrontRedirect("error", "One or more text fields are too long.");
   }
-  if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+  if (contactEmail.length > 254 || (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail))) {
     storefrontRedirect("error", "Enter a valid public contact email.");
   }
-  if (website.error || instagram.error) {
-    storefrontRedirect("error", website.error || instagram.error || "Enter a valid URL.");
+  if ([website.value, instagram.value, etsy.value].some((value) => (value?.length ?? 0) > 2048)) {
+    storefrontRedirect("error", "Links must be 2,048 characters or fewer.");
+  }
+  if (website.error || instagram.error || etsy.error) {
+    storefrontRedirect(
+      "error",
+      website.error || instagram.error || etsy.error || "Enter a valid URL.",
+    );
   }
 
-  const pendingImages = (
-    await Promise.all([
-      prepareImage(getOptionalFile(formData, "logoImage"), "logo"),
-      prepareImage(getOptionalFile(formData, "coverImage"), "cover"),
-    ])
-  ).filter((image): image is PendingImage => image !== null);
+  if (galleryFiles.length > 6) {
+    storefrontRedirect("error", "A storefront gallery can contain up to six images.");
+  }
 
   const { data: category, error: categoryError } = await supabase
     .from("categories")
@@ -219,11 +262,12 @@ export async function saveStorefrontAction(formData: FormData) {
   let existingName: string | null = null;
   let oldLogoUrl: string | null = null;
   let oldCoverUrl: string | null = null;
+  let oldGalleryImageUrls: string[] = [];
 
   if (submittedBusinessId) {
     const { data: existingBusiness, error: existingError } = await supabase
       .from("businesses")
-      .select("id, status, slug, name, logo_url, cover_image_url")
+      .select("id, status, slug, name, logo_url, cover_image_url, gallery_image_urls")
       .eq("id", submittedBusinessId)
       .eq("owner_id", userId)
       .maybeSingle();
@@ -245,9 +289,29 @@ export async function saveStorefrontAction(formData: FormData) {
     existingName = existingBusiness.name;
     oldLogoUrl = existingBusiness.logo_url;
     oldCoverUrl = existingBusiness.cover_image_url;
+    oldGalleryImageUrls = Array.isArray(existingBusiness.gallery_image_urls)
+      ? existingBusiness.gallery_image_urls.filter(
+          (url): url is string => typeof url === "string" && url.length > 0,
+        )
+      : [];
   } else if (intent === "publish") {
     storefrontRedirect("error", "Create the draft before publishing it.");
   }
+
+  const removedGalleryUrls = oldGalleryImageUrls.filter((url) => requestedGalleryRemovals.has(url));
+  const keptGalleryUrls = oldGalleryImageUrls.filter((url) => !requestedGalleryRemovals.has(url));
+
+  if (keptGalleryUrls.length + galleryFiles.length > 6) {
+    storefrontRedirect("error", "A storefront gallery can contain up to six images.");
+  }
+
+  const pendingImages = (
+    await Promise.all([
+      prepareImage(getOptionalFile(formData, "logoImage"), "logo"),
+      prepareImage(getOptionalFile(formData, "coverImage"), "cover"),
+      ...galleryFiles.map((file) => prepareImage(file, "gallery")),
+    ])
+  ).filter((image): image is PendingImage => image !== null);
 
   let slug =
     (existingSlug && name === existingName ? existingSlug : normalizeStorefrontSlug(name)) ||
@@ -264,12 +328,16 @@ export async function saveStorefrontAction(formData: FormData) {
   const values = {
     name,
     slug,
+    tagline: tagline || null,
     description: description || null,
+    materials: materials || null,
+    creative_process: creativeProcess || null,
     category_id: categoryId,
     city: city || null,
     country: country || null,
     website_url: website.value,
     instagram_url: instagram.value,
+    etsy_url: etsy.value,
     contact_email: contactEmail || null,
   };
 
@@ -319,9 +387,15 @@ export async function saveStorefrontAction(formData: FormData) {
   const uploadedImages = await uploadImages(supabase, userId, businessId, pendingImages);
   const uploadedLogo = uploadedImages.find((image) => image.kind === "logo");
   const uploadedCover = uploadedImages.find((image) => image.kind === "cover");
+  const uploadedGallery = uploadedImages.filter((image) => image.kind === "gallery");
+  const finalGalleryUrls = [
+    ...keptGalleryUrls,
+    ...uploadedGallery.map((image) => image.publicUrl),
+  ];
   const imageValues = {
     ...(uploadedLogo ? { logo_url: uploadedLogo.publicUrl } : {}),
     ...(uploadedCover ? { cover_image_url: uploadedCover.publicUrl } : {}),
+    gallery_image_urls: finalGalleryUrls,
   };
   const needsUpdate = !isNewStorefront || uploadedImages.length > 0;
 
@@ -360,7 +434,11 @@ export async function saveStorefrontAction(formData: FormData) {
 
   const finalLogoUrl = uploadedLogo?.publicUrl ?? oldLogoUrl;
   const finalCoverUrl = uploadedCover?.publicUrl ?? oldCoverUrl;
-  const replacedUrls = [uploadedLogo ? oldLogoUrl : null, uploadedCover ? oldCoverUrl : null]
+  const replacedUrls = [
+    uploadedLogo ? oldLogoUrl : null,
+    uploadedCover ? oldCoverUrl : null,
+    ...removedGalleryUrls,
+  ]
     .filter((url): url is string => Boolean(url))
     .filter((url) => url !== finalLogoUrl && url !== finalCoverUrl);
   const oldPaths = Array.from(
