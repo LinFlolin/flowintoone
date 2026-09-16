@@ -56,7 +56,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
   }
 
   return (
-    <main className="mx-auto max-w-[1040px] px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
+    <section className="w-full py-4 sm:py-8">
       <Link
         href="/dashboard"
         className="text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4"
@@ -189,6 +189,6 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           </aside>
         </div>
       )}
-    </main>
+    </section>
   );
 }

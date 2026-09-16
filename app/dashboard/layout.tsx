@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { logoutAction } from "@/app/auth/actions";
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { requireUser } from "@/lib/auth/session";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
@@ -9,7 +10,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   return (
     <div className="min-h-screen bg-cream">
       <header className="border-b border-heather/10 bg-white/65">
-        <div className="mx-auto flex min-h-[76px] max-w-[1200px] flex-wrap items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
+        <div className="mx-auto flex min-h-[76px] max-w-[1720px] flex-wrap items-center justify-between gap-4 px-5 py-4 sm:px-8 xl:px-10 2xl:px-12">
           <div className="flex items-center gap-6">
             <Link
               href="/dashboard"
@@ -48,7 +49,12 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           </div>
         </div>
       </header>
-      {children}
+      <main className="px-6 py-8 sm:px-8 lg:px-10 2xl:px-12 mx-auto">
+        <div className="grid gap-4 lg:grid-cols-[12rem_minmax(0,1fr)] 2xl:gap-8 2xl:grid-cols-[13rem_minmax(0,1fr)]">
+          <DashboardSidebar />
+          <div className="min-w-0">{children}</div>
+        </div>
+      </main>
     </div>
   );
 }

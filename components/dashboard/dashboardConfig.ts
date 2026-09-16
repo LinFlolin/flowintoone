@@ -3,7 +3,6 @@ export type DashboardIconName =
   | "storefront"
   | "products"
   | "profile"
-  | "insights"
   | "settings"
   | "arrow"
   | "external"
@@ -21,9 +20,8 @@ export const DASHBOARD_NAVIGATION: Array<{
 }> = [
   { label: "Dashboard", href: "/dashboard", icon: "home" },
   { label: "My storefront", href: "/dashboard/storefront", icon: "storefront" },
-  { label: "My products", icon: "products" },
   { label: "My profile", href: "/dashboard/profile", icon: "profile" },
-  { label: "Insights", icon: "insights" },
+  { label: "My products", icon: "products" },
   { label: "Settings", icon: "settings" },
 ];
 

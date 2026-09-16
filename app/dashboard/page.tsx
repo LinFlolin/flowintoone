@@ -3,7 +3,6 @@ import Link from "next/link";
 import { DashboardIcon } from "@/components/dashboard/DashboardIcon";
 import {
   DASHBOARD_ASSETS,
-  DASHBOARD_NAVIGATION,
   DASHBOARD_QUICK_ACCESS,
 } from "@/components/dashboard/dashboardConfig";
 import { requireUser } from "@/lib/auth/session";
@@ -94,7 +93,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const progress = `${(completedTasks / completionTasks.length) * 100}%`;
 
   return (
-    <main className="px-4 py-5 sm:px-8 sm:py-8 xl:px-10 2xl:px-12">
+    <>
       {params.message && (
         <p
           role="status"
@@ -104,53 +103,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         </p>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[12rem_minmax(0,1fr)] 2xl:gap-8 2xl:grid-cols-[13rem_minmax(0,1fr)]">
-        <aside
-          aria-label="Dashboard navigation"
-          className="overflow-x-auto rounded-2xl border border-heather/25 bg-white/45 p-2 lg:min-h-[calc(100vh-8.5rem)] lg:overflow-visible"
-        >
-          <nav className="flex min-w-max gap-1 lg:sticky lg:top-6 lg:grid lg:min-w-0 lg:gap-2">
-            {DASHBOARD_NAVIGATION.map((item, index) => {
-              const content = (
-                <>
-                  <DashboardIcon name={item.icon} className="size-4 shrink-0" />
-                  <span>{item.label}</span>
-                  {!item.href && (
-                    <span className="ml-auto hidden text-[10px] font-bold uppercase tracking-[0.1em] text-ink/55 lg:inline">
-                      Soon
-                    </span>
-                  )}
-                </>
-              );
-              const className = `inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors ${
-                index === 0
-                  ? "bg-heather/15 text-heather"
-                  : item.href
-                    ? "text-ink/80 hover:bg-heather/10 hover:text-heather"
-                    : "cursor-default text-ink/55"
-              }`;
-
-              return item.href ? (
-                <Link key={item.label} href={item.href} className={className}>
-                  {content}
-                </Link>
-              ) : (
-                <div key={item.label} className={className} aria-disabled="true">
-                  {content}
-                </div>
-              );
-            })}
-          </nav>
-        </aside>
-
-        <div className="min-w-0">
-          <section className="relative min-h-48 overflow-hidden rounded-[1.75rem] border border-heather/25 bg-sandstone/25 p-7 sm:min-h-52 sm:p-9 2xl:min-h-56 2xl:p-10">
+      <section className="relative min-h-48 overflow-hidden rounded-[1.75rem] border border-heather/25 bg-sandstone/25 p-7 sm:min-h-52 sm:p-9 2xl:min-h-56 2xl:p-10">
             <Image
               src={DASHBOARD_ASSETS.welcomeBanner}
               alt=""
               fill
               priority
-              sizes="(min-width: 1024px) 1100px, 100vw"
+              sizes="(min-width: 1536px) 1400px, (min-width: 1024px) 1100px, 100vw"
               className="object-cover object-center opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/70 to-cream/15" />
@@ -167,7 +126,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 meet the community.
               </p>
             </div>
-          </section>
+      </section>
 
           {(profileResult.error || !profile) && (
             <p className="mt-4 text-sm leading-5 text-ink/50">
@@ -278,7 +237,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                       src={business?.cover_image_url || "/images/storefront-fallback.svg"}
                       alt=""
                       fill
-                      sizes="(min-width: 1280px) 420px, (min-width: 768px) 45vw, 100vw"
+                      sizes="(min-width: 1536px) 620px, (min-width: 1024px) 460px, (min-width: 768px) 45vw, 100vw"
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-cream/85 via-cream/20 to-transparent" />
@@ -416,8 +375,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </section>
             </>
           )}
-        </div>
-      </div>
-    </main>
+    </>
   );
 }
