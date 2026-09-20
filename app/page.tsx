@@ -10,17 +10,30 @@ import { getHomepageData } from "@/lib/data/homepage";
 
 export const revalidate = 300;
 
-export default async function Homepage() {
-  const { categories, businesses, events } = await getHomepageData();
+type HomepageProps = {
+  searchParams: Promise<{ query?: string; category?: string }>;
+};
+
+export default async function Homepage({ searchParams }: HomepageProps) {
+  const params = await searchParams;
+  const { categories, businesses, events } = await getHomepageData({
+    query: params.query,
+    category: params.category,
+  });
 
   return (
     <>
       <Header />
       <main>
         <HeroSection />
-        <SearchSection />
+        <SearchSection query={params.query} />
         <CategoryGrid categories={categories.data} error={categories.error} />
-        <ArtisanDirectory artisans={businesses.data} error={businesses.error} />
+        <ArtisanDirectory
+          artisans={businesses.data}
+          error={businesses.error}
+          query={params.query}
+          category={params.category}
+        />
         <UpcomingEvents events={events.data} error={events.error} />
         <RegistrationCTA />
       </main>

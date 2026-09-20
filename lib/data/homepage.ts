@@ -30,6 +30,21 @@ export type HomepageSection<T> = {
   error: string | null;
 };
 
+export type ArtisanDirectoryFilters = {
+  query?: string;
+  category?: string;
+  city?: string;
+  page?: number;
+};
+
+export type ArtisanDirectoryResult = HomepageSection<HomepageBusiness[]> & {
+  count: number;
+  page: number;
+  pageSize: number;
+};
+
+export const ARTISAN_DIRECTORY_PAGE_SIZE = 12;
+
 type CategoryRow = {
   id: string;
   name: string;
@@ -42,9 +57,12 @@ type BusinessRow = {
   name: string;
   slug: string;
   city: string | null;
+  country: string | null;
+  tagline: string | null;
+  description: string | null;
   cover_image_url: string | null;
   logo_url: string | null;
-  category: { name: string } | { name: string }[] | null;
+  category: { name: string; slug: string } | { name: string; slug: string }[] | null;
 };
 
 type EventRow = {
@@ -100,19 +118,49 @@ export async function getHomepageCategories(): Promise<
   }
 }
 
-export async function getHomepageBusinesses(): Promise<
+export async function getHomepageBusinesses(filters: {
+  query?: string;
+  category?: string;
+} = {}): Promise<
   HomepageSection<HomepageBusiness[]>
 > {
   try {
     const supabase = createPublicSupabaseClient();
-    const { data, error } = await supabase
+    const categorySlug = filters.category?.trim().toLowerCase().slice(0, 80);
+    const searchTerm = filters.query
+      ?.trim()
+      .replace(/[%,()]/g, " ")
+      .replace(/\s+/g, " ")
+      .slice(0, 80);
+    const select = categorySlug
+      ? "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories!inner(name, slug)"
+      : "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories(name, slug)";
+
+    let businessesQuery = supabase
       .from("businesses")
-      .select(
-        "id, name, slug, city, cover_image_url, logo_url, category:categories(name)",
-      )
+      .select(select)
       .eq("status", "published")
       .order("created_at", { ascending: false })
       .limit(8);
+
+    if (categorySlug) {
+      businessesQuery = businessesQuery.eq("category.slug", categorySlug);
+    }
+
+    if (searchTerm) {
+      const pattern = `%${searchTerm}%`;
+      businessesQuery = businessesQuery.or(
+        [
+          `name.ilike.${pattern}`,
+          `city.ilike.${pattern}`,
+          `country.ilike.${pattern}`,
+          `tagline.ilike.${pattern}`,
+          `description.ilike.${pattern}`,
+        ].join(","),
+      );
+    }
+
+    const { data, error } = await businessesQuery;
 
     if (error) {
       reportQueryError("businesses", error);
@@ -139,6 +187,119 @@ export async function getHomepageBusinesses(): Promise<
   } catch (error) {
     reportQueryError("businesses", error);
     return { data: [], error: "Maker profiles are temporarily unavailable." };
+  }
+}
+
+export async function getPublishedArtisanCities(): Promise<HomepageSection<string[]>> {
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("city")
+      .eq("status", "published")
+      .not("city", "is", null)
+      .limit(1000);
+
+    if (error) {
+      reportQueryError("artisan-cities", error);
+      return { data: [], error: "Cities are temporarily unavailable." };
+    }
+
+    const cities = Array.from(
+      new Set(
+        (data ?? [])
+          .map((business) => (typeof business.city === "string" ? business.city.trim() : ""))
+          .filter(Boolean),
+      ),
+    ).sort((first, second) => first.localeCompare(second));
+
+    return { data: cities, error: null };
+  } catch (error) {
+    reportQueryError("artisan-cities", error);
+    return { data: [], error: "Cities are temporarily unavailable." };
+  }
+}
+
+export async function getPublishedArtisans(
+  filters: ArtisanDirectoryFilters = {},
+): Promise<ArtisanDirectoryResult> {
+  const page = Number.isInteger(filters.page) && filters.page && filters.page > 0 ? filters.page : 1;
+  const categorySlug = filters.category?.trim().toLowerCase().slice(0, 80);
+  const city = filters.city?.trim().slice(0, 120);
+  const searchTerm = filters.query
+    ?.trim()
+    .replace(/[%,()]/g, " ")
+    .replace(/\s+/g, " ")
+    .slice(0, 80);
+  const from = (page - 1) * ARTISAN_DIRECTORY_PAGE_SIZE;
+  const to = from + ARTISAN_DIRECTORY_PAGE_SIZE - 1;
+
+  try {
+    const supabase = createPublicSupabaseClient();
+    const select = categorySlug
+      ? "id, name, slug, city, cover_image_url, logo_url, category:categories!inner(name, slug)"
+      : "id, name, slug, city, cover_image_url, logo_url, category:categories(name, slug)";
+    let artisansQuery = supabase
+      .from("businesses")
+      .select(select, { count: "exact" })
+      .eq("status", "published")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (categorySlug) {
+      artisansQuery = artisansQuery.eq("category.slug", categorySlug);
+    }
+
+    if (city) {
+      artisansQuery = artisansQuery.eq("city", city);
+    }
+
+    if (searchTerm) {
+      artisansQuery = artisansQuery.ilike("name", `%${searchTerm}%`);
+    }
+
+    const { data, error, count } = await artisansQuery;
+
+    if (error) {
+      reportQueryError("artisan-directory", error);
+      return {
+        data: [],
+        count: 0,
+        page,
+        pageSize: ARTISAN_DIRECTORY_PAGE_SIZE,
+        error: "Maker profiles are temporarily unavailable.",
+      };
+    }
+
+    return {
+      data: ((data ?? []) as BusinessRow[]).map((business) => {
+        const relatedCategory = Array.isArray(business.category)
+          ? business.category[0]
+          : business.category;
+
+        return {
+          id: business.id,
+          slug: business.slug,
+          businessName: business.name,
+          category: relatedCategory?.name ?? null,
+          city: business.city,
+          imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
+        };
+      }),
+      count: count ?? 0,
+      page,
+      pageSize: ARTISAN_DIRECTORY_PAGE_SIZE,
+      error: null,
+    };
+  } catch (error) {
+    reportQueryError("artisan-directory", error);
+    return {
+      data: [],
+      count: 0,
+      page,
+      pageSize: ARTISAN_DIRECTORY_PAGE_SIZE,
+      error: "Maker profiles are temporarily unavailable.",
+    };
   }
 }
 
@@ -180,10 +341,10 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
   }
 }
 
-export async function getHomepageData() {
+export async function getHomepageData(filters: { query?: string; category?: string } = {}) {
   const [categories, businesses, events] = await Promise.all([
     getHomepageCategories(),
-    getHomepageBusinesses(),
+    getHomepageBusinesses(filters),
     getHomepageEvents(),
   ]);
 

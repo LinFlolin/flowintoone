@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { HomepageCategory } from "@/lib/data/homepage";
 
 const fallbackImages: Record<string, { src: string; alt: string }> = {
@@ -52,7 +53,12 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
               const imageSrc = category.imageUrl || fallback?.src;
 
               return (
-                <article key={category.id} className="group">
+                <Link
+                  key={category.id}
+                  href={`/?category=${encodeURIComponent(category.slug)}#artisans`}
+                  className="group block focus-visible:outline-2"
+                  aria-label={`Explore ${category.name} artisans`}
+                >
                   <div className="relative aspect-square overflow-hidden rounded-2xl bg-sandstone/35 sm:rounded-3xl">
                     {imageSrc ? (
                       <Image
@@ -60,7 +66,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
                         alt={
                           category.imageUrl
                             ? `${category.name} handmade creations`
-                            : fallback.alt
+                            : fallback?.alt ?? `${category.name} handmade creations`
                         }
                         fill
                         sizes="(min-width: 1024px) 25vw, 50vw"
@@ -83,7 +89,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
                       {category.name}
                     </h3>
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>

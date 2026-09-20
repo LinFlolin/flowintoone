@@ -5,9 +5,18 @@ import type { HomepageBusiness } from "@/lib/data/homepage";
 type ArtisanDirectoryProps = {
   artisans: HomepageBusiness[];
   error?: string | null;
+  query?: string;
+  category?: string;
 };
 
-export function ArtisanDirectory({ artisans, error = null }: ArtisanDirectoryProps) {
+export function ArtisanDirectory({
+  artisans,
+  error = null,
+  query,
+  category,
+}: ArtisanDirectoryProps) {
+  const hasFilter = Boolean(query?.trim() || category?.trim());
+
   return (
     <section
       id="artisans"
@@ -28,6 +37,17 @@ export function ArtisanDirectory({ artisans, error = null }: ArtisanDirectoryPro
           <p className="mt-5 text-base leading-7 text-ink/65 sm:text-lg">
             Discover the people and stories behind handmade creations.
           </p>
+          {hasFilter && (
+            <p className="mt-4 text-sm font-medium text-heather">
+              Showing published storefronts matching your search.
+              <Link
+                href="/#artisans"
+                className="ml-2 underline decoration-heather/35 underline-offset-4"
+              >
+                Clear filters
+              </Link>
+            </p>
+          )}
         </div>
 
         {error ? (

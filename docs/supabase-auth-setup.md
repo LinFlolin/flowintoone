@@ -1,7 +1,8 @@
 # Supabase Auth setup
 
 The application uses Supabase's cookie-based PKCE flow through `@supabase/ssr`.
-It never uses a service-role or secret key.
+Normal requests use the publishable key. The account deletion action also uses a
+server-only service-role key because Supabase Auth user deletion is an admin operation.
 
 ## 1. Database state record
 
@@ -37,11 +38,16 @@ Local `.env.local` and production hosting settings need:
 ```text
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_your-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 NEXT_PUBLIC_SITE_URL=https://your-production-domain.example
 ```
 
 Use `NEXT_PUBLIC_SITE_URL=http://localhost:3000` locally if desired. When it is
 missing locally, server actions use the incoming request origin.
+
+`SUPABASE_SERVICE_ROLE_KEY` must be configured only in the server environment. Never
+prefix it with `NEXT_PUBLIC_`, commit it, or expose it to browser code. It is required
+when a user confirms deletion from `/dashboard/profile`.
 
 ## 3. Supabase dashboard URL configuration
 
@@ -74,3 +80,17 @@ is intended only for limited testing.
 The optional location fields and private avatar Storage configuration are documented
 in `docs/profile-2-setup.md`. Apply its migration separately; it remains compatible
 with the profile trigger described above.
+
+## 6. Account deletion
+
+The profile page requires the signed-in user to type `DELETE`. The server then removes
+all Storage objects below that user's UUID in the `profile-avatars` and
+`storefront-images` buckets, deletes their `businesses` and `profiles` rows, deletes
+the Supabase Auth user through the admin API, and signs out the session. Storage is
+cleaned before database/Auth deletion because Auth cascades do not remove Storage
+objects.
+
+Test this with a disposable account after applying the profile and storefront
+migrations. Confirm that the Auth user, profile row, storefront rows, and all objects
+under the user's UUID are gone. An incorrectly configured service-role key leaves the
+account intact and shows an error on the profile page.

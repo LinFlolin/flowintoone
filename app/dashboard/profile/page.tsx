@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { DeleteAccountButton } from "@/components/dashboard/DeleteAccountButton";
 import { ProfileAvatarField } from "@/components/dashboard/ProfileAvatarField";
 import { ProfileSubmitButton } from "@/components/dashboard/ProfileSubmitButton";
 import { requireUser } from "@/lib/auth/session";
 import { isOwnedProfileAvatarPath, PROFILE_AVATAR_BUCKET } from "@/lib/profile/avatar";
-import { updateProfileAction } from "./actions";
+import { deleteAccountAction, updateProfileAction } from "./actions";
 
 type ProfilePageProps = {
   searchParams: Promise<{ error?: string; message?: string }>;
@@ -186,6 +187,35 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
             >
               Manage password
             </Link>
+
+            <div className="mt-8 border-t border-candy/20 pt-7">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a95d76]">
+                Danger zone
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
+                Delete your account.
+              </h2>
+              <p className="mt-4 text-sm leading-6 text-ink/60">
+                This permanently removes your profile, storefronts, images, and sign-in. This
+                cannot be undone.
+              </p>
+              <form action={deleteAccountAction} className="mt-5 grid gap-3">
+                <label className="text-xs font-semibold text-ink/70" htmlFor="delete-confirmation">
+                  Type <span className="font-bold text-[#a95d76]">DELETE</span> to confirm
+                  <input
+                    id="delete-confirmation"
+                    name="confirmation"
+                    className="mt-2 min-h-11 w-full rounded-xl border border-candy/25 bg-white px-3 text-sm text-ink focus:border-candy focus:outline-2"
+                    autoComplete="off"
+                    pattern="DELETE"
+                    spellCheck={false}
+                    title='Enter DELETE exactly to confirm account deletion.'
+                    required
+                  />
+                </label>
+                <DeleteAccountButton />
+              </form>
+            </div>
           </aside>
         </div>
       )}
