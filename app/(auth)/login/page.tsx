@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import { AuthCard } from "@/components/auth/AuthCard";
-import { LoginForm } from "@/components/auth/AuthForms";
+import { LoginForm, ResendConfirmationForm } from "@/components/auth/AuthForms";
 import { getAuthenticatedUser, safeNextPath } from "@/lib/auth/session";
 
 type LoginPageProps = {
-  searchParams: Promise<{ next?: string; error?: string; message?: string }>;
+  searchParams: Promise<{ next?: string; error?: string; message?: string; resend?: string }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
@@ -29,7 +29,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           {params.error || params.message}
         </p>
       )}
-      <LoginForm nextPath={safeNextPath(params.next)} />
+      {params.resend === "1" ? <ResendConfirmationForm /> : <LoginForm nextPath={safeNextPath(params.next)} />}
     </AuthCard>
   );
 }

@@ -7,6 +7,7 @@ import {
   forgotPasswordAction,
   loginAction,
   registerAction,
+  resendConfirmationAction,
   updatePasswordAction,
   type AuthFormState,
 } from "@/app/auth/actions";
@@ -159,6 +160,22 @@ export function ForgotPasswordForm() {
       >
         Back to login
       </Link>
+    </form>
+  );
+}
+
+export function ResendConfirmationForm() {
+  const [state, formAction] = useActionState(resendConfirmationAction, initialState);
+
+  return (
+    <form action={formAction} className="grid gap-5">
+      <FormMessage state={state} />
+      <label className="text-sm font-semibold text-ink">
+        Email
+        <input className={inputClassName} type="email" name="email" autoComplete="email" required />
+      </label>
+      <SubmitButton>Send confirmation email</SubmitButton>
+      <Link href="/login" className="text-center text-sm font-semibold text-heather underline underline-offset-4">Back to login</Link>
     </form>
   );
 }

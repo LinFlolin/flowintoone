@@ -4,11 +4,11 @@ import { StorefrontGalleryField } from "@/components/dashboard/StorefrontGallery
 import { StorefrontImageFields } from "@/components/dashboard/StorefrontImageFields";
 import { StorefrontNameField } from "@/components/dashboard/StorefrontNameField";
 import { StorefrontSubmitButtons } from "@/components/dashboard/StorefrontSubmitButtons";
-import { requireUser } from "@/lib/auth/session";
+import { requireArtisan } from "@/lib/auth/roles";
 import { saveStorefrontAction } from "./actions";
 
 type StorefrontPageProps = {
-  searchParams: Promise<{ error?: string; message?: string }>;
+  searchParams: Promise<{ error?: string; message?: string; businessId?: string }>;
 };
 
 type StorefrontBusiness = {
@@ -65,18 +65,19 @@ function EditorSection({ number, title, description, children }: EditorSectionPr
 }
 
 export default async function StorefrontPage({ searchParams }: StorefrontPageProps) {
-  const { supabase, userId } = await requireUser();
+  const { supabase, userId } = await requireArtisan();
   const params = await searchParams;
+  const businessQuery = supabase
+    .from("businesses")
+    .select(
+      "id, name, slug, tagline, description, materials, creative_process, category_id, city, country, website_url, instagram_url, etsy_url, contact_email, logo_url, cover_image_url, gallery_image_urls, status",
+    )
+    .eq("owner_id", userId)
+    .order("created_at", { ascending: true })
+    .limit(1);
+  if (params.businessId) businessQuery.eq("id", params.businessId);
   const [businessResult, categoriesResult] = await Promise.all([
-    supabase
-      .from("businesses")
-      .select(
-        "id, name, slug, tagline, description, materials, creative_process, category_id, city, country, website_url, instagram_url, etsy_url, contact_email, logo_url, cover_image_url, gallery_image_urls, status",
-      )
-      .eq("owner_id", userId)
-      .order("created_at", { ascending: true })
-      .limit(1)
-      .maybeSingle(),
+    businessQuery.maybeSingle(),
     supabase
       .from("categories")
       .select("id, name")
@@ -383,9 +384,11 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                   View live storefront ↗
                 </Link>
               ) : (
-                <p className="max-w-xs text-xs leading-5 text-ink/45">
-                  The public preview becomes available as soon as the storefront is published.
-                </p>
+                business ? (
+                  <Link href={`/dashboard/storefront/preview?businessId=${business.id}`} className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4">Preview draft ↗</Link>
+                ) : (
+                  <p className="max-w-xs text-xs leading-5 text-ink/45">The public preview becomes available as soon as the storefront is published.</p>
+                )
               )}
             </div>
 

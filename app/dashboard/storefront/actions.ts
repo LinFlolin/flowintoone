@@ -3,7 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireUser } from "@/lib/auth/session";
+import { requireArtisan } from "@/lib/auth/roles";
 import {
   processStorefrontImage,
   STOREFRONT_IMAGE_BUCKET,
@@ -176,7 +176,7 @@ async function uploadImages(
 }
 
 export async function saveStorefrontAction(formData: FormData) {
-  const { supabase, userId } = await requireUser();
+  const { supabase, userId } = await requireArtisan();
   const hasValidAuthenticatedUserId =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
       userId,

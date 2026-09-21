@@ -75,10 +75,11 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
           {user ? (
             <>
               <Link
-                href="/dashboard"
+                href={user.storefrontHref || "/dashboard"}
+                target={user.storefrontHref ? "_blank" : undefined}
                 className="inline-flex min-h-10 items-center justify-center rounded-full border border-heather/30 px-4 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-visible:outline-2"
               >
-                Dashboard
+                {user.storefrontHref ? "View my website ↗" : "Dashboard"}
               </Link>
               <div className="relative">
                 <button

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeNextPath } from "@/lib/auth/session";
+import { getPostAuthPath } from "@/lib/auth/roles";
 import { getSiteUrl } from "@/lib/auth/site-url";
 
 export type AuthFormState = {
@@ -49,20 +50,27 @@ export async function loginAction(
   void _previousState;
   const email = getField(formData, "email").toLowerCase();
   const password = getField(formData, "password");
-  const nextPath = safeNextPath(getField(formData, "next"));
+  const requestedNextPath = getField(formData, "next");
+  const nextPath = safeNextPath(requestedNextPath);
 
   if (!isEmail(email) || !password) {
     return { error: "Enter a valid email and password.", success: null };
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     return { error: authErrorMessage(error.message), success: null };
   }
 
-  redirect(nextPath);
+  redirect(
+    requestedNextPath && nextPath !== "/dashboard"
+      ? nextPath
+      : data.user
+        ? await getPostAuthPath(supabase, data.user.id)
+        : nextPath,
+  );
 }
 
 export async function registerAction(
@@ -100,7 +108,9 @@ export async function registerAction(
       data: {
         full_name: fullName,
       },
-      emailRedirectTo: `${siteUrl}/auth/callback?next=/dashboard`,
+      // The callback exchanges the code for a session before sending the user
+      // to role selection, which then chooses the correct protected dashboard.
+      emailRedirectTo: `${siteUrl}/auth/callback?next=/onboarding/role`,
     },
   });
 
@@ -109,7 +119,7 @@ export async function registerAction(
   }
 
   if (data.session) {
-    redirect("/dashboard");
+    redirect("/onboarding/role");
   }
 
   return {
@@ -144,6 +154,26 @@ export async function forgotPasswordAction(
     success:
       "If an account exists for that email, you will receive a password reset link shortly.",
   };
+}
+
+export async function resendConfirmationAction(
+  _previousState: AuthFormState = emptyState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  void _previousState;
+  const email = getField(formData, "email").toLowerCase();
+  if (!isEmail(email)) return { error: "Enter a valid email address.", success: null };
+
+  const supabase = await createClient();
+  const siteUrl = await getSiteUrl();
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email,
+    options: { emailRedirectTo: `${siteUrl}/auth/callback?next=/onboarding/role` },
+  });
+
+  if (error) return { error: authErrorMessage(error.message), success: null };
+  return { error: null, success: "If this account still needs confirmation, a new email is on its way." };
 }
 
 export async function updatePasswordAction(

@@ -1,5 +1,6 @@
 import { HeaderNavigation } from "@/components/layout/HeaderNavigation";
 import { getAuthenticatedUser } from "@/lib/auth/session";
+import { getAccountRole } from "@/lib/auth/roles";
 
 type HeaderProfile = {
   full_name: string | null;
@@ -16,19 +17,22 @@ export async function Header() {
     return <HeaderNavigation />;
   }
 
+  const role = await getAccountRole(user.supabase, user.userId);
   const [profileResult, storefrontResult] = await Promise.all([
     user.supabase
       .from("profiles")
       .select("full_name")
       .eq("id", user.userId)
       .maybeSingle(),
-    user.supabase
+    role === "artisan"
+      ? user.supabase
       .from("businesses")
       .select("slug")
       .eq("owner_id", user.userId)
       .eq("status", "published")
       .limit(1)
-      .maybeSingle(),
+      .maybeSingle()
+      : Promise.resolve({ data: null }),
   ]);
 
   const profile = profileResult.data as HeaderProfile | null;

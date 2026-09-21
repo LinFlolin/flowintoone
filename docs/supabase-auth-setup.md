@@ -31,6 +31,11 @@ creation belongs exclusively to the database trigger. Registration sends `full_n
 inside `raw_user_meta_data`, and authenticated users can update their own name from
 `/dashboard/profile`.
 
+The creation-flow migration `supabase/migrations/20260920100000_creation_roles_and_purposes.sql`
+adds the owner-selected `profiles.role` (`visitor` or `artisan`) and the additive
+`businesses.website_purpose` (`shop` or `events`) and `businesses.design_model` fields.
+Apply it once after the existing dashboard/storefront migrations.
+
 ## 2. Environment variables
 
 Local `.env.local` and production hosting settings need:
@@ -64,11 +69,14 @@ If deployment previews are needed, add a narrowly scoped preview wildcard separa
 ## 4. Email templates
 
 The default Supabase confirmation template works with the `emailRedirectTo` passed
-by the application. If you intentionally switch to a custom token-hash template,
+by the application. After the user confirms their email, the callback creates the
+session and sends them to `/onboarding/role`. Visitors go to the dashboard; artisans
+continue to `/dashboard/create-store` when they have no website. If you intentionally
+switch to a custom token-hash template,
 point it to the app's `/auth/confirm` handler:
 
 ```text
-{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard
+{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/onboarding/role
 ```
 
 Password recovery redirects through `/auth/callback` and ends at

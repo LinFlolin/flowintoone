@@ -7,7 +7,9 @@ export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const tokenHash = requestUrl.searchParams.get("token_hash");
   const type = requestUrl.searchParams.get("type") as EmailOtpType | null;
-  const nextPath = safeNextPath(requestUrl.searchParams.get("next"));
+  // Email confirmation is the entry point for new users, so a confirmation
+  // link without an explicit destination should begin website creation.
+  const nextPath = safeNextPath(requestUrl.searchParams.get("next"), "/onboarding/role");
 
   if (tokenHash && type) {
     const supabase = await createClient();
@@ -23,5 +25,6 @@ export async function GET(request: NextRequest) {
     "error",
     "The verification link is invalid or has expired. Please request a new one.",
   );
+  loginUrl.searchParams.set("resend", "1");
   return NextResponse.redirect(loginUrl);
 }

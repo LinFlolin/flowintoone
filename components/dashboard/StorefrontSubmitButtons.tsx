@@ -24,7 +24,7 @@ export function StorefrontSubmitButtons({
       >
         {pending ? "Saving and uploading…" : exists ? "Save changes" : "Create draft"}
       </button>
-      {exists && !isPublished && (
+      {exists && (
         <button
           type="submit"
           name="intent"
@@ -32,7 +32,7 @@ export function StorefrontSubmitButtons({
           disabled={pending || disabled}
           className="inline-flex min-h-12 items-center justify-center rounded-full border border-viridian/45 bg-viridian/10 px-7 text-sm font-semibold text-[#477b7b] transition-colors hover:bg-viridian/20 disabled:cursor-wait disabled:opacity-60"
         >
-          Publish storefront
+          {isPublished ? "Republish storefront" : "Publish storefront"}
         </button>
       )}
     </div>

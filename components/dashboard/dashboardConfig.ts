@@ -1,13 +1,19 @@
 export type DashboardIconName =
   | "home"
   | "storefront"
-  | "products"
   | "profile"
-  | "billing"
   | "settings"
+  | "appearance"
+  | "discover"
+  | "following"
+  | "calendar"
+  | "bookmark"
+  | "help"
   | "arrow"
   | "external"
-  | "check";
+  | "check"
+  | "edit"
+  | "image";
 
 export const DASHBOARD_ASSETS = {
   // Replace this path when the final dashboard banner artwork is provided.
@@ -18,13 +24,18 @@ export const DASHBOARD_NAVIGATION: Array<{
   label: string;
   href?: string;
   icon: DashboardIconName;
+  group: "Website" | "Community" | "Support";
 }> = [
-  { label: "Dashboard", href: "/dashboard", icon: "home" },
-  { label: "My storefront", href: "/dashboard/storefront", icon: "storefront" },
-  { label: "My profile", href: "/dashboard/profile", icon: "profile" },
-  { label: "My products", icon: "products" },
-  { label: "Subscription & Billing", href: "/dashboard/billing", icon: "billing" },
-  { label: "Settings", icon: "settings" },
+  { label: "Dashboard", href: "/dashboard", icon: "home", group: "Website" },
+  { label: "My website", href: "/dashboard/storefront", icon: "storefront", group: "Website" },
+  { label: "Appearance", icon: "appearance", group: "Website" },
+  { label: "Settings", icon: "settings", group: "Website" },
+  { label: "Discover", href: "/", icon: "discover", group: "Community" },
+  { label: "Following", icon: "following", group: "Community" },
+  { label: "Events", icon: "calendar", group: "Community" },
+  { label: "My saves", icon: "bookmark", group: "Community" },
+  { label: "Help", icon: "help", group: "Support" },
+  { label: "My account", href: "/dashboard/profile", icon: "profile", group: "Support" },
 ];
 
 export const DASHBOARD_QUICK_ACCESS: Array<{
@@ -36,33 +47,32 @@ export const DASHBOARD_QUICK_ACCESS: Array<{
   backgroundClassName: string;
 }> = [
   {
-    label: "My profile",
-    description: "Manage your personal information and bio.",
-    href: "/dashboard/profile",
-    icon: "profile",
-    tone: "bg-heather/10 text-heather",
-    backgroundClassName: "bg-heather/5",
-  },
-  {
-    label: "My storefront",
-    description: "Edit your business details and public space.",
+    label: "Edit content",
+    description: "Update text, images and pages.",
     href: "/dashboard/storefront",
-    icon: "storefront",
-    tone: "bg-viridian/15 text-[#477b7b]",
-    backgroundClassName: "bg-viridian/5",
-  },
-  {
-    label: "My products",
-    description: "Add and manage your creations.",
-    icon: "products",
+    icon: "edit",
     tone: "bg-candy/15 text-[#a95d76]",
-    backgroundClassName: "bg-candy/5",
+    backgroundClassName: "bg-candy/10",
   },
   {
-    label: "Settings",
-    description: "Update your preferences and account details.",
+    label: "Manage images",
+    description: "Upload and organize your photos.",
+    icon: "image",
+    tone: "bg-viridian/15 text-[#477b7b]",
+    backgroundClassName: "bg-viridian/10",
+  },
+  {
+    label: "Appearance",
+    description: "Change colors and style.",
+    icon: "appearance",
+    tone: "bg-heather/15 text-heather",
+    backgroundClassName: "bg-heather/10",
+  },
+  {
+    label: "Website settings",
+    description: "Name, URL and visibility.",
     icon: "settings",
     tone: "bg-azur/15 text-[#537da9]",
-    backgroundClassName: "bg-azur/5",
+    backgroundClassName: "bg-azur/10",
   },
 ];
