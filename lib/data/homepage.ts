@@ -13,6 +13,7 @@ export type HomepageBusiness = {
   businessName: string;
   category: string | null;
   city: string | null;
+  description: string | null;
   imageSrc: string;
 };
 
@@ -179,6 +180,7 @@ export async function getHomepageBusinesses(filters: {
           businessName: business.name,
           category: relatedCategory?.name ?? null,
           city: business.city,
+          description: business.tagline ?? business.description,
           imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
         };
       }),
@@ -283,6 +285,7 @@ export async function getPublishedArtisans(
           businessName: business.name,
           category: relatedCategory?.name ?? null,
           city: business.city,
+          description: business.tagline ?? business.description,
           imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
         };
       }),

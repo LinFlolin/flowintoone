@@ -5,7 +5,7 @@ type SearchSectionProps = {
 export function SearchSection({ query = "" }: SearchSectionProps) {
   return (
     <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-10" aria-labelledby="search-heading">
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto max-w-4xl text-center">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-viridian">
           Find something special
         </p>
@@ -25,7 +25,7 @@ export function SearchSection({ query = "" }: SearchSectionProps) {
               name="query"
               type="search"
               defaultValue={query}
-              placeholder="Search artisans, products or cities..."
+              placeholder="Search websites, creators, products or places..."
               className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm text-ink placeholder:text-ink/60 disabled:cursor-not-allowed disabled:opacity-70 sm:px-5"
             />
             <button
@@ -36,7 +36,7 @@ export function SearchSection({ query = "" }: SearchSectionProps) {
             </button>
           </div>
           <p className="mt-3 text-xs leading-5 text-ink/70">
-            Search published storefronts by name, city, or category.
+            Discover independent creators, local businesses and meaningful experiences.
           </p>
         </form>
       </div>

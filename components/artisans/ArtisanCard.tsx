@@ -32,6 +32,9 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
           {artisan.businessName}
         </h3>
         {artisan.city && <p className="mt-2 text-sm text-ink/75">{artisan.city}</p>}
+        {artisan.description && (
+          <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink/70">{artisan.description}</p>
+        )}
         <span className="mt-5 inline-flex text-sm font-semibold text-ink underline decoration-heather/35 underline-offset-4 transition-colors group-hover:text-heather">
           Visit storefront <span aria-hidden="true">↗</span>
         </span>

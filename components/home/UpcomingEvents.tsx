@@ -9,20 +9,20 @@ type UpcomingEventsProps = {
 export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
   return (
     <section id="events" className="scroll-mt-24 px-5 py-20 sm:px-8 sm:py-28 lg:px-10" aria-labelledby="events-heading">
-      <div className="mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-[1500px]">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-viridian">
-              Markets & events
+              Upcoming events
             </p>
             <h2
               id="events-heading"
               className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl"
             >
-              Where to find us<span className="text-candy">.</span>
+              Upcoming events<span className="text-candy">.</span>
             </h2>
             <p className="mt-5 text-base leading-7 text-ink/75 sm:text-lg">
-              Discover upcoming markets and creative events.
+              Discover markets, workshops and creative experiences near you.
             </p>
           </div>
           <span className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-ink/45" aria-disabled="true" title="Coming soon">

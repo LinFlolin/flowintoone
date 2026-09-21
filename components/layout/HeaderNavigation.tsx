@@ -150,7 +150,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                 href="/register"
                 className="inline-flex min-h-10 items-center justify-center rounded-full bg-heather px-5 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
               >
-                Create your storefront
+                Create your website
               </Link>
             </>
           )}
@@ -241,7 +241,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                 onClick={closeMenus}
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-5 text-sm font-semibold text-white focus-visible:outline-2"
               >
-                Create your storefront
+                Create your website
               </Link>
             </>
           )}

@@ -8,35 +8,35 @@ export function HeroSection() {
         className="absolute -left-20 top-24 size-52 rounded-full bg-sandstone/35 blur-3xl"
         aria-hidden="true"
       />
-      <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-10 lg:pb-28 lg:pt-24">
+      <div className="mx-auto grid max-w-[1500px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-10 lg:pb-28 lg:pt-24">
         <div className="relative z-10">
           <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-heather">
-            Independent makers · Thoughtful objects
+            Your space. Your story. Your possibilities.
           </p>
           <h1 className="max-w-2xl text-[clamp(2.65rem,7vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-ink">
-            Discover the beauty of handmade<span className="text-candy">.</span>
+            Your place to grow online<span className="text-candy">.</span>
           </h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-ink/80 sm:text-lg sm:leading-8">
-            Explore independent artisans, unique creations, and creative markets
-            all in one place.
+            Create a website that reflects who you are and what you do. Showcase
+            your work, share your story, and connect with the right people.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#artisans"
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-7 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
-            >
-              Explore websites
-            </a>
             <Link
               href="/register"
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-heather/35 px-7 text-sm font-semibold text-ink transition-colors hover:border-heather hover:bg-white/55 focus-visible:outline-2"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-7 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
             >
               Create your website
             </Link>
+            <a
+              href="#artisans"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-heather/35 px-7 text-sm font-semibold text-ink transition-colors hover:border-heather hover:bg-white/55 focus-visible:outline-2"
+            >
+              Explore websites
+            </a>
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-2xl lg:mx-0">
+        <div className="relative mx-auto w-full max-w-3xl lg:mx-0">
           <div
             className="absolute -right-3 -top-3 size-20 rounded-tr-[2.75rem] bg-viridian/45 sm:-right-5 sm:-top-5 sm:size-28"
             aria-hidden="true"
@@ -54,7 +54,7 @@ export function HeroSection() {
           <div className="relative -mt-7 ml-5 mr-10 flex max-w-sm items-center gap-3 rounded-2xl border border-heather/10 bg-[#fffdf9] px-5 py-4 sm:-mt-8 sm:ml-8">
             <span className="size-2.5 shrink-0 rounded-full bg-candy" aria-hidden="true" />
             <p className="text-xs font-semibold leading-5 text-ink/85 sm:text-sm">
-              Made slowly. Chosen thoughtfully.
+              Real people. Meaningful stories. A kinder web.
             </p>
           </div>
         </div>

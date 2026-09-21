@@ -17,7 +17,7 @@ const informationLinks = [
 export function Footer() {
   return (
     <footer className="bg-sandstone/65">
-      <div className="mx-auto grid max-w-[1200px] gap-12 px-5 py-14 sm:px-8 md:grid-cols-[1.5fr_1fr_1fr] lg:px-10 lg:py-16">
+      <div className="mx-auto grid max-w-[1500px] gap-12 px-5 py-14 sm:px-8 md:grid-cols-[1.5fr_1fr_1fr] lg:px-10 lg:py-16">
         <div>
           <Link
             href="/"
@@ -68,7 +68,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-ink/10">
-        <div className="mx-auto max-w-[1200px] px-5 py-5 text-xs text-ink/70 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-[1500px] px-5 py-5 text-xs text-ink/70 sm:px-8 lg:px-10">
           © {new Date().getFullYear()} Flowintoone. All rights reserved.
         </div>
       </div>
