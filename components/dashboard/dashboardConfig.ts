@@ -25,12 +25,13 @@ export const DASHBOARD_NAVIGATION: Array<{
   href?: string;
   icon: DashboardIconName;
   group: "Website" | "Community" | "Support";
+  ownerOnly?: boolean;
 }> = [
   { label: "Dashboard", href: "/dashboard", icon: "home", group: "Website" },
-  { label: "My website", href: "/dashboard/storefront", icon: "storefront", group: "Website" },
-  { label: "Appearance", icon: "appearance", group: "Website" },
-  { label: "Settings", icon: "settings", group: "Website" },
-  { label: "Discover", href: "/", icon: "discover", group: "Community" },
+  { label: "My website", href: "/dashboard/storefront", icon: "storefront", group: "Website", ownerOnly: true },
+  { label: "Appearance", icon: "appearance", group: "Website", ownerOnly: true },
+  { label: "Settings", icon: "settings", group: "Website", ownerOnly: true },
+  { label: "Discover", href: "/discover", icon: "discover", group: "Community" },
   { label: "Following", icon: "following", group: "Community" },
   { label: "Events", icon: "calendar", group: "Community" },
   { label: "My saves", icon: "bookmark", group: "Community" },

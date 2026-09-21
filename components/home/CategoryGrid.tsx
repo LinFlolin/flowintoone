@@ -4,15 +4,15 @@ import type { HomepageCategory } from "@/lib/data/homepage";
 
 const fallbackImages: Record<string, { src: string; alt: string }> = {
   ceramics: {
-    src: "/images/categories/ceramico.jpg",
+    src: "/Ceramics.png",
     alt: "Pastel handmade ceramic vessels and tableware with flowers",
   },
   jewelry: {
-    src: "/images/categories/jewelry.png",
+    src: "/Jewelry.png",
     alt: "Delicate handmade jewelry displayed in a neutral studio setting",
   },
   textiles: {
-    src: "/images/categories/textiles.jpg",
+    src: "/Textiles.png",
     alt: "Ivory textile with delicate botanical embroidery",
   },
   "art-prints": {
@@ -20,11 +20,11 @@ const fallbackImages: Record<string, { src: string; alt: string }> = {
     alt: "An artist holding botanical art prints at a work table",
   },
   "home-living": {
-    src: "/images/categories/ceramico-flora.png",
+    src: "/Home-Living.png",
     alt: "Handmade homeware arranged with flowers",
   },
   "food-beverage": {
-    src: "/images/categories/painted-cards.jpg",
+    src: "/Food-Beverage.png",
     alt: "Handmade goods arranged on a table",
   },
 };
@@ -77,7 +77,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
             {displayedCategories.map((featured, index) => {
               const category = featured.category;
               const fallback = fallbackImages[featured.slug];
-              const imageSrc = category ? category.imageUrl || fallback?.src : undefined;
+              const imageSrc = category?.imageUrl || fallback?.src;
 
               const content = (
                 <>

@@ -27,12 +27,12 @@ export function HeroSection() {
             >
               Create your website
             </Link>
-            <a
-              href="#artisans"
+            <Link
+              href="/discover"
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-heather/35 px-7 text-sm font-semibold text-ink transition-colors hover:border-heather hover:bg-white/55 focus-visible:outline-2"
             >
               Explore websites
-            </a>
+            </Link>
           </div>
         </div>
 

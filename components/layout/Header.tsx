@@ -10,11 +10,11 @@ type HeaderStorefront = {
   slug: string;
 };
 
-export async function Header() {
+export async function Header({ dashboardMode = false }: { dashboardMode?: boolean } = {}) {
   const user = await getAuthenticatedUser();
 
   if (!user) {
-    return <HeaderNavigation />;
+    return <HeaderNavigation dashboardMode={dashboardMode} />;
   }
 
   const role = await getAccountRole(user.supabase, user.userId);
@@ -40,6 +40,7 @@ export async function Header() {
 
   return (
     <HeaderNavigation
+      dashboardMode={dashboardMode}
       user={{
         name: profile?.full_name?.trim() || "My account",
         storefrontHref: storefront ? `/artisans/${storefront.slug}` : null,

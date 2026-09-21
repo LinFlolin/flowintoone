@@ -12,6 +12,8 @@ type DashboardHomeProps = {
     status: string;
     logo_url: string | null;
     cover_image_url: string | null;
+    category: string | null;
+    city: string | null;
   } | null;
   publicStorefrontHref: string | null;
   profileReady: boolean;
@@ -38,6 +40,57 @@ export function DashboardHome({
 
   return (
     <div className="pb-8">
+      <section className="lg:hidden" aria-label="Mobile dashboard overview">
+        {message && <p role="status" className="mb-4 rounded-xl border border-viridian/25 bg-viridian/10 px-4 py-3 text-sm text-ink">{message}</p>}
+        <p className="text-3xl font-semibold tracking-[-0.05em] text-ink">Welcome back, {firstName}!</p>
+        <p className="mt-1 text-sm text-ink/65">Here&apos;s your website at a glance.</p>
+
+        <article className="mt-5 rounded-2xl border border-heather/20 bg-white/75 p-3.5" aria-label="Website summary">
+          {business ? (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="relative size-[86px] shrink-0 overflow-hidden rounded-xl bg-sandstone/35">
+                  <Image src={business.cover_image_url || "/images/storefront-fallback.svg"} alt="" fill sizes="86px" className="object-cover" />
+                </div>
+                <div className="min-w-0">
+                  <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold ${business.status === "published" ? "bg-viridian/15 text-[#477b7b]" : "bg-sandstone/50 text-ink/55"}`}>
+                    <span className="size-1.5 rounded-full bg-current" />{statusLabel(business.status)}
+                  </span>
+                  <h2 className="mt-2 truncate text-lg font-semibold tracking-[-0.03em] text-ink">{business.name}</h2>
+                  <p className="mt-1 truncate text-xs text-ink/60">{[business.category, business.city].filter(Boolean).join(" · ") || "Your Flowintoone website"}</p>
+                </div>
+              </div>
+              <p className="mt-3 line-clamp-1 text-xs text-ink/55">{business.description || "Your website is live and ready to share."}</p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Link href="/dashboard/storefront" className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-heather px-3 text-xs font-semibold text-white"><DashboardIcon name="edit" className="size-3.5" />Edit website</Link>
+                {publicStorefrontHref ? <Link href={publicStorefrontHref} target="_blank" className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-heather bg-transparent px-3 text-xs font-semibold text-ink"><DashboardIcon name="external" className="size-3.5" />View site</Link> : <span className="inline-flex min-h-10 items-center justify-center rounded-xl bg-ink/10 px-3 text-center text-[10px] font-semibold text-ink/45">Publish to view</span>}
+              </div>
+            </>
+          ) : (
+            <div className="p-2">
+              <h2 className="text-lg font-semibold text-ink">Your website is not set up yet</h2>
+              <p className="mt-1 text-sm text-ink/60">Start with the website editor to create your public space.</p>
+              <Link href="/dashboard/storefront" className="mt-4 inline-flex min-h-10 items-center rounded-xl bg-heather px-4 text-xs font-semibold text-white">Create website</Link>
+            </div>
+          )}
+        </article>
+
+        <section className="mt-4" aria-labelledby="mobile-quick-actions-title">
+          <h2 id="mobile-quick-actions-title" className="text-2xl font-semibold tracking-[-0.04em] text-ink">Quick actions</h2>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <MobileQuickAction label="Appearance" icon="appearance" tone="bg-heather/10" />
+            <MobileQuickAction label="Settings" icon="settings" tone="bg-azur/10" />
+            <MobileQuickAction label="My website" icon="storefront" href="/dashboard/storefront" tone="bg-viridian/10" />
+            <MobileQuickAction label="My account" icon="profile" href="/dashboard/profile" tone="bg-candy/10" />
+          </div>
+        </section>
+
+        <Link href="/discover" className="mt-3 flex min-h-20 items-center justify-between rounded-2xl border border-sandstone bg-white/65 px-4 text-sm text-ink/55">
+          <span>Explore our creative community.</span><span className="text-lg text-heather" aria-hidden="true">→</span>
+        </Link>
+      </section>
+
+      <div className="hidden lg:block">
       {message && <p role="status" className="mb-5 rounded-xl border border-viridian/25 bg-viridian/10 px-4 py-3 text-sm text-ink">{message}</p>}
 
       <section className="relative min-h-52 overflow-hidden rounded-[1.35rem] border border-heather/15 bg-white/55 px-6 py-7 sm:px-8 sm:py-8">
@@ -103,6 +156,23 @@ export function DashboardHome({
         <article className="rounded-[1.35rem] border border-heather/15 bg-white/75 p-5"><div className="flex items-center justify-between"><h2 className="text-lg font-semibold text-[#202043]">Need help?</h2><span className="text-ink/60">→</span></div><div className="mt-4 grid gap-3"><Link href="/dashboard/storefront" className="flex items-center gap-3 text-xs text-ink/70"><span className="grid size-8 place-items-center rounded-full bg-heather/10 text-heather">?</span><span><strong className="block text-ink">View guides</strong>Manage your website</span></Link><Link href="/dashboard/profile" className="flex items-center gap-3 text-xs text-ink/70"><span className="grid size-8 place-items-center rounded-full bg-azur/15 text-[#537da9]">@</span><span><strong className="block text-ink">Visit your account</strong>Update your details</span></Link><div className="flex items-center gap-3 text-xs text-ink/45"><span className="grid size-8 place-items-center rounded-full bg-candy/10">✉</span><span><strong className="block text-ink/60">Contact support</strong>Coming soon</span></div></div></article>
         <aside className="relative min-h-48 overflow-hidden rounded-[1.35rem] border border-sandstone/60 bg-sandstone/25 p-5"><Image src={DASHBOARD_ASSETS.welcomeBanner} alt="" fill sizes="300px" className="object-cover opacity-40" /><div className="absolute inset-0 bg-gradient-to-t from-cream/95 via-cream/65 to-transparent" /><div className="relative mt-16"><h2 className="text-base font-semibold leading-5 text-[#202043]">Build a meaningful presence.</h2><p className="mt-2 text-xs leading-5 text-ink/60">Share your craft and connect with your community.</p><span className="mt-3 inline-block text-xs font-semibold text-heather">Flowintoone</span></div></aside>
       </section>
+      </div>
     </div>
   );
+}
+
+function MobileQuickAction({
+  label,
+  icon,
+  href,
+  tone,
+}: {
+  label: string;
+  icon: "appearance" | "settings" | "storefront" | "profile";
+  href?: string;
+  tone: string;
+}) {
+  const content = <><DashboardIcon name={icon} className="size-5 text-ink/75" /><span className="mt-3 block text-sm font-semibold text-ink">{label}</span>{!href && <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.08em] text-ink/40">Coming soon</span>}</>;
+  const className = `min-h-20 rounded-xl border border-heather/10 p-3.5 ${tone} ${href ? "transition-transform hover:-translate-y-0.5" : "opacity-80"}`;
+  return href ? <Link href={href} className={className}>{content}</Link> : <div className={className} aria-disabled="true">{content}</div>;
 }

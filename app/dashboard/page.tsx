@@ -14,6 +14,8 @@ type DashboardBusiness = {
   logo_url: string | null;
   cover_image_url: string | null;
   status: string;
+  city: string | null;
+  category: { name: string } | { name: string }[] | null;
 };
 
 type DashboardProfile = {
@@ -32,14 +34,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const [businessResult, profileResult] = await Promise.all([
     supabase
       .from("businesses")
-      .select("name, slug, description, logo_url, cover_image_url, status")
+      .select("name, slug, description, logo_url, cover_image_url, status, city, category:categories(name)")
       .eq("owner_id", userId)
       .order("created_at", { ascending: true })
       .limit(1)
       .maybeSingle(),
     supabase.from("profiles").select("full_name, avatar_path").eq("id", userId).maybeSingle(),
   ]);
-  const business = businessResult.data as DashboardBusiness | null;
+  const rawBusiness = businessResult.data as DashboardBusiness | null;
+  const relatedCategory = Array.isArray(rawBusiness?.category) ? rawBusiness.category[0] : rawBusiness?.category;
+  const business = rawBusiness ? { ...rawBusiness, category: relatedCategory?.name ?? null } : null;
   const profile = profileResult.data as DashboardProfile | null;
   const name = firstName(profile?.full_name ?? null, email);
 

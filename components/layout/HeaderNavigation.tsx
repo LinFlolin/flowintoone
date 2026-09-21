@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { logoutAction } from "@/app/auth/actions";
 import { HEADER_NAVIGATION } from "@/components/layout/headerConfig";
 
 type HeaderNavigationProps = {
+  dashboardMode?: boolean;
   user?: {
     name: string;
     storefrontHref: string | null;
@@ -26,7 +28,8 @@ function MenuMark({ open }: { open: boolean }) {
   );
 }
 
-export function HeaderNavigation({ user }: HeaderNavigationProps) {
+export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigationProps) {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const closeMenus = () => {
@@ -48,11 +51,11 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-heather/25 bg-cream/95 backdrop-blur-md">
-      <div className="mx-auto flex min-h-[76px] max-w-[1720px] items-center justify-between gap-4 px-5 py-4 sm:px-8 xl:px-10 2xl:px-12">
+      <div className="mx-auto flex min-h-[76px] max-w-[1720px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:min-h-[88px] xl:px-10 2xl:px-12">
         <div className="flex min-w-0 items-center gap-5 lg:gap-7">
           <Link
             href="/"
-            className="shrink-0 text-xl font-bold tracking-[-0.04em] text-ink focus-visible:outline-2"
+            className="shrink-0 text-xl font-bold tracking-[-0.04em] text-ink focus-visible:outline-2 lg:text-2xl"
             onClick={closeMenus}
           >
             flowintoone<span className="text-candy">.</span>
@@ -64,7 +67,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="text-sm font-semibold text-ink/85 transition-colors hover:text-heather focus-visible:outline-2"
+                  className="text-sm font-semibold text-ink/85 transition-colors hover:text-heather focus-visible:outline-2 lg:text-base"
                 >
                   {item.label}
                 </Link>
@@ -156,7 +159,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
           )}
         </div>
 
-        <button
+        {!dashboardMode && <button
           type="button"
           className="grid size-11 shrink-0 place-items-center rounded-full border border-heather/30 text-ink md:hidden"
           aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -166,13 +169,27 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
         >
           <span className="sr-only">Menu</span>
           <MenuMark open={isMobileMenuOpen} />
-        </button>
+        </button>}
       </div>
 
-      <div
+      {!dashboardMode && isMobileMenuOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation menu"
+          onClick={closeMenus}
+          className="fixed inset-0 z-[55] bg-ink/35 md:hidden"
+        />
+      )}
+      {!dashboardMode && <div
         id="mobile-navigation"
-        className={isMobileMenuOpen ? "grid border-t border-heather/20 bg-cream px-5 pb-6 pt-4 md:hidden" : "hidden border-t border-heather/20 bg-cream px-5 pb-6 pt-4 md:hidden"}
+        className={isMobileMenuOpen ? "fixed inset-y-0 left-0 z-[60] grid w-[min(22rem,90vw)] overflow-y-auto bg-cream px-5 pb-8 pt-5 shadow-[12px_0_36px_rgba(81,68,91,0.18)] md:hidden" : "hidden md:hidden"}
       >
+        <div className="flex min-h-14 items-center justify-between border-b border-heather/15 pb-4">
+          <Link href="/" onClick={closeMenus} className="text-xl font-bold tracking-[-0.04em] text-ink">
+            flowintoone<span className="text-candy">.</span>
+          </Link>
+          <button type="button" onClick={closeMenus} aria-label="Close navigation menu" className="grid size-10 place-items-center rounded-full border border-heather/60 text-xl font-light text-ink">×</button>
+        </div>
         <nav className="grid gap-1" aria-label="Mobile navigation">
             {HEADER_NAVIGATION.map((item) => (
             item.href ? (
@@ -180,7 +197,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                 key={item.label}
                 href={item.href}
                 onClick={closeMenus}
-                className="rounded-xl px-3 py-3 text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                className={`rounded-xl px-3 py-3 text-base font-semibold hover:bg-white/70 hover:text-heather focus-visible:outline-2 ${pathname === item.href ? "bg-heather/15 text-heather" : "text-ink/90"}`}
               >
                 {item.label}
               </Link>
@@ -191,39 +208,43 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
             )
             ))}
         </nav>
-        <div className="mt-4 grid gap-3 border-t border-heather/20 pt-5">
+        <div className="mt-4 grid gap-1 border-t border-heather/20 pt-4">
           {user ? (
             <>
-              <p className="px-3 text-sm font-semibold text-ink/75">{user.name}</p>
+              <div className="flex min-h-14 items-center gap-3 rounded-xl px-3">
+                <span className="grid size-9 place-items-center rounded-full bg-candy/20 text-sm font-semibold text-heather">{user.name.charAt(0).toUpperCase()}</span>
+                <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-ink">{user.name}</p><Link href="/dashboard/profile" onClick={closeMenus} className="text-xs text-ink/55">View profile</Link></div>
+                <span className="text-base text-ink/55" aria-hidden="true">›</span>
+              </div>
               <Link
                 href="/dashboard"
                 onClick={closeMenus}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-5 text-sm font-semibold text-white focus-visible:outline-2"
+                className="inline-flex min-h-11 items-center justify-between rounded-xl bg-heather px-4 text-sm font-semibold text-white focus-visible:outline-2"
               >
-                Dashboard
+                <span className="flex items-center gap-3"><span className="text-base">▦</span>Dashboard</span><span aria-hidden="true">›</span>
               </Link>
               <Link
                 href="/dashboard/profile"
                 onClick={closeMenus}
-                className="rounded-xl px-3 py-3 text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                className="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
               >
-                My profile
+                <span className="flex items-center gap-3"><span className="text-base">♙</span>My profile</span><span aria-hidden="true">›</span>
               </Link>
               {user.storefrontHref && (
                 <Link
                   href={user.storefrontHref}
                   onClick={closeMenus}
-                  className="rounded-xl px-3 py-3 text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                  className="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                 >
-                  My website
+                  <span className="flex items-center gap-3"><span className="text-base">▱</span>My website</span><span aria-hidden="true">›</span>
                 </Link>
               )}
-              <form action={logoutAction}>
+              <form action={logoutAction} className="mt-2 border-t border-heather/15 pt-2">
                 <button
                   type="submit"
-                  className="w-full rounded-xl px-3 py-3 text-left text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                  className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                 >
-                  Logout
+                  <span className="text-base">↪</span>Logout
                 </button>
               </form>
             </>
@@ -232,21 +253,22 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
               <Link
                 href="/login"
                 onClick={closeMenus}
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-heather/30 px-5 text-sm font-semibold text-ink focus-visible:outline-2"
+                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-heather/30 px-5 text-sm font-semibold text-ink focus-visible:outline-2"
               >
                 Login
               </Link>
               <Link
                 href="/register"
                 onClick={closeMenus}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-5 text-sm font-semibold text-white focus-visible:outline-2"
+                className="inline-flex min-h-11 items-center justify-center rounded-xl bg-heather px-5 text-sm font-semibold text-white focus-visible:outline-2"
               >
                 Create your website
               </Link>
             </>
           )}
         </div>
-      </div>
+        {user && <div className="mt-4 flex items-center gap-3 rounded-xl bg-candy/10 px-3 py-3 text-[10px] leading-4 text-ink/65"><span className="text-2xl text-candy" aria-hidden="true">◒</span><span>A kinder web<br />for creative people.</span></div>}
+      </div>}
     </header>
   );
 }

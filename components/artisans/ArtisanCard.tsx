@@ -31,7 +31,11 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
         <h3 className="mt-2 text-xl font-semibold tracking-[-0.025em] text-ink">
           {artisan.businessName}
         </h3>
-        {artisan.city && <p className="mt-2 text-sm text-ink/75">{artisan.city}</p>}
+        {(artisan.city || artisan.country) && (
+          <p className="mt-2 text-sm text-ink/75">
+            {[artisan.city, artisan.country].filter(Boolean).join(", ")}
+          </p>
+        )}
         {artisan.description && (
           <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink/70">{artisan.description}</p>
         )}

@@ -13,6 +13,7 @@ export type HomepageBusiness = {
   businessName: string;
   category: string | null;
   city: string | null;
+  country: string | null;
   description: string | null;
   imageSrc: string;
 };
@@ -36,6 +37,7 @@ export type ArtisanDirectoryFilters = {
   category?: string;
   city?: string;
   page?: number;
+  sort?: "recent" | "name";
 };
 
 export type ArtisanDirectoryResult = HomepageSection<HomepageBusiness[]> & {
@@ -180,6 +182,7 @@ export async function getHomepageBusinesses(filters: {
           businessName: business.name,
           category: relatedCategory?.name ?? null,
           city: business.city,
+          country: business.country,
           description: business.tagline ?? business.description,
           imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
         };
@@ -226,7 +229,7 @@ export async function getPublishedArtisans(
   filters: ArtisanDirectoryFilters = {},
 ): Promise<ArtisanDirectoryResult> {
   const page = Number.isInteger(filters.page) && filters.page && filters.page > 0 ? filters.page : 1;
-  const categorySlug = filters.category?.trim().toLowerCase().slice(0, 80);
+  let categorySlug = filters.category?.trim().toLowerCase().slice(0, 80);
   const city = filters.city?.trim().slice(0, 120);
   const searchTerm = filters.query
     ?.trim()
@@ -238,14 +241,28 @@ export async function getPublishedArtisans(
 
   try {
     const supabase = createPublicSupabaseClient();
+
+    if (!categorySlug && searchTerm) {
+      const { data: matchingCategory } = await supabase
+        .from("categories")
+        .select("slug")
+        .eq("is_active", true)
+        .or(`slug.ilike.%${searchTerm}%,name.ilike.%${searchTerm}%`)
+        .limit(1)
+        .maybeSingle();
+
+      categorySlug = matchingCategory?.slug ?? undefined;
+    }
+
     const select = categorySlug
-      ? "id, name, slug, city, cover_image_url, logo_url, category:categories!inner(name, slug)"
-      : "id, name, slug, city, cover_image_url, logo_url, category:categories(name, slug)";
+      ? "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories!inner(name, slug)"
+      : "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories(name, slug)";
+    const sort = filters.sort === "name" ? "name" : "created_at";
     let artisansQuery = supabase
       .from("businesses")
       .select(select, { count: "exact" })
       .eq("status", "published")
-      .order("created_at", { ascending: false })
+      .order(sort, { ascending: sort === "name" })
       .range(from, to);
 
     if (categorySlug) {
@@ -257,7 +274,16 @@ export async function getPublishedArtisans(
     }
 
     if (searchTerm) {
-      artisansQuery = artisansQuery.ilike("name", `%${searchTerm}%`);
+      const pattern = `%${searchTerm}%`;
+      artisansQuery = artisansQuery.or(
+        [
+          `name.ilike.${pattern}`,
+          `city.ilike.${pattern}`,
+          `country.ilike.${pattern}`,
+          `tagline.ilike.${pattern}`,
+          `description.ilike.${pattern}`,
+        ].join(","),
+      );
     }
 
     const { data, error, count } = await artisansQuery;
@@ -285,6 +311,7 @@ export async function getPublishedArtisans(
           businessName: business.name,
           category: relatedCategory?.name ?? null,
           city: business.city,
+          country: business.country,
           description: business.tagline ?? business.description,
           imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
         };
