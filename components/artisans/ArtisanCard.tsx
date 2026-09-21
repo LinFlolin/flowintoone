@@ -31,7 +31,7 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
         <h3 className="mt-2 text-xl font-semibold tracking-[-0.025em] text-ink">
           {artisan.businessName}
         </h3>
-        {artisan.city && <p className="mt-2 text-sm text-ink/60">{artisan.city}</p>}
+        {artisan.city && <p className="mt-2 text-sm text-ink/75">{artisan.city}</p>}
         <span className="mt-5 inline-flex text-sm font-semibold text-ink underline decoration-heather/35 underline-offset-4 transition-colors group-hover:text-heather">
           Visit storefront <span aria-hidden="true">↗</span>
         </span>

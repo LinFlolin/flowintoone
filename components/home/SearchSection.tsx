@@ -26,7 +26,7 @@ export function SearchSection({ query = "" }: SearchSectionProps) {
               type="search"
               defaultValue={query}
               placeholder="Search artisans, products or cities..."
-              className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm text-ink placeholder:text-ink/45 disabled:cursor-not-allowed disabled:opacity-70 sm:px-5"
+              className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm text-ink placeholder:text-ink/60 disabled:cursor-not-allowed disabled:opacity-70 sm:px-5"
             />
             <button
               type="submit"
@@ -35,7 +35,7 @@ export function SearchSection({ query = "" }: SearchSectionProps) {
               Search
             </button>
           </div>
-          <p className="mt-3 text-xs leading-5 text-ink/55">
+          <p className="mt-3 text-xs leading-5 text-ink/70">
             Search published storefronts by name, city, or category.
           </p>
         </form>

@@ -43,7 +43,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
         </div>
 
         {error ? (
-          <div className="rounded-2xl border border-heather/15 bg-white/45 px-6 py-10 text-center text-sm text-ink/65">
+          <div className="rounded-2xl border border-heather/15 bg-white/45 px-6 py-10 text-center text-sm text-ink/75">
             {error} Please try again soon.
           </div>
         ) : categories.length > 0 ? (
@@ -94,7 +94,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
             })}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-heather/25 bg-white/35 px-6 py-10 text-center text-sm text-ink/60">
+          <div className="rounded-2xl border border-dashed border-heather/25 bg-white/35 px-6 py-10 text-center text-sm text-ink/70">
             Categories will appear here once they are active.
           </div>
         )}

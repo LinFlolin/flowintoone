@@ -16,7 +16,7 @@ export function HeroSection() {
           <h1 className="max-w-2xl text-[clamp(2.65rem,7vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-ink">
             Discover the beauty of handmade<span className="text-candy">.</span>
           </h1>
-          <p className="mt-7 max-w-xl text-base leading-7 text-ink/70 sm:text-lg sm:leading-8">
+          <p className="mt-7 max-w-xl text-base leading-7 text-ink/80 sm:text-lg sm:leading-8">
             Explore independent artisans, unique creations, and creative markets
             all in one place.
           </p>
@@ -25,13 +25,13 @@ export function HeroSection() {
               href="#artisans"
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-7 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
             >
-              Explore artisans
+              Explore websites
             </a>
             <Link
               href="/register"
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-heather/35 px-7 text-sm font-semibold text-ink transition-colors hover:border-heather hover:bg-white/55 focus-visible:outline-2"
             >
-              Create your storefront
+              Create your website
             </Link>
           </div>
         </div>
@@ -53,7 +53,7 @@ export function HeroSection() {
           </div>
           <div className="relative -mt-7 ml-5 mr-10 flex max-w-sm items-center gap-3 rounded-2xl border border-heather/10 bg-[#fffdf9] px-5 py-4 sm:-mt-8 sm:ml-8">
             <span className="size-2.5 shrink-0 rounded-full bg-candy" aria-hidden="true" />
-            <p className="text-xs font-semibold leading-5 text-ink/75 sm:text-sm">
+            <p className="text-xs font-semibold leading-5 text-ink/85 sm:text-sm">
               Made slowly. Chosen thoughtfully.
             </p>
           </div>

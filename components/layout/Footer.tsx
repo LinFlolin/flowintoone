@@ -2,16 +2,16 @@ import Link from "next/link";
 
 const primaryLinks = [
   { label: "Home", href: "/" },
-  { label: "Events", href: "/events" },
-  { label: "About us", href: "/about" },
+  { label: "Events", href: "/#events" },
+  { label: "About us", href: null },
   { label: "Register", href: "/register" },
   { label: "Login", href: "/login" },
 ];
 
 const informationLinks = [
-  { label: "Contact", href: "/contact" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Cookie Policy", href: "/cookies" },
+  { label: "Contact", href: null },
+  { label: "Privacy Policy", href: null },
+  { label: "Cookie Policy", href: null },
 ];
 
 export function Footer() {
@@ -25,48 +25,50 @@ export function Footer() {
           >
             flowintoone<span className="text-candy">.</span>
           </Link>
-          <p className="mt-4 max-w-xs text-sm leading-6 text-ink/70">
+          <p className="mt-4 max-w-xs text-sm leading-6 text-ink/80">
             A creative home for independent makers.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-ink/55">
+          <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-ink/70">
             Explore
           </h2>
           <nav className="mt-5 grid gap-3" aria-label="Footer navigation">
             {primaryLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="w-fit text-sm font-medium text-ink/75 transition-colors hover:text-heather focus-visible:outline-2"
-              >
-                {link.label}
-              </Link>
+              link.href ? (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="w-fit text-sm font-medium text-ink/85 transition-colors hover:text-heather focus-visible:outline-2"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <span key={link.label} className="w-fit cursor-default text-sm font-medium text-ink/45" aria-disabled="true">
+                  {link.label} <span className="text-xs">Coming soon</span>
+                </span>
+              )
             ))}
           </nav>
         </div>
 
         <div>
-          <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-ink/55">
+          <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-ink/70">
             Information
           </h2>
           <nav className="mt-5 grid gap-3" aria-label="Information links">
             {informationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="w-fit text-sm font-medium text-ink/75 transition-colors hover:text-heather focus-visible:outline-2"
-              >
-                {link.label}
-              </Link>
+              <span key={link.label} className="w-fit cursor-default text-sm font-medium text-ink/45" aria-disabled="true">
+                {link.label} <span className="text-xs">Coming soon</span>
+              </span>
             ))}
           </nav>
         </div>
       </div>
 
       <div className="border-t border-ink/10">
-        <div className="mx-auto max-w-[1200px] px-5 py-5 text-xs text-ink/60 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-[1200px] px-5 py-5 text-xs text-ink/70 sm:px-8 lg:px-10">
           © {new Date().getFullYear()} Flowintoone. All rights reserved.
         </div>
       </div>

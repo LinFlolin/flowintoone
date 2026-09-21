@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { EventCard } from "@/components/events/EventCard";
 import type { HomepageEvent } from "@/lib/data/homepage";
 
@@ -9,7 +8,7 @@ type UpcomingEventsProps = {
 
 export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
   return (
-    <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-10" aria-labelledby="events-heading">
+    <section id="events" className="scroll-mt-24 px-5 py-20 sm:px-8 sm:py-28 lg:px-10" aria-labelledby="events-heading">
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
@@ -22,16 +21,13 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
             >
               Where to find us<span className="text-candy">.</span>
             </h2>
-            <p className="mt-5 text-base leading-7 text-ink/65 sm:text-lg">
+            <p className="mt-5 text-base leading-7 text-ink/75 sm:text-lg">
               Discover upcoming markets and creative events.
             </p>
           </div>
-          <Link
-            href="/events"
-            className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-ink underline decoration-heather/35 underline-offset-4 transition-colors hover:text-heather focus-visible:outline-2"
-          >
-            Explore all events <span aria-hidden="true">→</span>
-          </Link>
+          <span className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-ink/45" aria-disabled="true" title="Coming soon">
+            Explore all events <span className="text-xs font-medium no-underline">Coming soon</span>
+          </span>
         </div>
 
         {error ? (
@@ -39,7 +35,7 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
             <p className="text-xl font-semibold tracking-[-0.03em] text-ink">
               We could not load upcoming events.
             </p>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/60">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">
               {error} Please try again soon.
             </p>
           </div>
@@ -54,7 +50,7 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
             <p className="text-xl font-semibold tracking-[-0.03em] text-ink">
               New dates are on their way.
             </p>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/60">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">
               Upcoming markets and creative events will appear here once they are
               published.
             </p>

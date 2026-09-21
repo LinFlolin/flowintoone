@@ -18,17 +18,25 @@ export function EventCard({ event }: EventCardProps) {
         </span>
       </time>
       <div>
-        <span className="inline-flex rounded-full bg-sandstone/55 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.15em] text-ink/70">
+        <span className="inline-flex rounded-full bg-sandstone/55 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.15em] text-ink/80">
           {event.type}
         </span>
         <h3 className="mt-3 text-lg font-semibold tracking-[-0.025em] text-ink">{event.title}</h3>
-        {event.location && <p className="mt-2 text-sm text-ink/60">{event.location}</p>}
-        <a
-          href={event.href}
-          className="mt-4 inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
-        >
-          View details <span aria-hidden="true">↗</span>
-        </a>
+        {event.location && <p className="mt-2 text-sm text-ink/75">{event.location}</p>}
+        {event.href ? (
+          <a
+            href={event.href}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
+          >
+            View details <span aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <span className="mt-4 inline-flex text-sm font-semibold text-ink/40" aria-disabled="true">
+            Details coming soon
+          </span>
+        )}
       </div>
     </article>
   );

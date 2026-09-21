@@ -60,13 +60,19 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
           <span className="hidden h-5 w-px shrink-0 bg-heather/25 md:block" aria-hidden="true" />
           <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label="Main navigation">
             {HEADER_NAVIGATION.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm font-semibold text-ink/75 transition-colors hover:text-heather focus-visible:outline-2"
-              >
-                {item.label}
-              </Link>
+              item.href ? (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="text-sm font-semibold text-ink/85 transition-colors hover:text-heather focus-visible:outline-2"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span key={item.label} className="cursor-default text-sm font-semibold text-ink/45" aria-disabled="true" title="Coming soon">
+                  {item.label}
+                </span>
+              )
             ))}
           </nav>
         </div>
@@ -84,7 +90,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
               <div className="relative">
                 <button
                   type="button"
-                  className="inline-flex min-h-10 max-w-48 items-center gap-2 rounded-full px-3 text-sm font-semibold text-ink/80 transition-colors hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                  className="inline-flex min-h-10 max-w-48 items-center gap-2 rounded-full px-3 text-sm font-semibold text-ink/90 transition-colors hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                   aria-expanded={isUserMenuOpen}
                   aria-controls="user-navigation"
                   aria-haspopup="menu"
@@ -105,7 +111,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                       href="/dashboard/profile"
                       role="menuitem"
                       onClick={closeMenus}
-                      className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                      className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                     >
                       My profile
                     </Link>
@@ -114,7 +120,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                         href={user.storefrontHref}
                         role="menuitem"
                         onClick={closeMenus}
-                        className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                        className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                       >
                         My website
                       </Link>
@@ -123,7 +129,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                       <button
                         type="submit"
                         role="menuitem"
-                        className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                        className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                       >
                         Logout
                       </button>
@@ -168,21 +174,27 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
         className={isMobileMenuOpen ? "grid border-t border-heather/20 bg-cream px-5 pb-6 pt-4 md:hidden" : "hidden border-t border-heather/20 bg-cream px-5 pb-6 pt-4 md:hidden"}
       >
         <nav className="grid gap-1" aria-label="Mobile navigation">
-          {HEADER_NAVIGATION.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={closeMenus}
-              className="rounded-xl px-3 py-3 text-base font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
-            >
-              {item.label}
-            </Link>
-          ))}
+            {HEADER_NAVIGATION.map((item) => (
+            item.href ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={closeMenus}
+                className="rounded-xl px-3 py-3 text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <span key={item.label} className="rounded-xl px-3 py-3 text-base font-semibold text-ink/45" aria-disabled="true">
+                {item.label} <span className="ml-1 text-xs font-medium">Coming soon</span>
+              </span>
+            )
+            ))}
         </nav>
         <div className="mt-4 grid gap-3 border-t border-heather/20 pt-5">
           {user ? (
             <>
-              <p className="px-3 text-sm font-semibold text-ink/60">{user.name}</p>
+              <p className="px-3 text-sm font-semibold text-ink/75">{user.name}</p>
               <Link
                 href="/dashboard"
                 onClick={closeMenus}
@@ -193,7 +205,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
               <Link
                 href="/dashboard/profile"
                 onClick={closeMenus}
-                className="rounded-xl px-3 py-3 text-base font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                className="rounded-xl px-3 py-3 text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
               >
                 My profile
               </Link>
@@ -201,7 +213,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
                 <Link
                   href={user.storefrontHref}
                   onClick={closeMenus}
-                  className="rounded-xl px-3 py-3 text-base font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                  className="rounded-xl px-3 py-3 text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                 >
                   My website
                 </Link>
@@ -209,7 +221,7 @@ export function HeaderNavigation({ user }: HeaderNavigationProps) {
               <form action={logoutAction}>
                 <button
                   type="submit"
-                  className="w-full rounded-xl px-3 py-3 text-left text-base font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
+                  className="w-full rounded-xl px-3 py-3 text-left text-base font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                 >
                   Logout
                 </button>

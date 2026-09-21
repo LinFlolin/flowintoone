@@ -34,7 +34,7 @@ export function ArtisanDirectory({
           >
             Meet our makers<span className="text-candy">.</span>
           </h2>
-          <p className="mt-5 text-base leading-7 text-ink/65 sm:text-lg">
+          <p className="mt-5 text-base leading-7 text-ink/75 sm:text-lg">
             Discover the people and stories behind handmade creations.
           </p>
           {hasFilter && (
@@ -55,7 +55,7 @@ export function ArtisanDirectory({
             <h3 className="text-xl font-semibold tracking-[-0.03em] text-ink">
               We could not load our makers.
             </h3>
-            <p className="mt-3 text-sm leading-6 text-ink/60">{error} Please try again soon.</p>
+            <p className="mt-3 text-sm leading-6 text-ink/70">{error} Please try again soon.</p>
           </div>
         ) : artisans.length > 0 ? (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -75,7 +75,7 @@ export function ArtisanDirectory({
               <h3 className="text-2xl font-semibold tracking-[-0.035em] text-ink">
                 New makers are joining soon.
               </h3>
-              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/60">
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">
                 Are you an independent artisan? Be among the first to share your work
                 with the Flowintoone community.
               </p>

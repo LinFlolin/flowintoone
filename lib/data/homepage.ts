@@ -22,7 +22,7 @@ export type HomepageEvent = {
   location: string | null;
   date: string;
   type: string;
-  href: string;
+  href: string | null;
 };
 
 export type HomepageSection<T> = {
@@ -331,7 +331,7 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
             : event.type.toLowerCase() === "event"
               ? "Event"
               : event.type,
-        href: event.external_url || `/events/${event.slug}`,
+        href: event.external_url,
       })),
       error: null,
     };
