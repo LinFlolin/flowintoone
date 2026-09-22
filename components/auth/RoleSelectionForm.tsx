@@ -14,7 +14,7 @@ function SubmitButton() {
       disabled={pending}
       className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-heather px-6 text-sm font-semibold text-white transition-colors hover:bg-[#756486] disabled:cursor-wait disabled:opacity-60"
     >
-      {pending ? "Saving…" : "Continue"}
+      {pending ? "Salvataggio…" : "Continua"}
     </button>
   );
 }
@@ -30,13 +30,13 @@ export function RoleSelectionForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="cursor-pointer rounded-2xl border border-heather/20 bg-white/55 p-5 has-[:checked]:border-heather has-[:checked]:bg-[#f7eef6]">
             <input className="sr-only" type="radio" name="role" value="visitor" required />
-            <span className="block text-lg font-semibold">I&apos;m here to explore</span>
-            <span className="mt-2 block text-sm leading-6 text-ink/60">Discover independent makers and their work.</span>
+            <span className="block text-lg font-semibold">Sono qui per esplorare</span>
+            <span className="mt-2 block text-sm leading-6 text-ink/60">Scopri creator indipendenti e il loro lavoro.</span>
           </label>
           <label className="cursor-pointer rounded-2xl border border-heather/20 bg-white/55 p-5 has-[:checked]:border-heather has-[:checked]:bg-[#f7eef6]">
             <input className="sr-only" type="radio" name="role" value="artisan" required />
-            <span className="block text-lg font-semibold">I&apos;m an artisan</span>
-            <span className="mt-2 block text-sm leading-6 text-ink/60">Create and publish a website for my practice.</span>
+            <span className="block text-lg font-semibold">Sono un creator</span>
+            <span className="mt-2 block text-sm leading-6 text-ink/60">Crea e pubblica un sito per la tua attività.</span>
           </label>
         </div>
       </fieldset>

@@ -62,19 +62,19 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
         href="/dashboard"
         className="text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4"
       >
-        ← Back to dashboard
+        ← Torna alla dashboard
       </Link>
 
       <div className="mt-8 max-w-2xl">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
-          Account details
+          Dettagli account
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl">
-          Your profile<span className="text-candy">.</span>
+          Il tuo profilo<span className="text-candy">.</span>
         </h1>
         <p className="mt-4 text-sm leading-7 text-ink/60 sm:text-base">
-          Keep your personal details current and choose how you appear in your creative
-          workspace.
+          Mantieni aggiornati i tuoi dati personali e scegli come apparire nel tuo spazio
+          creativo.
         </p>
       </div>
 
@@ -93,13 +93,13 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
 
       {error ? (
         <div className="mt-8 rounded-[2rem] border border-candy/25 bg-candy/10 p-7 text-sm leading-6 text-ink">
-          Your profile could not be loaded. Confirm that the Profile 2.0 migration has
-          been applied, then try again.
+          Non è stato possibile caricare il profilo. Verifica che la migrazione Profile 2.0
+          sia stata applicata, poi riprova.
         </div>
       ) : !profile ? (
         <div className="mt-8 rounded-[2rem] border border-heather/15 bg-white/60 p-7 text-sm leading-6 text-ink/65">
-          Your profile has not appeared yet. The database trigger should create it
-          automatically; refresh this page shortly or verify the trigger in Supabase.
+          Il tuo profilo non è ancora disponibile. Il database dovrebbe crearlo
+          automaticamente; aggiorna la pagina tra poco o verifica il trigger in Supabase.
         </div>
       ) : (
         <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_18rem] lg:items-start">
@@ -114,10 +114,10 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
               />
 
               <fieldset className="grid gap-6 border-0 p-0">
-                <legend className="text-sm font-semibold text-ink">Personal details</legend>
+                <legend className="text-sm font-semibold text-ink">Dati personali</legend>
 
                 <label className="text-sm font-semibold text-ink">
-                  Full name
+                  Nome completo
                   <input
                     className="mt-2 min-h-12 w-full rounded-xl border border-heather/20 bg-white px-4 text-sm text-ink focus:border-heather focus:outline-2"
                     name="fullName"
@@ -131,7 +131,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
 
                 <div className="grid gap-6 sm:grid-cols-2">
                   <label className="text-sm font-semibold text-ink">
-                    City <span className="font-normal text-ink/45">(optional)</span>
+                    Città <span className="font-normal text-ink/45">(facoltativa)</span>
                     <input
                       className="mt-2 min-h-12 w-full rounded-xl border border-heather/20 bg-white px-4 text-sm text-ink focus:border-heather focus:outline-2"
                       name="city"
@@ -142,7 +142,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
                   </label>
 
                   <label className="text-sm font-semibold text-ink">
-                    Country <span className="font-normal text-ink/45">(optional)</span>
+                    Paese <span className="font-normal text-ink/45">(facoltativo)</span>
                     <input
                       className="mt-2 min-h-12 w-full rounded-xl border border-heather/20 bg-white px-4 text-sm text-ink focus:border-heather focus:outline-2"
                       name="country"
@@ -157,14 +157,14 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
 
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.13em] text-ink/45">
-                Account email
+                Email account
               </p>
               <p className="mt-2 break-all text-sm font-medium text-ink">
-                {email || "Unavailable"}
+                {email || "Non disponibile"}
               </p>
               <p className="mt-2 text-xs leading-5 text-ink/45">
-                Your email comes directly from Supabase Auth and is not duplicated in your
-                profile.
+                La tua email proviene direttamente da Supabase Auth e non viene duplicata nel
+                profilo.
               </p>
             </div>
 
@@ -173,35 +173,35 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
 
           <aside className="rounded-[2rem] bg-sandstone/35 p-7 sm:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-heather">
-              Account security
+              Sicurezza account
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
-              Keep your account secure.
+              Mantieni sicuro il tuo account.
             </h2>
             <p className="mt-4 text-sm leading-6 text-ink/60">
-              Choose a strong password and update it whenever you need to.
+              Scegli una password sicura e aggiornala quando necessario.
             </p>
             <Link
               href="/update-password"
               className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full border border-heather/25 bg-white/70 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-visible:outline-2"
             >
-              Manage password
+              Gestisci password
             </Link>
 
             <div className="mt-8 border-t border-candy/20 pt-7">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a95d76]">
-                Danger zone
+                Zona pericolosa
               </p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
-                Delete your account.
+                Elimina il tuo account.
               </h2>
               <p className="mt-4 text-sm leading-6 text-ink/60">
-                This permanently removes your profile, storefronts, images, and sign-in. This
-                cannot be undone.
+                Questa azione rimuove definitivamente profilo, siti, immagini e accesso. Non
+                può essere annullata.
               </p>
               <form action={deleteAccountAction} className="mt-5 grid gap-3">
                 <label className="text-xs font-semibold text-ink/70" htmlFor="delete-confirmation">
-                  Type <span className="font-bold text-[#a95d76]">DELETE</span> to confirm
+                  Digita <span className="font-bold text-[#a95d76]">DELETE</span> per confermare
                   <input
                     id="delete-confirmation"
                     name="confirmation"
@@ -209,7 +209,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
                     autoComplete="off"
                     pattern="DELETE"
                     spellCheck={false}
-                    title='Enter DELETE exactly to confirm account deletion.'
+                    title="Inserisci DELETE esattamente per confermare l'eliminazione dell'account."
                     required
                   />
                 </label>

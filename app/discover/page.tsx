@@ -5,8 +5,8 @@ import { DiscoverPage } from "@/components/discover/DiscoverPage";
 import { getHomepageCategories, getPublishedArtisans } from "@/lib/data/homepage";
 
 export const metadata: Metadata = {
-  title: "Discover | Flowintoone",
-  description: "Discover independent creators and published websites on Flowintoone.",
+  title: "Scopri | Flowintoone",
+  description: "Scopri creator indipendenti e siti pubblicati su Flowintoone.",
 };
 
 type DiscoverRouteProps = {

@@ -42,7 +42,7 @@ function SubmitButton({ children }: { children: React.ReactNode }) {
       disabled={pending}
       className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-heather px-6 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2 disabled:cursor-wait disabled:opacity-65"
     >
-      {pending ? "Please wait…" : children}
+      {pending ? "Attendi…" : children}
     </button>
   );
 }
@@ -73,14 +73,14 @@ export function LoginForm({ nextPath = "/dashboard" }: { nextPath?: string }) {
           href="/forgot-password"
           className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4"
         >
-          Forgot your password?
+          Hai dimenticato la password?
         </Link>
       </div>
-      <SubmitButton>Login</SubmitButton>
+      <SubmitButton>Accedi</SubmitButton>
       <p className="text-center text-sm text-ink/60">
-        New to Flowintoone?{" "}
+        Non hai ancora un account Flowintoone?{" "}
         <Link href="/register" className="font-semibold text-heather underline underline-offset-4">
-          Create an account
+          Crea un account
         </Link>
       </p>
     </form>
@@ -94,7 +94,7 @@ export function RegisterForm() {
     <form action={formAction} className="grid gap-5">
       <FormMessage state={state} />
       <label className="text-sm font-semibold text-ink">
-        Full name
+        Nome e cognome
         <input
           className={inputClassName}
           type="text"
@@ -119,10 +119,10 @@ export function RegisterForm() {
           minLength={8}
           required
         />
-        <span className="mt-2 block text-xs font-normal text-ink/50">At least 8 characters.</span>
+        <span className="mt-2 block text-xs font-normal text-ink/50">Almeno 8 caratteri.</span>
       </label>
       <label className="text-sm font-semibold text-ink">
-        Confirm password
+        Conferma password
         <input
           className={inputClassName}
           type="password"
@@ -132,11 +132,11 @@ export function RegisterForm() {
           required
         />
       </label>
-      <SubmitButton>Create my account</SubmitButton>
+      <SubmitButton>Crea il mio account</SubmitButton>
       <p className="text-center text-sm text-ink/60">
-        Already registered?{" "}
+        Hai già un account?{" "}
         <Link href="/login" className="font-semibold text-heather underline underline-offset-4">
-          Login
+          Accedi
         </Link>
       </p>
     </form>
@@ -153,12 +153,12 @@ export function ForgotPasswordForm() {
         Email
         <input className={inputClassName} type="email" name="email" autoComplete="email" required />
       </label>
-      <SubmitButton>Send reset link</SubmitButton>
+      <SubmitButton>Invia link di reimpostazione</SubmitButton>
       <Link
         href="/login"
         className="text-center text-sm font-semibold text-heather underline underline-offset-4"
       >
-        Back to login
+        Torna all&apos;accesso
       </Link>
     </form>
   );
@@ -174,8 +174,8 @@ export function ResendConfirmationForm() {
         Email
         <input className={inputClassName} type="email" name="email" autoComplete="email" required />
       </label>
-      <SubmitButton>Send confirmation email</SubmitButton>
-      <Link href="/login" className="text-center text-sm font-semibold text-heather underline underline-offset-4">Back to login</Link>
+      <SubmitButton>Invia email di conferma</SubmitButton>
+      <Link href="/login" className="text-center text-sm font-semibold text-heather underline underline-offset-4">Torna all&apos;accesso</Link>
     </form>
   );
 }
@@ -187,7 +187,7 @@ export function UpdatePasswordForm() {
     <form action={formAction} className="grid gap-5">
       <FormMessage state={state} />
       <label className="text-sm font-semibold text-ink">
-        New password
+        Nuova password
         <input
           className={inputClassName}
           type="password"
@@ -198,7 +198,7 @@ export function UpdatePasswordForm() {
         />
       </label>
       <label className="text-sm font-semibold text-ink">
-        Confirm new password
+        Conferma nuova password
         <input
           className={inputClassName}
           type="password"
@@ -208,7 +208,7 @@ export function UpdatePasswordForm() {
           required
         />
       </label>
-      <SubmitButton>Update password</SubmitButton>
+      <SubmitButton>Aggiorna password</SubmitButton>
     </form>
   );
 }

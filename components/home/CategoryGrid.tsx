@@ -61,17 +61,17 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
             id="categories-heading"
             className="text-3xl font-semibold tracking-[-0.04em] text-ink sm:text-4xl"
           >
-            Explore by category<span className="text-candy">.</span>
+            Esplora per categoria<span className="text-candy">.</span>
           </h2>
           <div className="hidden h-px flex-1 bg-heather/15 sm:block" aria-hidden="true" />
-          <span className="shrink-0 text-xs font-semibold text-ink/70" aria-disabled="true" title="Coming soon">
-            View all categories <span aria-hidden="true">→</span>
+          <span className="shrink-0 text-xs font-semibold text-ink/70" aria-disabled="true" title="Prossimamente">
+            Vedi tutte le categorie <span aria-hidden="true">→</span>
           </span>
         </div>
 
         {error ? (
           <div className="rounded-2xl border border-heather/15 bg-white/45 px-6 py-10 text-center text-sm text-ink/75">
-            {error} Please try again soon.
+            {error} Riprova tra poco.
           </div>
         ) : categories.length > 0 ? (
           <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-6">
@@ -112,7 +112,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
                       {featured.name}
                     </h3>
                   </div>
-                  {!category && <p className="mt-1 text-[0.65rem] font-semibold text-ink/55">Coming soon</p>}
+                  {!category && <p className="mt-1 text-[0.65rem] font-semibold text-ink/55">Prossimamente</p>}
                 </>
               );
 
@@ -121,7 +121,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
                   key={featured.slug}
                   href={`/?category=${encodeURIComponent(category.slug)}#artisans`}
                   className="group block focus-visible:outline-2"
-                  aria-label={`Explore ${featured.name} artisans`}
+                  aria-label={`Esplora i creator di ${featured.name}`}
                 >
                   {content}
                 </Link>
@@ -134,7 +134,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
           </div>
         ) : (
           <div className="rounded-2xl border border-dashed border-heather/25 bg-white/35 px-6 py-10 text-center text-sm text-ink/70">
-            Categories will appear here once they are active.
+            Le categorie saranno disponibili a breve.
           </div>
         )}
       </ScrollReveal>

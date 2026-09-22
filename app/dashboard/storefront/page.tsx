@@ -91,11 +91,11 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
     ? business.gallery_image_urls
     : [];
   const publishingChecklist = [
-    { label: "Business name", complete: Boolean(business?.name.trim()) },
-    { label: "Category", complete: Boolean(business?.category_id) },
-    { label: "Our story", complete: Boolean(business?.description?.trim()) },
-    { label: "City", complete: Boolean(business?.city?.trim()) },
-    { label: "Country", complete: Boolean(business?.country?.trim()) },
+    { label: "Nome attività", complete: Boolean(business?.name.trim()) },
+    { label: "Categoria", complete: Boolean(business?.category_id) },
+    { label: "La nostra storia", complete: Boolean(business?.description?.trim()) },
+    { label: "Città", complete: Boolean(business?.city?.trim()) },
+    { label: "Paese", complete: Boolean(business?.country?.trim()) },
   ];
 
   return (
@@ -104,16 +104,16 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
         href="/dashboard"
         className="text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4"
       >
-        ← Back to dashboard
+        ← Torna alla dashboard
       </Link>
 
       <div className="mt-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
-          {business ? "Storefront editor" : "New storefront"}
+          {business ? "Editor del sito" : "Nuovo sito"}
         </p>
         <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl">
-            Shape your storefront<span className="text-candy">.</span>
+            Dai forma al tuo sito<span className="text-candy">.</span>
           </h1>
           {business && (
             <span
@@ -128,8 +128,8 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
           )}
         </div>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-ink/60 sm:text-base">
-          Build an editorial home for your work, from the ideas and materials behind it to
-          the photographs that bring it to life.
+          Crea uno spazio editoriale per il tuo lavoro, dalle idee e dai materiali alle
+          fotografie che lo rendono vivo.
         </p>
       </div>
 
@@ -148,17 +148,17 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
 
       {hasLoadError ? (
         <div className="mt-8 rounded-[2rem] border border-candy/25 bg-candy/10 p-7 text-sm leading-6 text-ink">
-          The storefront editor could not be loaded. Confirm that the Storefront 2.0
-          migration has been applied, then try again.
+          Non è stato possibile caricare l&apos;editor del sito. Verifica che la migrazione
+          Storefront 2.0 sia stata applicata, poi riprova.
         </div>
       ) : (
         <form action={saveStorefrontAction} className="mt-10 grid gap-6">
           {business && <input type="hidden" name="businessId" value={business.id} />}
 
           <EditorSection
-            number="01 — Business information"
-            title="The essentials"
-            description="Set the identity, category, and location visitors use to understand your business at a glance."
+            number="01 — Informazioni attività"
+            title="Le informazioni essenziali"
+            description="Imposta identità, categoria e posizione che aiutano i visitatori a capire subito la tua attività."
           >
             <StorefrontNameField
               initialName={business?.name ?? ""}
@@ -166,22 +166,22 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
             />
 
             <label className="text-sm font-semibold text-ink">
-              Tagline <span className="font-normal text-ink/45">(optional)</span>
+              Sottotitolo <span className="font-normal text-ink/45">(facoltativo)</span>
               <input
                 className={inputClassName}
                 name="tagline"
                 defaultValue={business?.tagline ?? ""}
                 maxLength={160}
-                placeholder="Small-batch ceramics inspired by the Mediterranean coast."
+                placeholder="Ceramiche artigianali ispirate alla costa mediterranea."
               />
               <span className="mt-2 block text-xs font-normal text-ink/45">
-                A short introduction shown prominently on your public storefront.
+                Una breve introduzione mostrata in evidenza sul tuo sito pubblico.
               </span>
             </label>
 
             <div className="grid gap-6 sm:grid-cols-3">
               <label className="text-sm font-semibold text-ink sm:col-span-1">
-                Category <span className="text-candy">*</span>
+                Categoria <span className="text-candy">*</span>
                 <select
                   className={inputClassName}
                   name="categoryId"
@@ -190,7 +190,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                   required
                 >
                   <option value="" disabled>
-                    {categories.length === 0 ? "No categories available" : "Select a category"}
+                    {categories.length === 0 ? "Nessuna categoria disponibile" : "Seleziona una categoria"}
                   </option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -200,12 +200,12 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 </select>
                 {categories.length === 0 && (
                   <span id="category-unavailable" className="mt-2 block text-xs font-normal text-candy">
-                    No active categories are available. Saving is disabled.
+                    Nessuna categoria attiva disponibile. Il salvataggio è disabilitato.
                   </span>
                 )}
               </label>
               <label className="text-sm font-semibold text-ink">
-                City
+                Città
                 <input
                   className={inputClassName}
                   name="city"
@@ -215,7 +215,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 />
               </label>
               <label className="text-sm font-semibold text-ink">
-                Country
+                Paese
                 <input
                   className={inputClassName}
                   name="country"
@@ -228,53 +228,53 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
           </EditorSection>
 
           <EditorSection
-            number="02 — Our story"
-            title="The meaning behind the work"
-            description="Share the human story, material choices, and process that make your practice distinctive."
+            number="02 — La nostra storia"
+            title="Il significato del tuo lavoro"
+            description="Condividi la storia, i materiali e il processo che rendono unica la tua pratica."
           >
             <label className="text-sm font-semibold text-ink">
-              Your story
+              La tua storia
               <textarea
                 className={`${inputClassName} min-h-48 resize-y py-3 leading-6`}
                 name="description"
                 defaultValue={business?.description ?? ""}
                 maxLength={4000}
-                placeholder="How did your practice begin? What ideas and places continue to shape it?"
+                placeholder="Come è iniziata la tua pratica? Quali idee e luoghi continuano a ispirarti?"
               />
               <span className="mt-2 block text-xs font-normal text-ink/45">
-                Required before publishing.
+                Necessario prima della pubblicazione.
               </span>
             </label>
 
             <div className="grid gap-6 lg:grid-cols-2">
               <label className="text-sm font-semibold text-ink">
-                Materials <span className="font-normal text-ink/45">(optional)</span>
+                Materiali <span className="font-normal text-ink/45">(facoltativi)</span>
                 <textarea
                   className={`${inputClassName} min-h-36 resize-y py-3 leading-6`}
                   name="materials"
                   defaultValue={business?.materials ?? ""}
                   maxLength={2000}
-                  placeholder="Describe the materials you choose, where they come from, and why they matter."
+                  placeholder="Descrivi i materiali che scegli, da dove provengono e perché sono importanti."
                 />
               </label>
 
               <label className="text-sm font-semibold text-ink">
-                Creative process <span className="font-normal text-ink/45">(optional)</span>
+                Processo creativo <span className="font-normal text-ink/45">(facoltativo)</span>
                 <textarea
                   className={`${inputClassName} min-h-36 resize-y py-3 leading-6`}
                   name="creativeProcess"
                   defaultValue={business?.creative_process ?? ""}
                   maxLength={3000}
-                  placeholder="Take visitors from the first sketch to the finished piece."
+                  placeholder="Accompagna i visitatori dal primo schizzo all'opera finita."
                 />
               </label>
             </div>
           </EditorSection>
 
           <EditorSection
-            number="03 — Branding & gallery"
-            title="Show the work in context"
-            description="Use a clear logo, an atmospheric cover, and a focused selection of photographs."
+            number="03 — Branding e galleria"
+            title="Mostra il lavoro nel suo contesto"
+            description="Usa un logo chiaro, una copertina suggestiva e una selezione mirata di fotografie."
           >
             <StorefrontImageFields
               logoUrl={business?.logo_url ?? null}
@@ -283,19 +283,19 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
             <div className="border-t border-heather/10 pt-7">
               <StorefrontGalleryField
                 imageUrls={galleryImageUrls}
-                businessName={business?.name ?? "Storefront"}
+              businessName={business?.name ?? "Sito"}
               />
             </div>
           </EditorSection>
 
           <EditorSection
-            number="04 — Contact & social"
-            title="Help visitors find you"
-            description="Connect your independent website, social presence, shop, and preferred public contact address."
+            number="04 — Contatti e social"
+            title="Fatti trovare dai visitatori"
+            description="Collega il tuo sito indipendente, i social, il negozio e il contatto pubblico preferito."
           >
             <div className="grid gap-6 sm:grid-cols-2">
               <label className="text-sm font-semibold text-ink">
-                Website URL
+                URL del sito
                 <input
                   className={inputClassName}
                   type="text"
@@ -306,7 +306,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 />
               </label>
               <label className="text-sm font-semibold text-ink">
-                Instagram URL
+                URL Instagram
                 <input
                   className={inputClassName}
                   type="text"
@@ -317,7 +317,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 />
               </label>
               <label className="text-sm font-semibold text-ink">
-                Etsy shop URL
+                URL negozio Etsy
                 <input
                   className={inputClassName}
                   type="text"
@@ -328,7 +328,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 />
               </label>
               <label className="text-sm font-semibold text-ink">
-                Public contact email
+                Email di contatto pubblica
                 <input
                   className={inputClassName}
                   type="email"
@@ -337,21 +337,21 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                   autoComplete="email"
                 />
                 <span className="mt-2 block text-xs font-normal text-ink/50">
-                  This address may be displayed publicly on your storefront.
+                  Questo indirizzo potrebbe essere mostrato pubblicamente sul tuo sito.
                 </span>
               </label>
             </div>
           </EditorSection>
 
           <EditorSection
-            number="05 — Preview & publish"
-            title="Ready for the community?"
-            description="Save freely while the storefront is a draft. Publishing makes it discoverable on Flowintoone."
+            number="05 — Anteprima e pubblicazione"
+            title="Pronto per la community?"
+            description="Salva liberamente mentre il sito è una bozza. Pubblicandolo sarà visibile su Flowintoone."
           >
             <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.15em] text-ink/45">
-                  Publishing essentials — last saved state
+                  Elementi per la pubblicazione — ultimo salvataggio
                 </p>
                 <ul className="mt-4 grid gap-2 sm:grid-cols-2">
                   {publishingChecklist.map((item) => (
@@ -371,7 +371,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                   ))}
                 </ul>
                 <p className="mt-3 text-xs leading-5 text-ink/45">
-                  This checklist refreshes after each successful save.
+                  Questa lista si aggiorna dopo ogni salvataggio riuscito.
                 </p>
               </div>
 
@@ -381,13 +381,13 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                   target="_blank"
                   className="inline-flex min-h-11 items-center justify-center rounded-full border border-heather/25 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-visible:outline-2"
                 >
-                  View live storefront ↗
+                  Vedi sito pubblicato ↗
                 </Link>
               ) : (
                 business ? (
-                  <Link href={`/dashboard/storefront/preview?businessId=${business.id}`} className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4">Preview draft ↗</Link>
+                  <Link href={`/dashboard/storefront/preview?businessId=${business.id}`} className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4">Anteprima bozza ↗</Link>
                 ) : (
-                  <p className="max-w-xs text-xs leading-5 text-ink/45">The public preview becomes available as soon as the storefront is published.</p>
+                  <p className="max-w-xs text-xs leading-5 text-ink/45">L&apos;anteprima pubblica sarà disponibile quando il sito verrà pubblicato.</p>
                 )
               )}
             </div>

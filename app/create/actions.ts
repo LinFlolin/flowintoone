@@ -47,18 +47,18 @@ export async function createWebsiteAction(formData: FormData) {
   const contactEmail = field(formData, "contactEmail").toLowerCase();
 
   if (!["shop", "events", "portfolio", "services", "personal"].includes(purpose)) {
-    fail("Choose a valid website purpose.");
+    fail("Scegli uno scopo valido per il sito.");
   }
   if (purpose !== "shop" && purpose !== "events") {
-    fail("This website type is coming soon. Choose Shop or Events for now.");
+    fail("Questo tipo di sito sarà disponibile prossimamente. Per ora scegli Negozio o Eventi.");
   }
-  if (designModel !== "editorial" && designModel !== "minimal") fail("Choose a valid design.");
-  if (name.length < 2 || name.length > 100) fail("Website name must be between 2 and 100 characters.");
-  if (!slug || slug.length > 80 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) fail("Enter a valid public URL slug.");
-  if (!description || description.length > 4000) fail("Add a description of your work.");
-  if (!categoryId || !city || !country) fail("Complete the category, city, and country fields.");
-  if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) fail("Enter a valid contact email.");
-  if ([field(formData, "websiteUrl"), field(formData, "instagramUrl"), field(formData, "etsyUrl")].some((value) => value.length > 2048)) fail("Links must be 2,048 characters or fewer.");
+  if (designModel !== "editorial" && designModel !== "minimal") fail("Scegli un design valido.");
+  if (name.length < 2 || name.length > 100) fail("Il nome del sito deve contenere da 2 a 100 caratteri.");
+  if (!slug || slug.length > 80 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) fail("Inserisci uno slug valido per l'URL pubblico.");
+  if (!description || description.length > 4000) fail("Aggiungi una descrizione del tuo lavoro.");
+  if (!categoryId || !city || !country) fail("Completa i campi categoria, città e Paese.");
+  if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) fail("Inserisci un'email di contatto valida.");
+  if ([field(formData, "websiteUrl"), field(formData, "instagramUrl"), field(formData, "etsyUrl")].some((value) => value.length > 2048)) fail("I link devono contenere al massimo 2.048 caratteri.");
   if (field(formData, "websiteUrl") && !normalizeUrl(field(formData, "websiteUrl"))) fail("Enter a valid website URL.");
   if (field(formData, "instagramUrl") && !normalizeUrl(field(formData, "instagramUrl"))) fail("Enter a valid Instagram URL.");
   if (field(formData, "etsyUrl") && !normalizeEtsyUrl(field(formData, "etsyUrl"))) fail("Enter a valid Etsy shop URL.");
@@ -69,7 +69,7 @@ export async function createWebsiteAction(formData: FormData) {
     .eq("id", categoryId)
     .eq("is_active", true)
     .maybeSingle();
-  if (categoryError || !category) fail("The selected category is not available.");
+  if (categoryError || !category) fail("La categoria selezionata non è disponibile.");
 
   // The product currently supports one website per artisan. This guard also
   // makes a double-click or repeated submission idempotent.
@@ -79,7 +79,7 @@ export async function createWebsiteAction(formData: FormData) {
     .eq("owner_id", userId)
     .limit(1)
     .maybeSingle();
-  if (existing) redirect("/dashboard/storefront?message=Your website already exists.");
+  if (existing) redirect(`/dashboard/storefront?message=${encodeURIComponent("Il tuo sito esiste già.")}`);
 
   const values = {
     owner_id: userId,
@@ -108,13 +108,13 @@ export async function createWebsiteAction(formData: FormData) {
     .maybeSingle();
 
   if (error || !business) {
-    if (error?.code === "23505") fail("That public URL is already in use. Choose another slug.");
+    if (error?.code === "23505") fail("Questo URL pubblico è già in uso. Scegli un altro slug.");
     console.error("[create:website] business insert failed", error);
-    fail("The website could not be created. Please try again.");
+    fail("Non è stato possibile creare il sito. Riprova.");
   }
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/storefront");
   revalidatePath(`/artisans/${slug}`);
-  redirect(`/dashboard/storefront?businessId=${business.id}&message=${encodeURIComponent("Draft website created successfully.")}`);
+  redirect(`/dashboard/storefront?businessId=${business.id}&message=${encodeURIComponent("Bozza del sito creata con successo.")}`);
 }

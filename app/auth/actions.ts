@@ -25,11 +25,11 @@ function authErrorMessage(message: string) {
   const normalized = message.toLowerCase();
 
   if (normalized.includes("invalid login credentials")) {
-    return "The email or password is incorrect.";
+    return "L'email o la password non sono corrette.";
   }
 
   if (normalized.includes("email not confirmed")) {
-    return "Please verify your email before signing in.";
+    return "Verifica la tua email prima di accedere.";
   }
 
   if (normalized.includes("already registered") || normalized.includes("already exists")) {
@@ -37,7 +37,7 @@ function authErrorMessage(message: string) {
   }
 
   if (normalized.includes("rate limit")) {
-    return "Too many attempts. Please wait a moment and try again.";
+    return "Troppi tentativi. Attendi un momento e riprova.";
   }
 
   return message;
@@ -96,7 +96,7 @@ export async function registerAction(
   }
 
   if (password !== confirmPassword) {
-    return { error: "The passwords do not match.", success: null };
+    return { error: "Le password non coincidono.", success: null };
   }
 
   const supabase = await createClient();
@@ -162,7 +162,7 @@ export async function resendConfirmationAction(
 ): Promise<AuthFormState> {
   void _previousState;
   const email = getField(formData, "email").toLowerCase();
-  if (!isEmail(email)) return { error: "Enter a valid email address.", success: null };
+  if (!isEmail(email)) return { error: "Inserisci un indirizzo email valido.", success: null };
 
   const supabase = await createClient();
   const siteUrl = await getSiteUrl();
@@ -189,7 +189,7 @@ export async function updatePasswordAction(
   }
 
   if (password !== confirmPassword) {
-    return { error: "The passwords do not match.", success: null };
+    return { error: "Le password non coincidono.", success: null };
   }
 
   const supabase = await createClient();
@@ -199,7 +199,7 @@ export async function updatePasswordAction(
     return { error: authErrorMessage(error.message), success: null };
   }
 
-  redirect("/dashboard?message=Password updated successfully.");
+  redirect(`/dashboard?message=${encodeURIComponent("Password aggiornata con successo.")}`);
 }
 
 export async function logoutAction() {

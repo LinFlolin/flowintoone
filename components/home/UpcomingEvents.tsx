@@ -14,30 +14,30 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-viridian">
-              Upcoming events
+              Prossimi eventi
             </p>
             <h2
               id="events-heading"
               className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl"
             >
-              Upcoming events<span className="text-candy">.</span>
+              Prossimi eventi<span className="text-candy">.</span>
             </h2>
             <p className="mt-5 text-base leading-7 text-ink/75 sm:text-lg">
-              Discover markets, workshops and creative experiences near you.
+              Scopri mercati, workshop ed esperienze creative vicino a te.
             </p>
           </div>
-          <span className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-ink/45" aria-disabled="true" title="Coming soon">
-            Explore all events <span className="text-xs font-medium no-underline">Coming soon</span>
+          <span className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-ink/45" aria-disabled="true" title="Prossimamente">
+            Esplora tutti gli eventi <span className="text-xs font-medium no-underline">Prossimamente</span>
           </span>
         </div>
 
         {error ? (
           <div className="mt-12 rounded-[2rem] border border-heather/15 bg-sandstone/20 px-6 py-12 text-center sm:px-10">
             <p className="text-xl font-semibold tracking-[-0.03em] text-ink">
-              We could not load upcoming events.
+              Non è stato possibile caricare gli eventi.
             </p>
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">
-              {error} Please try again soon.
+              {error} Riprova tra poco.
             </p>
           </div>
         ) : events.length > 0 ? (
@@ -49,11 +49,10 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
         ) : (
           <div className="mt-12 rounded-[2rem] border border-heather/15 bg-sandstone/20 px-6 py-12 text-center sm:px-10">
             <p className="text-xl font-semibold tracking-[-0.03em] text-ink">
-              New dates are on their way.
+              Nuove date in arrivo.
             </p>
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">
-              Upcoming markets and creative events will appear here once they are
-              published.
+              Mercati ed eventi creativi appariranno qui quando saranno pubblicati.
             </p>
           </div>
         )}

@@ -22,7 +22,7 @@ export function InitialPageLoader() {
       aria-busy="true"
       className="fixed inset-0 z-[100] grid place-items-center bg-cream"
     >
-      <FlowLoader message="Loading Flowintoone" />
+      <FlowLoader message="Caricamento Flowintoone" />
     </div>
   );
 }

@@ -35,13 +35,13 @@ function planPrice(plan: BillingPlan, cycle: BillingCycle) {
   return cycle === "monthly"
     ? {
         amount: "€" + plan.monthlyPrice,
-        suffix: "month",
-        detail: "€" + plan.yearlyPrice + " / year",
+        suffix: "mese",
+        detail: "€" + plan.yearlyPrice + " / anno",
       }
     : {
         amount: "€" + plan.yearlyPrice,
-        suffix: "year",
-        detail: "€" + plan.monthlyPrice + " / month",
+        suffix: "anno",
+        detail: "€" + plan.monthlyPrice + " / mese",
       };
 }
 
@@ -83,7 +83,7 @@ function PlanCard({ plan, cycle }: { plan: BillingPlan; cycle: BillingCycle }) {
       {price.detail ? (
         <p className="mt-1 text-xs text-ink/45">{price.detail}</p>
       ) : (
-        <p className="mt-1 text-xs text-ink/45">No commitment</p>
+          <p className="mt-1 text-xs text-ink/45">Nessun vincolo</p>
       )}
 
       <ul className="mt-6 grid gap-2.5">
@@ -107,11 +107,11 @@ function PlanCard({ plan, cycle }: { plan: BillingPlan; cycle: BillingCycle }) {
         aria-disabled={isCurrent}
         title={
           isCurrent
-            ? "This is the presentation-only current plan state."
+            ? "Questo è solo lo stato dimostrativo del piano attuale."
             : "Billing integration coming soon"
         }
       >
-        {isCurrent ? "Current plan" : "Upgrade to " + plan.label}
+        {isCurrent ? "Piano attuale" : "Passa a " + plan.label}
       </button>
     </article>
   );
@@ -137,13 +137,13 @@ export default function BillingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/75 to-cream/20" />
         <div className="relative max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-heather">
-            Subscription &amp; billing
+            Abbonamento e fatturazione
           </p>
           <h1 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-ink sm:text-5xl">
-            Find the plan that fits you<span className="text-candy">.</span>
+            Trova il piano più adatto a te<span className="text-candy">.</span>
           </h1>
           <p className="mt-3 max-w-xl text-base leading-6 text-ink/60">
-            More visibility, more opportunities, more time for the work you love.
+            Più visibilità, più opportunità, più tempo per il lavoro che ami.
           </p>
         </div>
       </section>
@@ -152,7 +152,7 @@ export default function BillingPage() {
         <div
           className="inline-flex rounded-full border border-heather/25 bg-white/70 p-1"
           role="group"
-          aria-label="Billing cycle"
+          aria-label="Ciclo di fatturazione"
         >
           <button
             type="button"
@@ -160,7 +160,7 @@ export default function BillingPage() {
             onClick={() => setCycle("monthly")}
             className={cycle === "monthly" ? monthlyActive : monthlyInactive}
           >
-            Monthly
+            Mensile
           </button>
           <button
             type="button"
@@ -168,7 +168,7 @@ export default function BillingPage() {
             onClick={() => setCycle("yearly")}
             className={cycle === "yearly" ? monthlyActive : monthlyInactive}
           >
-            Yearly
+            Annuale
           </button>
         </div>
         <span className="rounded-full bg-candy/15 px-3 py-1.5 text-xs font-bold text-[#a95d76]">
@@ -176,7 +176,7 @@ export default function BillingPage() {
         </span>
       </div>
 
-      <section className="mt-6 grid gap-5 lg:grid-cols-3" aria-label="Subscription plans">
+      <section className="mt-6 grid gap-5 lg:grid-cols-3" aria-label="Piani di abbonamento">
         {BILLING_PLANS.map((plan) => (
           <PlanCard key={plan.id} plan={plan} cycle={cycle} />
         ))}
@@ -184,9 +184,9 @@ export default function BillingPage() {
 
       <section className="mt-6 overflow-hidden rounded-[1.6rem] border border-heather/25 bg-white/70">
         <div className="border-b border-heather/15 px-6 py-5 sm:px-7">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-heather">Compare plans</p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-heather">Confronta i piani</p>
           <h2 className="mt-1 text-xl font-semibold tracking-[-0.025em] text-ink">
-            Choose the space that feels right
+            Scegli lo spazio più adatto a te
           </h2>
         </div>
         <div className="scrollbar-hidden overflow-x-auto">
@@ -194,7 +194,7 @@ export default function BillingPage() {
             <thead>
               <tr className="border-b border-heather/15 text-xs font-bold uppercase tracking-[0.12em] text-ink/45">
                 <th scope="col" className="w-[42%] px-6 py-4 font-bold sm:px-7">
-                  Feature
+                  Funzionalità
                 </th>
                 {BILLING_PLANS.map((plan) => (
                   <th key={plan.id} scope="col" className="px-4 py-4 font-bold">
@@ -227,32 +227,32 @@ export default function BillingPage() {
       <section className="mt-6 grid gap-5 lg:grid-cols-[1fr_1.5fr]" aria-label="Billing support">
         <article className="rounded-[1.6rem] border border-viridian/30 bg-viridian/10 p-6 sm:p-7">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#477b7b]">
-            Need a little guidance?
+            Ti serve una guida?
           </p>
           <h2 className="mt-2 text-xl font-semibold tracking-[-0.025em] text-ink">
-            Not sure which plan is right for you?
+            Non sai quale piano scegliere?
           </h2>
           <p className="mt-2 text-sm leading-6 text-ink/60">
-            Start with Free and change your plan whenever your creative space grows.
+            Inizia con Free e cambia piano quando il tuo spazio creativo crescerà.
           </p>
           <button
             type="button"
             className="mt-5 rounded-full border border-heather/30 bg-white/65 px-4 py-2 text-sm font-semibold text-heather"
           >
-            Learn more about our plans
+            Scopri di più sui nostri piani
           </button>
         </article>
 
         <article className="rounded-[1.6rem] border border-heather/25 bg-white/70 p-6 sm:p-7">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-heather">
-            Frequently asked questions
+            Domande frequenti
           </p>
           <div className="mt-3 divide-y divide-heather/15">
             {[
-              "Can I change my plan later?",
-              "What happens to my data if I downgrade?",
-              "Do you offer refunds?",
-              "Is there a limit to the number of events?",
+              "Posso cambiare piano in seguito?",
+              "Cosa succede ai miei dati se passo a un piano inferiore?",
+              "Offrite rimborsi?",
+              "C'è un limite al numero di eventi?",
             ].map((question) => (
               <details key={question} className="group py-3">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-ink/75">
@@ -262,7 +262,7 @@ export default function BillingPage() {
                   </span>
                 </summary>
                 <p className="mt-2 max-w-2xl text-sm leading-5 text-ink/55">
-                  Billing details will be available when subscription payments are introduced.
+                  I dettagli di fatturazione saranno disponibili quando verranno introdotti i pagamenti per gli abbonamenti.
                 </p>
               </details>
             ))}

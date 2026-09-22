@@ -51,7 +51,7 @@ const getPublishedStorefront = cache(async (slug: string) => {
         message: error.message ?? null,
       })}`,
     );
-    throw new Error("The storefront could not be loaded.");
+    throw new Error("Non è stato possibile caricare il sito.");
   }
 
   return data as PublicStorefront | null;
@@ -146,7 +146,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
               href="/#artisans"
               className="inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
             >
-              ← Back to artisans
+              ← Torna ai creator
             </Link>
 
             <div className="relative mt-7 aspect-[16/7] min-h-64 overflow-hidden rounded-[2rem] bg-sandstone/35 sm:min-h-80">
@@ -208,10 +208,10 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
 
             <aside className="h-fit rounded-[2rem] bg-white/65 p-7 lg:mt-12">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-heather">
-                Connect
+                Connettiti
               </p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
-                Find their work.
+                Scopri il loro lavoro.
               </h2>
 
               {websiteUrl || instagramUrl || etsyUrl || publicEmail ? (
@@ -223,7 +223,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                       rel="noreferrer"
                       className="inline-flex min-h-11 items-center justify-between rounded-full bg-heather px-5 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
                     >
-                      Shop on Etsy <span aria-hidden="true">↗</span>
+                      Acquista su Etsy <span aria-hidden="true">↗</span>
                     </a>
                   )}
                   {websiteUrl && (
@@ -233,7 +233,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                       rel="noreferrer"
                       className="inline-flex min-h-11 items-center justify-between rounded-full border border-heather/20 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-visible:outline-2"
                     >
-                      Website <span aria-hidden="true">↗</span>
+                      Sito web <span aria-hidden="true">↗</span>
                     </a>
                   )}
                   {instagramUrl && (
@@ -257,7 +257,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                 </div>
               ) : (
                 <p className="mt-5 text-sm leading-6 text-ink/55">
-                  Contact details have not been added yet.
+                  I dettagli di contatto non sono ancora disponibili.
                 </p>
               )}
             </aside>
@@ -268,14 +268,14 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
           <div className="mx-auto grid max-w-[1100px] gap-10 border-t border-heather/15 pt-12 lg:grid-cols-[14rem_1fr] lg:gap-16">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
-                Our story
+                La nostra storia
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-ink">
-                Made with intention.
+                Creato con cura.
               </h2>
             </div>
             <p className="whitespace-pre-line text-base leading-8 text-ink/75 sm:text-lg sm:leading-9">
-              {storefront.description || "This artisan has not added their story yet."}
+              {storefront.description || "Questo creator non ha ancora aggiunto la propria storia."}
             </p>
           </div>
         </section>
@@ -286,10 +286,10 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
               {storefront.materials && (
                 <article className="rounded-[2rem] bg-sandstone/30 p-7 sm:p-10">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
-                    Materials
+                    Materiali
                   </p>
                   <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
-                    Chosen with care.
+                    Scelti con cura.
                   </h2>
                   <p className="mt-5 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">
                     {storefront.materials}
@@ -300,10 +300,10 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
               {storefront.creative_process && (
                 <article className="rounded-[2rem] bg-viridian/10 p-7 sm:p-10">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#477b7b]">
-                    Creative process
+                    Processo creativo
                   </p>
                   <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
-                    From idea to object.
+                    Dall&apos;idea all&apos;oggetto.
                   </h2>
                   <p className="mt-5 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">
                     {storefront.creative_process}
@@ -322,7 +322,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                   From the studio
                 </p>
                 <h2 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl">
-                  The work, up close<span className="text-candy">.</span>
+                  Il lavoro da vicino<span className="text-candy">.</span>
                 </h2>
               </div>
 

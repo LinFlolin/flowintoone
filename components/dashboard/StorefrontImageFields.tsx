@@ -13,11 +13,11 @@ type StorefrontImageFieldsProps = {
 
 function validateImage(file: File) {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-    return "Choose a JPEG, PNG, or WebP image.";
+    return "Scegli un'immagine JPEG, PNG o WebP.";
   }
 
   if (file.size > MAX_IMAGE_BYTES) {
-    return "The image must be 5 MB or smaller.";
+    return "L'immagine deve essere di 5 MB o meno.";
   }
 
   return null;
@@ -77,7 +77,7 @@ export function StorefrontImageFields({ logoUrl, coverUrl }: StorefrontImageFiel
   return (
     <fieldset className="grid gap-6 border-0 p-0 sm:grid-cols-2">
       <legend className="mb-1 text-sm font-semibold text-ink sm:col-span-2">
-        Storefront images
+        Immagini del sito
       </legend>
 
       <div>
@@ -85,7 +85,7 @@ export function StorefrontImageFields({ logoUrl, coverUrl }: StorefrontImageFiel
           {logoPreview ? (
             <Image
               src={logoPreview}
-              alt="Business logo preview"
+              alt="Anteprima logo attività"
               fill
               sizes="208px"
               unoptimized={logoPreview.startsWith("blob:")}
@@ -93,7 +93,7 @@ export function StorefrontImageFields({ logoUrl, coverUrl }: StorefrontImageFiel
             />
           ) : (
             <div className="absolute inset-0 grid place-items-center text-sm font-semibold text-heather/55">
-              Logo preview
+              Anteprima logo
             </div>
           )}
         </div>
@@ -109,7 +109,7 @@ export function StorefrontImageFields({ logoUrl, coverUrl }: StorefrontImageFiel
           />
         </label>
         <p id="logo-image-help" className={`mt-2 text-xs ${logoError ? "text-candy" : "text-ink/45"}`}>
-          {logoError || "JPEG, PNG, or WebP. Maximum 5 MB."}
+          {logoError || "JPEG, PNG o WebP. Massimo 5 MB."}
         </p>
       </div>
 
@@ -131,7 +131,7 @@ export function StorefrontImageFields({ logoUrl, coverUrl }: StorefrontImageFiel
           )}
         </div>
         <label className="mt-4 block text-sm font-semibold text-ink">
-          Cover image
+          Immagine di copertina
           <input
             className="mt-2 block w-full cursor-pointer rounded-xl border border-heather/20 bg-white px-3 py-3 text-xs text-ink file:mr-3 file:rounded-full file:border-0 file:bg-sandstone/45 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-ink"
             type="file"
@@ -142,7 +142,7 @@ export function StorefrontImageFields({ logoUrl, coverUrl }: StorefrontImageFiel
           />
         </label>
         <p id="cover-image-help" className={`mt-2 text-xs ${coverError ? "text-candy" : "text-ink/45"}`}>
-          {coverError || "JPEG, PNG, or WebP. Maximum 5 MB."}
+          {coverError || "JPEG, PNG o WebP. Massimo 5 MB."}
         </p>
       </div>
     </fieldset>

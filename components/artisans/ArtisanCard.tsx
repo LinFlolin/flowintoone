@@ -11,7 +11,7 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
     <Link
       href={`/artisans/${artisan.slug}`}
       className="group overflow-hidden rounded-2xl border border-heather/15 bg-white/55 transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2"
-      aria-label={`Visit ${artisan.businessName} storefront`}
+      aria-label={`Visita il sito di ${artisan.businessName}`}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-sandstone/30">
         <Image
@@ -40,7 +40,7 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
           <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink/70">{artisan.description}</p>
         )}
         <span className="mt-5 inline-flex text-sm font-semibold text-ink underline decoration-heather/35 underline-offset-4 transition-colors group-hover:text-heather">
-          Visit storefront <span aria-hidden="true">↗</span>
+          Visita il sito <span aria-hidden="true">↗</span>
         </span>
       </div>
     </Link>

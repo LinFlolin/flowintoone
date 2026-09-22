@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export function FlowLoader({ size = 56, message = "Loading" }: { size?: number; message?: string | null }) {
+export function FlowLoader({ size = 56, message = "Caricamento" }: { size?: number; message?: string | null }) {
   return (
     <span role="status" aria-live="polite" aria-busy="true" className="inline-flex items-center gap-2">
       <Image

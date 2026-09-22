@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   const loginUrl = new URL("/login", requestUrl.origin);
   loginUrl.searchParams.set(
     "error",
-    "The authentication link is invalid or has expired. Please try again.",
+    "Il link di autenticazione non è valido o è scaduto. Riprova.",
   );
   loginUrl.searchParams.set("resend", "1");
   return NextResponse.redirect(loginUrl);

@@ -164,7 +164,7 @@ async function uploadImages(
       );
       storefrontRedirect(
         "error",
-        "The images could not be uploaded. Check the Storage policies and try again.",
+        "Non è stato possibile caricare le immagini. Controlla le policy Storage e riprova.",
       );
     }
 
@@ -184,7 +184,7 @@ export async function saveStorefrontAction(formData: FormData) {
 
   if (!hasValidAuthenticatedUserId) {
     console.error("[storefront:auth] Authenticated claim has an invalid user ID format");
-    storefrontRedirect("error", "Your session is invalid. Please log out and sign in again.");
+    storefrontRedirect("error", "La sessione non è valida. Esci e accedi di nuovo.");
   }
 
   const submittedBusinessId = getField(formData, "businessId");
@@ -207,10 +207,10 @@ export async function saveStorefrontAction(formData: FormData) {
   );
 
   if (name.length < 2 || name.length > 100) {
-    storefrontRedirect("error", "Business name must be between 2 and 100 characters.");
+    storefrontRedirect("error", "Il nome dell'attività deve contenere da 2 a 100 caratteri.");
   }
   if (!categoryId) {
-    storefrontRedirect("error", "Select a category.");
+    storefrontRedirect("error", "Seleziona una categoria.");
   }
   if (
     tagline.length > 160 ||
@@ -233,7 +233,7 @@ export async function saveStorefrontAction(formData: FormData) {
       (value) => (value?.length ?? 0) > 2048,
     )
   ) {
-    storefrontRedirect("error", "Links must be 2,048 characters or fewer.");
+    storefrontRedirect("error", "I link devono contenere al massimo 2.048 caratteri.");
   }
   if (website.error || instagram.error || etsy.error) {
     storefrontRedirect(
@@ -258,11 +258,11 @@ export async function saveStorefrontAction(formData: FormData) {
       authenticated: true,
       categoryIdPresent: Boolean(categoryId),
     });
-    storefrontRedirect("error", "The selected category could not be verified.");
+    storefrontRedirect("error", "Non è stato possibile verificare la categoria selezionata.");
   }
 
   if (!category) {
-    storefrontRedirect("error", "The selected category is not available.");
+    storefrontRedirect("error", "La categoria selezionata non è disponibile.");
   }
 
   let existingStatus: string | null = null;
@@ -303,7 +303,7 @@ export async function saveStorefrontAction(formData: FormData) {
         )
       : [];
   } else if (intent === "publish") {
-    storefrontRedirect("error", "Create the draft before publishing it.");
+    storefrontRedirect("error", "Crea la bozza prima di pubblicarla.");
   }
 
   const removedGalleryUrls = oldGalleryImageUrls.filter((url) =>
@@ -385,7 +385,7 @@ export async function saveStorefrontAction(formData: FormData) {
         categoryIdPresent: true,
         slugPresent: true,
       });
-      storefrontRedirect("error", "The storefront could not be saved. Please try again.");
+      storefrontRedirect("error", "Non è stato possibile salvare il sito. Riprova.");
     }
 
     if (!createResult.data) {
@@ -394,7 +394,7 @@ export async function saveStorefrontAction(formData: FormData) {
         authenticated: true,
         ownerIdFromVerifiedClaims: true,
       });
-      storefrontRedirect("error", "The storefront could not be saved with your account.");
+      storefrontRedirect("error", "Non è stato possibile salvare il sito con il tuo account.");
     }
 
     businessId = createResult.data.id;
@@ -444,7 +444,7 @@ export async function saveStorefrontAction(formData: FormData) {
         supabase,
         uploadedImages.map((image) => image.path),
       );
-      storefrontRedirect("error", "The storefront could not be saved. Please try again.");
+      storefrontRedirect("error", "Non è stato possibile salvare il sito. Riprova.");
     }
   }
 
@@ -481,15 +481,15 @@ export async function saveStorefrontAction(formData: FormData) {
     storefrontRedirect(
       "message",
       uploadedImages.length > 0
-        ? "Draft storefront and images saved successfully."
-        : "Draft storefront created successfully.",
+        ? "Bozza del sito e immagini salvate con successo."
+        : "Bozza del sito creata con successo.",
     );
   }
 
   storefrontRedirect(
     "message",
     intent === "publish"
-      ? "Your storefront is now published."
+      ? "Il tuo sito è ora pubblicato."
       : uploadedImages.length > 0
         ? "Storefront changes and images saved."
         : "Storefront changes saved.",

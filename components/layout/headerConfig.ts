@@ -1,6 +1,6 @@
 export const HEADER_NAVIGATION = [
   { label: "Home", href: "/" },
-  { label: "Discover", href: "/discover" },
-  { label: "Events", href: "/#events" },
-  { label: "About us", href: null },
+  { label: "Scopri", href: "/discover" },
+  { label: "Eventi", href: "/#events" },
+  { label: "Chi siamo", href: null },
 ] as const;

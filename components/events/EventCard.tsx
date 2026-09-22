@@ -30,11 +30,11 @@ export function EventCard({ event }: EventCardProps) {
             rel="noreferrer"
             className="mt-4 inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
           >
-            View details <span aria-hidden="true">↗</span>
+            Vedi dettagli <span aria-hidden="true">↗</span>
           </a>
         ) : (
           <span className="mt-4 inline-flex text-sm font-semibold text-ink/40" aria-disabled="true">
-            Details coming soon
+            Dettagli prossimamente
           </span>
         )}
       </div>

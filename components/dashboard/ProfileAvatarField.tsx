@@ -13,11 +13,11 @@ type ProfileAvatarFieldProps = {
 
 function validateImage(file: File) {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-    return "Choose a JPEG, PNG, or WebP image.";
+    return "Scegli un'immagine JPEG, PNG o WebP.";
   }
 
   if (file.size > MAX_IMAGE_BYTES) {
-    return "The image must be 5 MB or smaller.";
+    return "L'immagine deve essere di 5 MB o meno.";
   }
 
   return null;
@@ -79,7 +79,7 @@ export function ProfileAvatarField({ avatarUrl, initials }: ProfileAvatarFieldPr
 
   return (
     <fieldset className="border-0 p-0">
-      <legend className="text-sm font-semibold text-ink">Profile photo</legend>
+      <legend className="text-sm font-semibold text-ink">Foto profilo</legend>
       <input type="hidden" name="removeAvatar" value={removeAvatar ? "1" : "0"} />
 
       <div className="mt-4 flex flex-col items-start gap-5 sm:flex-row sm:items-center lg:flex-col lg:items-start">
@@ -87,7 +87,7 @@ export function ProfileAvatarField({ avatarUrl, initials }: ProfileAvatarFieldPr
           {preview ? (
             <Image
               src={preview}
-              alt="Profile photo preview"
+              alt="Anteprima foto profilo"
               fill
               sizes="128px"
               unoptimized
@@ -102,7 +102,7 @@ export function ProfileAvatarField({ avatarUrl, initials }: ProfileAvatarFieldPr
 
         <div className="w-full">
           <label className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full border border-heather/25 bg-white px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-within:outline-2">
-            Choose photo
+            Scegli foto
             <input
               ref={inputRef}
               className="sr-only"
@@ -120,7 +120,7 @@ export function ProfileAvatarField({ avatarUrl, initials }: ProfileAvatarFieldPr
               onClick={handleRemove}
               className="ml-4 text-xs font-semibold text-candy underline decoration-candy/35 underline-offset-4 focus-visible:outline-2"
             >
-              Remove
+              Rimuovi
             </button>
           )}
 
@@ -128,7 +128,7 @@ export function ProfileAvatarField({ avatarUrl, initials }: ProfileAvatarFieldPr
             id="avatar-image-help"
             className={`mt-3 max-w-xs text-xs leading-5 ${error ? "text-candy" : "text-ink/45"}`}
           >
-            {error || "JPEG, PNG, or WebP. Maximum 5 MB. The image will be cropped square."}
+            {error || "JPEG, PNG o WebP. Massimo 5 MB. L'immagine verrà ritagliata in formato quadrato."}
           </p>
         </div>
       </div>

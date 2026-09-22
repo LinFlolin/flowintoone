@@ -3,16 +3,16 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const primaryLinks = [
   { label: "Home", href: "/" },
-  { label: "Events", href: "/#events" },
-  { label: "About us", href: null },
-  { label: "Register", href: "/register" },
-  { label: "Login", href: "/login" },
+  { label: "Eventi", href: "/#events" },
+  { label: "Chi siamo", href: null },
+  { label: "Registrati", href: "/register" },
+  { label: "Accedi", href: "/login" },
 ];
 
 const informationLinks = [
-  { label: "Contact", href: null },
-  { label: "Privacy Policy", href: null },
-  { label: "Cookie Policy", href: null },
+  { label: "Contatti", href: null },
+  { label: "Privacy", href: null },
+  { label: "Cookie", href: null },
 ];
 
 export function Footer() {
@@ -28,13 +28,13 @@ export function Footer() {
             flowintoone<span className="text-candy">.</span>
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-6 text-ink/80">
-            A creative home for independent makers.
+            Una casa creativa per creator indipendenti.
           </p>
         </div>
 
         <div>
           <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-ink/70">
-            Explore
+            Esplora
           </h2>
           <nav className="mt-5 grid gap-3" aria-label="Footer navigation">
             {primaryLinks.map((link) => (
@@ -48,7 +48,7 @@ export function Footer() {
                 </Link>
               ) : (
                 <span key={link.label} className="w-fit cursor-default text-sm font-medium text-ink/45" aria-disabled="true">
-                  {link.label} <span className="text-xs">Coming soon</span>
+                  {link.label} <span className="text-xs">Prossimamente</span>
                 </span>
               )
             ))}
@@ -57,12 +57,12 @@ export function Footer() {
 
         <div>
           <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-ink/70">
-            Information
+            Informazioni
           </h2>
           <nav className="mt-5 grid gap-3" aria-label="Information links">
             {informationLinks.map((link) => (
               <span key={link.label} className="w-fit cursor-default text-sm font-medium text-ink/45" aria-disabled="true">
-                {link.label} <span className="text-xs">Coming soon</span>
+                {link.label} <span className="text-xs">Prossimamente</span>
               </span>
             ))}
           </nav>
@@ -71,7 +71,7 @@ export function Footer() {
 
       <div className="border-t border-ink/10">
         <div className="mx-auto max-w-[1500px] px-5 py-5 text-xs text-ink/70 sm:px-8 lg:px-10">
-          © {new Date().getFullYear()} Flowintoone. All rights reserved.
+          © {new Date().getFullYear()} Flowintoone. Tutti i diritti riservati.
         </div>
       </div>
       </ScrollReveal>

@@ -18,11 +18,11 @@ const purposes: Array<{
   tone: string;
   enabled: boolean;
 }> = [
-  { id: "shop", title: "Shop", description: "Sell products online and grow your brand.", icon: "bag", tone: "bg-candy/15 text-candy", enabled: true },
-  { id: "events", title: "Events", description: "Promote events and manage registrations.", icon: "calendar", tone: "bg-azur/15 text-azur", enabled: true },
-  { id: "portfolio", title: "Portfolio", description: "Share your work and attract opportunities.", icon: "image", tone: "bg-sandstone/55 text-[#b37d59]", enabled: false },
-  { id: "services", title: "Services", description: "Showcase your services and get new clients.", icon: "gear", tone: "bg-viridian/15 text-viridian", enabled: false },
-  { id: "personal", title: "Personal", description: "Create a thoughtful home for your ideas.", icon: "image", tone: "bg-heather/15 text-heather", enabled: false },
+  { id: "shop", title: "Negozio", description: "Vendi prodotti online e fai crescere il tuo brand.", icon: "bag", tone: "bg-candy/15 text-candy", enabled: true },
+  { id: "events", title: "Eventi", description: "Promuovi eventi e gestisci le iscrizioni.", icon: "calendar", tone: "bg-azur/15 text-azur", enabled: true },
+  { id: "portfolio", title: "Portfolio", description: "Condividi il tuo lavoro e trova nuove opportunità.", icon: "image", tone: "bg-sandstone/55 text-[#b37d59]", enabled: false },
+  { id: "services", title: "Servizi", description: "Presenta i tuoi servizi e trova nuovi clienti.", icon: "gear", tone: "bg-viridian/15 text-viridian", enabled: false },
+  { id: "personal", title: "Personale", description: "Crea uno spazio speciale per le tue idee.", icon: "image", tone: "bg-heather/15 text-heather", enabled: false },
 ];
 
 function PurposeIcon({ name }: { name: string }) {
@@ -52,7 +52,7 @@ export function WebsitePurposeStep() {
     setError(null);
     if (!writeCreateFlowState({ purpose: selectedPurpose, step: "details" })) {
       setIsSaving(false);
-      setError("We could not save your progress. Please check your browser settings and try again.");
+      setError("Non è stato possibile salvare i tuoi progressi. Controlla le impostazioni del browser e riprova.");
       return;
     }
     router.push("/create/details");
@@ -62,16 +62,16 @@ export function WebsitePurposeStep() {
     <main className="min-h-screen bg-cream px-5 py-5 text-ink sm:px-8 sm:py-8">
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-5xl flex-col rounded-[2rem] border border-heather/10 bg-white/35 px-5 py-6 shadow-[0_20px_70px_rgba(81,68,91,0.06)] sm:min-h-[calc(100vh-4rem)] sm:px-10 sm:py-8 lg:px-16">
         <header className="flex items-center justify-between gap-4 text-xs font-semibold text-ink/55">
-          <Link href="/dashboard" className="inline-flex items-center gap-2 transition-colors hover:text-heather"><span aria-hidden="true">←</span> Back</Link>
-          <Link href="/dashboard" className="transition-colors hover:text-heather">Save and exit</Link>
+          <Link href="/dashboard" className="inline-flex items-center gap-2 transition-colors hover:text-heather"><span aria-hidden="true">←</span> Indietro</Link>
+          <Link href="/dashboard" className="transition-colors hover:text-heather">Salva ed esci</Link>
         </header>
 
         <div className="mx-auto mt-10 w-full max-w-3xl sm:mt-12">
-          <h1 className="text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">Create your website</h1>
-            <p className="mt-2 text-sm leading-6 text-ink/60">Choose the kind of website you want to create. Portfolio, Services and Personal are coming soon.</p>
+          <h1 className="text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">Crea il tuo sito</h1>
+            <p className="mt-2 text-sm leading-6 text-ink/60">Scegli il tipo di sito che vuoi creare. Portfolio, Servizi e Personale saranno disponibili prossimamente.</p>
 
-          <ol className="mt-9 grid grid-cols-4 gap-2 sm:mt-11 sm:gap-6" aria-label="Website creation progress">
-            {["Purpose", "Details", "Design", "Review"].map((label, index) => {
+          <ol className="mt-9 grid grid-cols-4 gap-2 sm:mt-11 sm:gap-6" aria-label="Avanzamento creazione sito">
+            {["Scopo", "Dettagli", "Design", "Riepilogo"].map((label, index) => {
               const active = index === 0;
               return (
                 <li key={label} className="relative text-center">
@@ -84,8 +84,8 @@ export function WebsitePurposeStep() {
           </ol>
 
           <section className="mt-12 sm:mt-16">
-            <h2 className="text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">What&apos;s the purpose of your website?</h2>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-ink/55">Choose the option that best fits your goals. You can always change this later.</p>
+            <h2 className="text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">Qual è lo scopo del tuo sito?</h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-ink/55">Scegli l&apos;opzione più adatta ai tuoi obiettivi. Potrai sempre cambiarla in seguito.</p>
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {purposes.map((purpose) => {
                 const selected = selectedPurpose === purpose.id;
@@ -94,8 +94,8 @@ export function WebsitePurposeStep() {
                     <span className={`grid size-9 place-items-center rounded-full ${purpose.tone}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-5" aria-hidden="true"><PurposeIcon name={purpose.icon} /></svg></span>
                     <span className="mt-3 block text-sm font-bold">{purpose.title}</span>
                     <span className="mt-1 block max-w-56 text-xs leading-5 text-ink/60">{purpose.description}</span>
-                    {!purpose.enabled && <span className="mt-3 inline-flex rounded-full bg-ink/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-ink/50">Coming soon</span>}
-                    {selected && <span className="absolute right-4 top-4 grid size-5 place-items-center rounded-full bg-heather text-xs text-white" aria-label="Selected">✓</span>}
+                    {!purpose.enabled && <span className="mt-3 inline-flex rounded-full bg-ink/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-ink/50">Prossimamente</span>}
+                    {selected && <span className="absolute right-4 top-4 grid size-5 place-items-center rounded-full bg-heather text-xs text-white" aria-label="Selezionato">✓</span>}
                   </button>
                 );
               })}
@@ -106,7 +106,7 @@ export function WebsitePurposeStep() {
             <p className="max-w-xs text-xs italic leading-5 text-ink/55">“A clear purpose today, a bigger tomorrow.”</p>
             <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:items-end">
               {error && <p role="alert" className="max-w-xs text-xs leading-5 text-candy">{error}</p>}
-              <button type="button" disabled={!selectedPurpose || isSaving} onClick={continueToDetails} className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-heather px-6 text-sm font-semibold text-white transition-colors hover:bg-[#756486] disabled:cursor-not-allowed disabled:bg-heather/30 sm:min-w-36">{isSaving ? <><FlowLoader size={20} message="Saving creation progress" />Saving…</> : <>Next step <span aria-hidden="true">→</span></>}</button>
+          <button type="button" disabled={!selectedPurpose || isSaving} onClick={continueToDetails} className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-heather px-6 text-sm font-semibold text-white transition-colors hover:bg-[#756486] disabled:cursor-not-allowed disabled:bg-heather/30 sm:min-w-36">{isSaving ? <><FlowLoader size={20} message="Salvataggio progressi" />Salvataggio…</> : <>Prossimo passo <span aria-hidden="true">→</span></>}</button>
             </div>
           </div>
         </div>

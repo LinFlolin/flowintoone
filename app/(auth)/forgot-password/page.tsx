@@ -4,9 +4,9 @@ import { ForgotPasswordForm } from "@/components/auth/AuthForms";
 export default function ForgotPasswordPage() {
   return (
     <AuthCard
-      eyebrow="Account recovery"
-      title="Reset your password."
-      description="Enter your email and we’ll send you a secure link to choose a new password."
+      eyebrow="Recupero account"
+      title="Reimposta la password."
+      description="Inserisci la tua email e riceverai un link sicuro per scegliere una nuova password."
     >
       <ForgotPasswordForm />
     </AuthCard>

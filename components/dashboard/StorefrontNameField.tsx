@@ -25,7 +25,7 @@ export function StorefrontNameField({
   return (
     <div className="grid items-end gap-6 sm:grid-cols-2">
       <label className="text-sm font-semibold text-ink">
-        Business name <span className="text-candy">*</span>
+        Nome attività <span className="text-candy">*</span>
         <input
           className={inputClassName}
           name="name"

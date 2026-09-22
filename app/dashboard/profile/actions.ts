@@ -114,11 +114,11 @@ export async function updateProfileAction(formData: FormData) {
   const avatarFile = avatarEntry instanceof File && avatarEntry.size > 0 ? avatarEntry : null;
 
   if (fullName.length < 2 || fullName.length > 100) {
-    profileRedirect("error", "Full name must be between 2 and 100 characters.");
+    profileRedirect("error", "Il nome completo deve contenere da 2 a 100 caratteri.");
   }
 
   if (city.length > 120 || country.length > 120) {
-    profileRedirect("error", "City and country must be 120 characters or fewer.");
+    profileRedirect("error", "Città e Paese devono contenere al massimo 120 caratteri.");
   }
 
   const { data: currentProfile, error: profileError } = await supabase
@@ -129,13 +129,13 @@ export async function updateProfileAction(formData: FormData) {
 
   if (profileError) {
     logProfileError("owner-read", profileError);
-    profileRedirect("error", "Your profile could not be verified. Please try again.");
+    profileRedirect("error", "Non è stato possibile verificare il profilo. Riprova.");
   }
 
   if (!currentProfile) {
     profileRedirect(
       "error",
-      "Your profile is not available yet. Please refresh the page and try again.",
+      "Il tuo profilo non è ancora disponibile. Aggiorna la pagina e riprova.",
     );
   }
 
@@ -145,11 +145,11 @@ export async function updateProfileAction(formData: FormData) {
       processedAvatar = await processProfileAvatar(avatarFile);
     } catch (error) {
       if (error instanceof ProfileAvatarValidationError) {
-        profileRedirect("error", `Profile photo: ${error.message}`);
+        profileRedirect("error", `Foto profilo: ${error.message}`);
       }
 
       console.error("[profile:avatar-process] Image processing failed");
-      profileRedirect("error", "The profile photo could not be processed. Try another image.");
+      profileRedirect("error", "Non è stato possibile elaborare la foto profilo. Prova un'altra immagine.");
     }
   }
 
@@ -170,7 +170,7 @@ export async function updateProfileAction(formData: FormData) {
       logProfileError("avatar-upload", error, { ownerNamespace: true });
       profileRedirect(
         "error",
-        "The profile photo could not be uploaded. Check the profile Storage migration.",
+        "Non è stato possibile caricare la foto profilo. Controlla la migrazione Storage del profilo.",
       );
     }
   }
@@ -197,8 +197,8 @@ export async function updateProfileAction(formData: FormData) {
     profileRedirect(
       "error",
       error
-        ? "Your profile could not be updated. Please try again."
-        : "Your profile is not available yet. Please refresh the page and try again.",
+        ? "Non è stato possibile aggiornare il profilo. Riprova."
+        : "Il tuo profilo non è ancora disponibile. Aggiorna la pagina e riprova.",
     );
   }
 
@@ -208,7 +208,7 @@ export async function updateProfileAction(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/profile");
-  profileRedirect("message", "Profile updated successfully.");
+  profileRedirect("message", "Profilo aggiornato con successo.");
 }
 
 /**
@@ -228,7 +228,7 @@ export async function deleteAccountAction(formData: FormData) {
 
   if (!ACCOUNT_ID_PATTERN.test(userId)) {
     console.error("[profile:account-delete] Refusing to process an invalid user ID");
-    profileRedirect("error", "Your session is invalid. Please log out and sign in again.");
+    profileRedirect("error", "La sessione non è valida. Esci e accedi di nuovo.");
   }
 
   let admin: SupabaseClient;
@@ -258,12 +258,12 @@ export async function deleteAccountAction(formData: FormData) {
     });
     profileRedirect(
       "error",
-      "Your account could not be deleted. Check the Supabase service-role setup and try again.",
+      "Non è stato possibile eliminare l'account. Controlla la configurazione del service role Supabase e riprova.",
     );
   }
 
   await supabase.auth.signOut();
   revalidatePath("/");
   revalidatePath("/dashboard");
-  redirect("/login?message=Your%20account%20has%20been%20deleted%20successfully.");
+  redirect(`/login?message=${encodeURIComponent("Il tuo account è stato eliminato con successo.")}`);
 }

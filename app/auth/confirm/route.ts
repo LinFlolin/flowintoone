@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   const loginUrl = new URL("/login", requestUrl.origin);
   loginUrl.searchParams.set(
     "error",
-    "The verification link is invalid or has expired. Please request a new one.",
+    "Il link di verifica non è valido o è scaduto. Richiedine uno nuovo.",
   );
   loginUrl.searchParams.set("resend", "1");
   return NextResponse.redirect(loginUrl);

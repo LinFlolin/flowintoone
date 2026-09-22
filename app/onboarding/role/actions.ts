@@ -15,7 +15,7 @@ export async function selectRoleAction(
   void _previousState;
   const role = String(formData.get("role") ?? "").trim();
   if (role !== "visitor" && role !== "artisan") {
-    return { error: "Choose whether you are visiting or creating a website." };
+    return { error: "Scegli se vuoi visitare o creare un sito." };
   }
 
   const user = await requireUser();
@@ -28,7 +28,7 @@ export async function selectRoleAction(
 
   if (error || !data) {
     console.error("[onboarding:role] profile role update failed", error);
-    return { error: "We could not save your account type. Please try again." };
+    return { error: "Non è stato possibile salvare il tipo di account. Riprova." };
   }
 
   redirect(await getPostAuthPath(user.supabase, user.userId));

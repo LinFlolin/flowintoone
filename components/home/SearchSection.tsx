@@ -7,36 +7,36 @@ export function SearchSection({ query = "" }: SearchSectionProps) {
     <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-10" aria-labelledby="search-heading">
       <ScrollReveal className="mx-auto max-w-4xl text-center">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-viridian">
-          Find something special
+          Trova qualcosa di speciale
         </p>
         <h2
           id="search-heading"
           className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-ink sm:text-4xl"
         >
-          What are you looking for?
+          Che cosa stai cercando?
         </h2>
         <form className="mt-8" action="/#artisans" method="get" role="search">
           <div className="flex flex-col gap-3 rounded-2xl border border-heather/15 bg-white/75 p-2 sm:flex-row sm:rounded-full">
             <label htmlFor="maker-search" className="sr-only">
-              Search artisans, products or cities
+              Cerca creator, prodotti o città
             </label>
             <input
               id="maker-search"
               name="query"
               type="search"
               defaultValue={query}
-              placeholder="Search websites, creators, products or places..."
+              placeholder="Cerca siti, creator, prodotti o luoghi..."
               className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm text-ink placeholder:text-ink/60 disabled:cursor-not-allowed disabled:opacity-70 sm:px-5"
             />
             <button
               type="submit"
               className="min-h-12 rounded-xl bg-heather px-7 text-sm font-semibold text-white transition-colors enabled:hover:bg-[#756486] disabled:cursor-not-allowed disabled:opacity-55 sm:rounded-full"
             >
-              Search
+              Cerca
             </button>
           </div>
           <p className="mt-3 text-xs leading-5 text-ink/70">
-            Discover independent creators, local businesses and meaningful experiences.
+            Scopri creator indipendenti, attività locali ed esperienze autentiche.
           </p>
         </form>
       </ScrollReveal>

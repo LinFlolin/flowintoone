@@ -9,9 +9,9 @@ export default async function RegisterPage() {
 
   return (
     <AuthCard
-      eyebrow="For independent artisans"
-      title="Create your account."
-      description="Join Flowintoone and start building a thoughtful digital home for your handmade business."
+      eyebrow="Per creator indipendenti"
+      title="Crea il tuo account."
+      description="Entra in Flowintoone e crea una casa digitale autentica per la tua attività."
     >
       <RegisterForm />
     </AuthCard>

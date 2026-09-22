@@ -28,15 +28,15 @@ export const DASHBOARD_NAVIGATION: Array<{
   ownerOnly?: boolean;
 }> = [
   { label: "Dashboard", href: "/dashboard", icon: "home", group: "Website" },
-  { label: "My website", href: "/dashboard/storefront", icon: "storefront", group: "Website", ownerOnly: true },
-  { label: "Appearance", icon: "appearance", group: "Website", ownerOnly: true },
-  { label: "Settings", icon: "settings", group: "Website", ownerOnly: true },
-  { label: "Discover", href: "/discover", icon: "discover", group: "Community" },
-  { label: "Following", icon: "following", group: "Community" },
-  { label: "Events", icon: "calendar", group: "Community" },
-  { label: "My saves", icon: "bookmark", group: "Community" },
-  { label: "Help", icon: "help", group: "Support" },
-  { label: "My account", href: "/dashboard/profile", icon: "profile", group: "Support" },
+  { label: "Il mio sito", href: "/dashboard/storefront", icon: "storefront", group: "Website", ownerOnly: true },
+  { label: "Aspetto", icon: "appearance", group: "Website", ownerOnly: true },
+  { label: "Impostazioni", icon: "settings", group: "Website", ownerOnly: true },
+  { label: "Scopri", href: "/discover", icon: "discover", group: "Community" },
+  { label: "Seguiti", icon: "following", group: "Community" },
+  { label: "Eventi", icon: "calendar", group: "Community" },
+  { label: "I miei preferiti", icon: "bookmark", group: "Community" },
+  { label: "Aiuto", icon: "help", group: "Support" },
+  { label: "Il mio account", href: "/dashboard/profile", icon: "profile", group: "Support" },
 ];
 
 export const DASHBOARD_QUICK_ACCESS: Array<{
@@ -48,30 +48,30 @@ export const DASHBOARD_QUICK_ACCESS: Array<{
   backgroundClassName: string;
 }> = [
   {
-    label: "Edit content",
-    description: "Update text, images and pages.",
+    label: "Modifica contenuti",
+    description: "Aggiorna testi, immagini e pagine.",
     href: "/dashboard/storefront",
     icon: "edit",
     tone: "bg-candy/15 text-[#a95d76]",
     backgroundClassName: "bg-candy/10",
   },
   {
-    label: "Manage images",
-    description: "Upload and organize your photos.",
+    label: "Gestisci immagini",
+    description: "Carica e organizza le tue foto.",
     icon: "image",
     tone: "bg-viridian/15 text-[#477b7b]",
     backgroundClassName: "bg-viridian/10",
   },
   {
-    label: "Appearance",
-    description: "Change colors and style.",
+    label: "Aspetto",
+    description: "Cambia colori e stile.",
     icon: "appearance",
     tone: "bg-heather/15 text-heather",
     backgroundClassName: "bg-heather/10",
   },
   {
-    label: "Website settings",
-    description: "Name, URL and visibility.",
+    label: "Impostazioni sito",
+    description: "Nome, URL e visibilità.",
     icon: "settings",
     tone: "bg-azur/15 text-[#537da9]",
     backgroundClassName: "bg-azur/10",

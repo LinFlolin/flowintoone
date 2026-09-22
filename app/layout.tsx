@@ -13,7 +13,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Flowintoone | Discover independent makers",
   description:
-    "Discover independent artisans, handmade creations, creative markets, and events.",
+    "Scopri creator indipendenti, creazioni artigianali, mercati creativi ed eventi.",
 };
 
 export default function RootLayout({

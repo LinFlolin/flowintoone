@@ -15,9 +15,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <AuthCard
-      eyebrow="Welcome back"
-      title="Login to your account."
-      description="Manage your storefront and share your handmade work with the Flowintoone community."
+      eyebrow="Bentornato"
+      title="Accedi al tuo account."
+      description="Gestisci il tuo sito e condividi il tuo lavoro con la community Flowintoone."
     >
       {(params.error || params.message) && (
         <p

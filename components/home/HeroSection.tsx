@@ -12,27 +12,27 @@ export function HeroSection() {
       <ScrollReveal className="mx-auto grid max-w-[1500px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-10 lg:pb-28 lg:pt-24">
         <div className="relative z-10">
           <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-heather">
-            Your space. Your story. Your possibilities.
+            Il tuo spazio. La tua storia. Le tue possibilità.
           </p>
           <h1 className="max-w-2xl text-[clamp(2.65rem,7vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-ink">
-            Your place to grow online<span className="flow-dot-pulse text-candy">.</span>
+            Il tuo posto per crescere online<span className="flow-dot-pulse text-candy">.</span>
           </h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-ink/80 sm:text-lg sm:leading-8">
-            Create a website that reflects who you are and what you do. Showcase
-            your work, share your story, and connect with the right people.
+            Crea un sito che racconti chi sei e cosa fai. Mostra il tuo lavoro,
+            condividi la tua storia e connettiti con le persone giuste.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/register"
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-7 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
             >
-              Create your website
+              Crea il tuo sito
             </Link>
             <Link
               href="/discover"
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-heather/35 px-7 text-sm font-semibold text-ink transition-colors hover:border-heather hover:bg-white/55 focus-visible:outline-2"
             >
-              Explore websites
+              Esplora i siti
             </Link>
           </div>
         </div>
@@ -55,7 +55,7 @@ export function HeroSection() {
           <div className="relative -mt-7 ml-5 mr-10 flex max-w-sm items-center gap-3 rounded-2xl border border-heather/10 bg-[#fffdf9] px-5 py-4 sm:-mt-8 sm:ml-8">
             <span className="size-2.5 shrink-0 rounded-full bg-candy" aria-hidden="true" />
             <p className="text-xs font-semibold leading-5 text-ink/85 sm:text-sm">
-              Real people. Meaningful stories. A kinder web.
+              Persone vere. Storie autentiche. Un web più gentile.
             </p>
           </div>
         </ScrollReveal>

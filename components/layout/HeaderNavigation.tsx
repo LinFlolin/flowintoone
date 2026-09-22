@@ -72,7 +72,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                   {item.label}
                 </Link>
               ) : (
-                <span key={item.label} className="cursor-default text-sm font-semibold text-ink/45" aria-disabled="true" title="Coming soon">
+                <span key={item.label} className="cursor-default text-sm font-semibold text-ink/45" aria-disabled="true" title="Prossimamente">
                   {item.label}
                 </span>
               )
@@ -88,7 +88,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                 target={user.storefrontHref ? "_blank" : undefined}
                 className="inline-flex min-h-10 items-center justify-center rounded-full border border-heather/30 px-4 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-visible:outline-2"
               >
-                {user.storefrontHref ? "View my website ↗" : "Dashboard"}
+                {user.storefrontHref ? "Vedi il mio sito ↗" : "Dashboard"}
               </Link>
               <div className="relative">
                 <button
@@ -116,7 +116,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                       onClick={closeMenus}
                       className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                     >
-                      My profile
+                      Il mio profilo
                     </Link>
                     {user.storefrontHref && (
                       <Link
@@ -125,7 +125,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                         onClick={closeMenus}
                         className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                       >
-                        My website
+                        Il mio sito
                       </Link>
                     )}
                     <form action={logoutAction} className="mt-1 border-t border-heather/15 pt-1">
@@ -134,7 +134,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                         role="menuitem"
                         className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                       >
-                        Logout
+                        Esci
                       </button>
                     </form>
                   </div>
@@ -147,13 +147,13 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                 href="/login"
                 className="text-sm font-semibold text-ink transition-colors hover:text-heather focus-visible:outline-2"
               >
-                Login
+                Accedi
               </Link>
               <Link
                 href="/register"
                 className="inline-flex min-h-10 items-center justify-center rounded-full bg-heather px-5 text-sm font-semibold text-white transition-colors hover:bg-[#756486] focus-visible:outline-2"
               >
-                Create your website
+                Crea il tuo sito
               </Link>
             </>
           )}
@@ -203,7 +203,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
               </Link>
             ) : (
               <span key={item.label} className="rounded-xl px-3 py-3 text-base font-semibold text-ink/45" aria-disabled="true">
-                {item.label} <span className="ml-1 text-xs font-medium">Coming soon</span>
+                {item.label} <span className="ml-1 text-xs font-medium">Prossimamente</span>
               </span>
             )
             ))}
@@ -213,7 +213,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
             <>
               <div className="flex min-h-14 items-center gap-3 rounded-xl px-3">
                 <span className="grid size-9 place-items-center rounded-full bg-candy/20 text-sm font-semibold text-heather">{user.name.charAt(0).toUpperCase()}</span>
-                <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-ink">{user.name}</p><Link href="/dashboard/profile" onClick={closeMenus} className="text-xs text-ink/55">View profile</Link></div>
+                <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-ink">{user.name}</p><Link href="/dashboard/profile" onClick={closeMenus} className="text-xs text-ink/55">Vedi profilo</Link></div>
                 <span className="text-base text-ink/55" aria-hidden="true">›</span>
               </div>
               <Link
@@ -228,7 +228,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                 onClick={closeMenus}
                 className="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
               >
-                <span className="flex items-center gap-3"><span className="text-base">♙</span>My profile</span><span aria-hidden="true">›</span>
+                <span className="flex items-center gap-3"><span className="text-base">♙</span>Il mio profilo</span><span aria-hidden="true">›</span>
               </Link>
               {user.storefrontHref && (
                 <Link
@@ -236,7 +236,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                   onClick={closeMenus}
                   className="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-semibold text-ink/90 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                 >
-                  <span className="flex items-center gap-3"><span className="text-base">▱</span>My website</span><span aria-hidden="true">›</span>
+                  <span className="flex items-center gap-3"><span className="text-base">▱</span>Il mio sito</span><span aria-hidden="true">›</span>
                 </Link>
               )}
               <form action={logoutAction} className="mt-2 border-t border-heather/15 pt-2">
@@ -244,7 +244,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                   type="submit"
                   className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-ink/80 hover:bg-white/70 hover:text-heather focus-visible:outline-2"
                 >
-                  <span className="text-base">↪</span>Logout
+                  <span className="text-base">↪</span>Esci
                 </button>
               </form>
             </>
@@ -255,14 +255,14 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                 onClick={closeMenus}
                 className="inline-flex min-h-11 items-center justify-center rounded-xl border border-heather/30 px-5 text-sm font-semibold text-ink focus-visible:outline-2"
               >
-                Login
+                Accedi
               </Link>
               <Link
                 href="/register"
                 onClick={closeMenus}
                 className="inline-flex min-h-11 items-center justify-center rounded-xl bg-heather px-5 text-sm font-semibold text-white focus-visible:outline-2"
               >
-                Create your website
+                Crea il tuo sito
               </Link>
             </>
           )}

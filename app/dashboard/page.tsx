@@ -50,10 +50,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (role === "visitor") {
     return (
       <section className="rounded-[1.35rem] border border-heather/20 bg-white/75 p-7 sm:p-10">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-heather">Your dashboard</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-ink">Welcome back, {name}.</h1>
-        <p className="mt-4 max-w-xl text-sm leading-7 text-ink/60">Explore independent makers and discover new work. Website creation tools are available to artisan accounts.</p>
-        <Link href="/" className="mt-7 inline-flex min-h-11 items-center rounded-lg bg-heather px-5 text-sm font-semibold text-white">Explore Flowintoone</Link>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-heather">La tua dashboard</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-ink">Bentornato, {name}.</h1>
+        <p className="mt-4 max-w-xl text-sm leading-7 text-ink/60">Esplora creator indipendenti e scopri nuovi lavori. Gli strumenti per creare siti sono disponibili per gli account creator.</p>
+        <Link href="/" className="mt-7 inline-flex min-h-11 items-center rounded-lg bg-heather px-5 text-sm font-semibold text-white">Esplora Flowintoone</Link>
       </section>
     );
   }

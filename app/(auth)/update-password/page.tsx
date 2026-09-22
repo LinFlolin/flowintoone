@@ -7,9 +7,9 @@ export default async function UpdatePasswordPage() {
 
   return (
     <AuthCard
-      eyebrow="Account security"
-      title="Choose a new password."
-      description="Use a password of at least 8 characters that you do not use elsewhere."
+      eyebrow="Sicurezza account"
+      title="Scegli una nuova password."
+      description="Usa una password di almeno 8 caratteri che non utilizzi altrove."
     >
       <UpdatePasswordForm />
     </AuthCard>

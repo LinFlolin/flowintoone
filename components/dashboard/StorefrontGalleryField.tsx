@@ -19,7 +19,7 @@ type StorefrontGalleryFieldProps = {
 
 function validateFiles(files: File[], availableSlots: number) {
   if (files.length > availableSlots) {
-    return `Choose no more than ${availableSlots} additional ${availableSlots === 1 ? "image" : "images"}.`;
+    return `Scegli al massimo ${availableSlots} ${availableSlots === 1 ? "immagine aggiuntiva" : "immagini aggiuntive"}.`;
   }
 
   for (const file of files) {
@@ -27,7 +27,7 @@ function validateFiles(files: File[], availableSlots: number) {
       return `${file.name}: choose a JPEG, PNG, or WebP image.`;
     }
     if (file.size > MAX_IMAGE_BYTES) {
-      return `${file.name}: each image must be 5 MB or smaller.`;
+      return `${file.name}: ogni immagine deve essere di 5 MB o meno.`;
     }
   }
 
@@ -91,7 +91,7 @@ export function StorefrontGalleryField({
 
   return (
     <fieldset className="border-0 p-0">
-      <legend className="text-sm font-semibold text-ink">Gallery</legend>
+      <legend className="text-sm font-semibold text-ink">Galleria</legend>
       <p className="mt-2 max-w-2xl text-xs leading-5 text-ink/50">
         Add up to six photographs of finished pieces, details, materials, or your studio.
       </p>
@@ -190,7 +190,7 @@ export function StorefrontGalleryField({
       >
         {error ||
           (availableSlots === 0
-            ? "The gallery is full. Remove an existing image to add another."
+            ? "La galleria è piena. Rimuovi un'immagine esistente per aggiungerne un'altra."
             : `${availableSlots} ${availableSlots === 1 ? "slot" : "slots"} available. JPEG, PNG, or WebP; 5 MB each.`)}
       </p>
     </fieldset>

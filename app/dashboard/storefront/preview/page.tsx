@@ -27,7 +27,7 @@ export default async function StorefrontPreviewPage({ searchParams }: PreviewPag
         <h1 className="mt-2 text-4xl font-semibold tracking-[-0.045em]">{data.name}</h1>
         {data.tagline && <p className="mt-4 text-xl leading-8 text-ink/70">{data.tagline}</p>}
         <p className="mt-8 whitespace-pre-line text-base leading-8 text-ink/75">{data.description || "Add your story in the editor."}</p>
-        <p className="mt-8 border-t border-heather/10 pt-5 text-xs leading-5 text-ink/50">Only you can see this preview. It will not be available at the public artisan URL until you publish the website.</p>
+        <p className="mt-8 border-t border-heather/10 pt-5 text-xs leading-5 text-ink/50">Solo tu puoi vedere questa anteprima. Non sarà disponibile all&apos;URL pubblico del creator finché non pubblicherai il sito.</p>
       </div>
     </section>
   );
