@@ -1,5 +1,6 @@
 import { EventCard } from "@/components/events/EventCard";
 import type { HomepageEvent } from "@/lib/data/homepage";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 type UpcomingEventsProps = {
   events: HomepageEvent[];
@@ -9,7 +10,7 @@ type UpcomingEventsProps = {
 export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
   return (
     <section id="events" className="scroll-mt-24 px-5 py-20 sm:px-8 sm:py-28 lg:px-10" aria-labelledby="events-heading">
-      <div className="mx-auto max-w-[1500px]">
+      <ScrollReveal className="mx-auto max-w-[1500px]">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-viridian">
@@ -56,7 +57,7 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
             </p>
           </div>
         )}
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

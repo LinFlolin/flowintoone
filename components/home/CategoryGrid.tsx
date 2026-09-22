@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { HomepageCategory } from "@/lib/data/homepage";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const fallbackImages: Record<string, { src: string; alt: string }> = {
   ceramics: {
@@ -54,7 +55,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
 
   return (
     <section className="px-5 pb-20 sm:px-8 sm:pb-28 lg:px-10" aria-labelledby="categories-heading">
-      <div className="mx-auto max-w-[1500px]">
+      <ScrollReveal className="mx-auto max-w-[1500px]">
         <div className="mb-8 flex items-end justify-between gap-6 sm:mb-10">
           <h2
             id="categories-heading"
@@ -136,7 +137,7 @@ export function CategoryGrid({ categories, error = null }: CategoryGridProps) {
             Categories will appear here once they are active.
           </div>
         )}
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

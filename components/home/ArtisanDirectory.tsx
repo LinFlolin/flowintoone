@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArtisanCard } from "@/components/artisans/ArtisanCard";
 import type { HomepageBusiness } from "@/lib/data/homepage";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 type ArtisanDirectoryProps = {
   artisans: HomepageBusiness[];
@@ -23,7 +24,7 @@ export function ArtisanDirectory({
       className="scroll-mt-24 bg-white/45 px-5 py-20 sm:px-8 sm:py-28 lg:px-10"
       aria-labelledby="artisans-heading"
     >
-      <div className="mx-auto max-w-[1500px]">
+      <ScrollReveal className="mx-auto max-w-[1500px]">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-heather">
             Our community
@@ -114,7 +115,7 @@ export function ArtisanDirectory({
             </div>
           </div>
         )}
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

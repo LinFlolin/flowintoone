@@ -5,7 +5,7 @@ type SearchSectionProps = {
 export function SearchSection({ query = "" }: SearchSectionProps) {
   return (
     <section className="px-5 py-16 sm:px-8 sm:py-20 lg:px-10" aria-labelledby="search-heading">
-      <div className="mx-auto max-w-4xl text-center">
+      <ScrollReveal className="mx-auto max-w-4xl text-center">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-viridian">
           Find something special
         </p>
@@ -39,7 +39,8 @@ export function SearchSection({ query = "" }: SearchSectionProps) {
             Discover independent creators, local businesses and meaningful experiences.
           </p>
         </form>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }
+import { ScrollReveal } from "@/components/ui/ScrollReveal";

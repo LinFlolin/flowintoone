@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export function HeroSection() {
   return (
@@ -8,13 +9,13 @@ export function HeroSection() {
         className="absolute -left-20 top-24 size-52 rounded-full bg-sandstone/35 blur-3xl"
         aria-hidden="true"
       />
-      <div className="mx-auto grid max-w-[1500px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-10 lg:pb-28 lg:pt-24">
+      <ScrollReveal className="mx-auto grid max-w-[1500px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-10 lg:pb-28 lg:pt-24">
         <div className="relative z-10">
           <p className="mb-5 text-xs font-bold uppercase tracking-[0.22em] text-heather">
             Your space. Your story. Your possibilities.
           </p>
           <h1 className="max-w-2xl text-[clamp(2.65rem,7vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-ink">
-            Your place to grow online<span className="text-candy">.</span>
+            Your place to grow online<span className="flow-dot-pulse text-candy">.</span>
           </h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-ink/80 sm:text-lg sm:leading-8">
             Create a website that reflects who you are and what you do. Showcase
@@ -36,9 +37,9 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-3xl lg:mx-0">
+        <ScrollReveal className="flow-scroll-fade relative mx-auto w-full max-w-3xl lg:mx-0" delay={180}>
           <div
-            className="absolute -right-3 -top-3 size-20 rounded-tr-[2.75rem] bg-viridian/45 sm:-right-5 sm:-top-5 sm:size-28"
+            className="flow-soft-pulse absolute -right-3 -top-3 size-20 rounded-tr-[2.75rem] bg-viridian/45 sm:-right-5 sm:-top-5 sm:size-28"
             aria-hidden="true"
           />
           <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] rounded-br-[5rem] sm:rounded-[2.25rem] sm:rounded-br-[7rem]">
@@ -57,8 +58,8 @@ export function HeroSection() {
               Real people. Meaningful stories. A kinder web.
             </p>
           </div>
-        </div>
-      </div>
+        </ScrollReveal>
+      </ScrollReveal>
     </section>
   );
 }

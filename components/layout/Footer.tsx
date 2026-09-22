@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const primaryLinks = [
   { label: "Home", href: "/" },
@@ -17,6 +18,7 @@ const informationLinks = [
 export function Footer() {
   return (
     <footer className="bg-sandstone/65">
+      <ScrollReveal>
       <div className="mx-auto grid max-w-[1500px] gap-12 px-5 py-14 sm:px-8 md:grid-cols-[1.5fr_1fr_1fr] lg:px-10 lg:py-16">
         <div>
           <Link
@@ -72,6 +74,7 @@ export function Footer() {
           © {new Date().getFullYear()} Flowintoone. All rights reserved.
         </div>
       </div>
+      </ScrollReveal>
     </footer>
   );
 }

@@ -50,6 +50,79 @@ input {
   display: none;
 }
 
+@keyframes flow-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flow-soft-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.06);
+    opacity: 0.68;
+  }
+}
+
+@keyframes flow-dot-pulse {
+  0%, 100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+}
+
+@keyframes flow-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.flow-scroll-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.flow-scroll-reveal.is-visible {
+  animation: flow-reveal 950ms cubic-bezier(0.22, 1, 0.36, 1) var(--flow-reveal-delay, 0ms) both;
+}
+
+.flow-scroll-fade {
+  transform: none;
+}
+
+.flow-scroll-reveal.flow-scroll-fade.is-visible {
+  animation: flow-fade 1200ms ease var(--flow-reveal-delay, 0ms) both;
+}
+
+.flow-soft-pulse {
+  animation: flow-soft-pulse 5s ease-in-out infinite;
+}
+
+.flow-dot-pulse {
+  display: inline-block;
+  transform-origin: 50% 80%;
+  animation: flow-dot-pulse 2.4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -62,5 +135,14 @@ input {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .flow-scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .flow-dot-pulse {
+    animation: none;
   }
 }
