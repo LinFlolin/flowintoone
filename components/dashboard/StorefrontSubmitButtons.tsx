@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { FlowLoader } from "@/components/ui/FlowLoader";
 
 export function StorefrontSubmitButtons({
   exists,
@@ -22,7 +23,7 @@ export function StorefrontSubmitButtons({
         disabled={pending || disabled}
         className="inline-flex min-h-12 items-center justify-center rounded-full bg-heather px-7 text-sm font-semibold text-white transition-colors hover:bg-[#756486] disabled:cursor-wait disabled:opacity-60"
       >
-        {pending ? "Saving and uploading…" : exists ? "Save changes" : "Create draft"}
+        {pending ? <><FlowLoader size={20} message="Saving and uploading" />Saving and uploading…</> : exists ? "Save changes" : "Create draft"}
       </button>
       {exists && (
         <button
@@ -32,7 +33,7 @@ export function StorefrontSubmitButtons({
           disabled={pending || disabled}
           className="inline-flex min-h-12 items-center justify-center rounded-full border border-viridian/45 bg-viridian/10 px-7 text-sm font-semibold text-[#477b7b] transition-colors hover:bg-viridian/20 disabled:cursor-wait disabled:opacity-60"
         >
-          {isPublished ? "Republish storefront" : "Publish storefront"}
+        {pending ? <><FlowLoader size={20} message="Publishing website" />Publishing…</> : isPublished ? "Republish storefront" : "Publish storefront"}
         </button>
       )}
     </div>

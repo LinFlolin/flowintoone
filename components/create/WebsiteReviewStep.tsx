@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { createWebsiteAction } from "@/app/create/actions";
 import { readCreateFlowState, type CreateFlowState } from "@/lib/create-flow";
+import { FlowLoader } from "@/components/ui/FlowLoader";
+
+function CreateWebsiteSubmitButton() {
+  const { pending } = useFormStatus();
+  return <button type="submit" disabled={pending} className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-xl bg-heather px-6 text-sm font-semibold text-white hover:bg-[#756486] disabled:cursor-wait disabled:opacity-70">{pending ? <><FlowLoader size={20} message="Creating website" />Creating website…</> : "Create website"}</button>;
+}
 
 export function WebsiteReviewStep({ error }: { error: string | null }) {
   const [flow, setFlow] = useState<CreateFlowState | null>(null);
@@ -35,7 +42,7 @@ export function WebsiteReviewStep({ error }: { error: string | null }) {
         </dl>
         <form action={createWebsiteAction} className="mt-8">
           {Object.entries({ purpose: flow.purpose, designModel: flow.designModel, ...details }).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
-          <button type="submit" className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-heather px-6 text-sm font-semibold text-white hover:bg-[#756486]">Create website</button>
+          <CreateWebsiteSubmitButton />
         </form>
       </div>
     </main>

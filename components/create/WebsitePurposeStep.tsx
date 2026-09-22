@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FlowLoader } from "@/components/ui/FlowLoader";
 import {
   readCreateFlowState,
   writeCreateFlowState,
@@ -105,7 +106,7 @@ export function WebsitePurposeStep() {
             <p className="max-w-xs text-xs italic leading-5 text-ink/55">“A clear purpose today, a bigger tomorrow.”</p>
             <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:items-end">
               {error && <p role="alert" className="max-w-xs text-xs leading-5 text-candy">{error}</p>}
-              <button type="button" disabled={!selectedPurpose || isSaving} onClick={continueToDetails} className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-heather px-6 text-sm font-semibold text-white transition-colors hover:bg-[#756486] disabled:cursor-not-allowed disabled:bg-heather/30 sm:min-w-36">{isSaving ? "Saving…" : "Next step"} <span aria-hidden="true">→</span></button>
+              <button type="button" disabled={!selectedPurpose || isSaving} onClick={continueToDetails} className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-heather px-6 text-sm font-semibold text-white transition-colors hover:bg-[#756486] disabled:cursor-not-allowed disabled:bg-heather/30 sm:min-w-36">{isSaving ? <><FlowLoader size={20} message="Saving creation progress" />Saving…</> : <>Next step <span aria-hidden="true">→</span></>}</button>
             </div>
           </div>
         </div>
