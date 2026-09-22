@@ -23,7 +23,7 @@ export function DashboardSidebar({ role, userName = "My account" }: DashboardSid
   const visibleItems = DASHBOARD_NAVIGATION.filter((item) => role === "artisan" || !item.ownerOnly);
 
   return (
-    <aside aria-label="Dashboard navigation" className="relative h-0 rounded-2xl border border-heather/20 bg-white/45 p-2 lg:h-auto lg:min-h-[calc(100vh-8.5rem)] lg:border-0 lg:bg-transparent lg:p-0">
+    <aside aria-label="Dashboard navigation" className="relative h-0 border-0 bg-transparent p-0 lg:h-auto lg:min-h-[calc(100vh-8.5rem)] lg:rounded-2xl lg:border-0 lg:bg-transparent lg:p-0">
       <button
         type="button"
         onClick={() => {

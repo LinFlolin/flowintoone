@@ -182,7 +182,7 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
       )}
       {!dashboardMode && <div
         id="mobile-navigation"
-        className={isMobileMenuOpen ? "fixed inset-y-0 left-0 z-[60] grid w-[min(22rem,90vw)] overflow-y-auto bg-cream px-5 pb-8 pt-5 shadow-[12px_0_36px_rgba(81,68,91,0.18)] md:hidden" : "hidden md:hidden"}
+        className={isMobileMenuOpen ? "fixed inset-y-0 left-0 z-[60] flex min-h-screen w-[min(22rem,90vw)] flex-col overflow-y-auto bg-cream px-5 pb-8 pt-5 shadow-[12px_0_36px_rgba(81,68,91,0.18)] md:hidden" : "hidden md:hidden"}
       >
         <div className="flex min-h-14 items-center justify-between border-b border-heather/15 pb-4">
           <Link href="/" onClick={closeMenus} className="text-xl font-bold tracking-[-0.04em] text-ink">
