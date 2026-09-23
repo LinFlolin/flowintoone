@@ -146,3 +146,56 @@ input {
     animation: none;
   }
 }
+
+/* Events uses a deliberately wider, more generous composition on large screens. */
+@media (min-width: 1280px) {
+  main:has(#upcoming-events) > section {
+    padding-left: clamp(2.5rem, 6vw, 7rem);
+    padding-right: clamp(2.5rem, 6vw, 7rem);
+  }
+
+  main:has(#upcoming-events) > section > div {
+    max-width: 1440px !important;
+  }
+
+  main:has(#upcoming-events) > section:first-child {
+    padding-bottom: 2rem;
+    padding-top: 3rem;
+  }
+
+  main:has(#upcoming-events) > section:first-child > div > div:last-child {
+    height: 20rem;
+  }
+
+  main:has(#upcoming-events) > section:first-child h1 {
+    font-size: clamp(3.5rem, 4.3vw, 4.75rem);
+  }
+
+  main:has(#upcoming-events) > section:first-child p:not(.sr-only) {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  main:has(#upcoming-events) > section:nth-child(2) form {
+    min-height: 4.5rem;
+    padding: 0.75rem;
+  }
+
+  main:has(#upcoming-events) > section:nth-child(2) input,
+  main:has(#upcoming-events) > section:nth-child(2) select,
+  main:has(#upcoming-events) > section:nth-child(2) button {
+    font-size: 0.875rem;
+  }
+
+  main:has(#upcoming-events) > section:nth-child(3) > div {
+    gap: 1.25rem;
+  }
+
+  main:has(#upcoming-events) > section:nth-child(3) article {
+    min-height: 20rem;
+  }
+
+  main:has(#upcoming-events) #upcoming-events h2 {
+    font-size: 2rem;
+  }
+}

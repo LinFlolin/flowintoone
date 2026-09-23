@@ -6,8 +6,8 @@ type EventCardProps = {
 
 export function EventCard({ event }: EventCardProps) {
   const date = new Date(event.date);
-  const day = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(date);
-  const month = new Intl.DateTimeFormat("en", { month: "short" }).format(date);
+  const day = new Intl.DateTimeFormat("it-IT", { day: "2-digit" }).format(date);
+  const month = new Intl.DateTimeFormat("it-IT", { month: "short" }).format(date).replace(".", "");
 
   return (
     <article className="grid grid-cols-[4rem_1fr] gap-5 rounded-2xl border border-heather/15 bg-white/50 p-5 transition-transform duration-300 hover:-translate-y-1">

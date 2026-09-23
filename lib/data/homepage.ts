@@ -25,6 +25,8 @@ export type HomepageEvent = {
   date: string;
   type: string;
   href: string | null;
+  description?: string | null;
+  imageUrl?: string | null;
 };
 
 export type HomepageSection<T> = {
@@ -79,6 +81,24 @@ type EventRow = {
   external_url: string | null;
 };
 
+export type EventDirectoryFilters = {
+  query?: string;
+  category?: string;
+  city?: string;
+  page?: number;
+  sort?: "date" | "name";
+};
+
+export type EventDirectoryResult = HomepageSection<HomepageEvent[]> & {
+  count: number;
+  page: number;
+  pageSize: number;
+  categories: string[];
+  calendarEvents: HomepageEvent[];
+};
+
+export const EVENT_DIRECTORY_PAGE_SIZE = 12;
+
 function reportQueryError(section: string, error: unknown) {
   const details =
     error instanceof Error
@@ -103,7 +123,7 @@ export async function getHomepageCategories(): Promise<
 
     if (error) {
       reportQueryError("categories", error);
-      return { data: [], error: "Categories are temporarily unavailable." };
+      return { data: [], error: "Le categorie non sono temporaneamente disponibili." };
     }
 
     return {
@@ -117,7 +137,7 @@ export async function getHomepageCategories(): Promise<
     };
   } catch (error) {
     reportQueryError("categories", error);
-    return { data: [], error: "Categories are temporarily unavailable." };
+    return { data: [], error: "Le categorie non sono temporaneamente disponibili." };
   }
 }
 
@@ -167,7 +187,7 @@ export async function getHomepageBusinesses(filters: {
 
     if (error) {
       reportQueryError("businesses", error);
-      return { data: [], error: "Maker profiles are temporarily unavailable." };
+      return { data: [], error: "I profili dei creator non sono temporaneamente disponibili." };
     }
 
     return {
@@ -191,7 +211,7 @@ export async function getHomepageBusinesses(filters: {
     };
   } catch (error) {
     reportQueryError("businesses", error);
-    return { data: [], error: "Maker profiles are temporarily unavailable." };
+    return { data: [], error: "I profili dei creator non sono temporaneamente disponibili." };
   }
 }
 
@@ -207,7 +227,7 @@ export async function getPublishedArtisanCities(): Promise<HomepageSection<strin
 
     if (error) {
       reportQueryError("artisan-cities", error);
-      return { data: [], error: "Cities are temporarily unavailable." };
+      return { data: [], error: "Le città non sono temporaneamente disponibili." };
     }
 
     const cities = Array.from(
@@ -221,7 +241,7 @@ export async function getPublishedArtisanCities(): Promise<HomepageSection<strin
     return { data: cities, error: null };
   } catch (error) {
     reportQueryError("artisan-cities", error);
-    return { data: [], error: "Cities are temporarily unavailable." };
+    return { data: [], error: "Le città non sono temporaneamente disponibili." };
   }
 }
 
@@ -295,7 +315,7 @@ export async function getPublishedArtisans(
         count: 0,
         page,
         pageSize: ARTISAN_DIRECTORY_PAGE_SIZE,
-        error: "Maker profiles are temporarily unavailable.",
+        error: "I profili dei creator non sono temporaneamente disponibili.",
       };
     }
 
@@ -328,7 +348,7 @@ export async function getPublishedArtisans(
       count: 0,
       page,
       pageSize: ARTISAN_DIRECTORY_PAGE_SIZE,
-      error: "Maker profiles are temporarily unavailable.",
+      error: "I profili dei creator non sono temporaneamente disponibili.",
     };
   }
 }
@@ -346,7 +366,7 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
 
     if (error) {
       reportQueryError("events", error);
-      return { data: [], error: "Upcoming events are temporarily unavailable." };
+      return { data: [], error: "Gli eventi in arrivo non sono temporaneamente disponibili." };
     }
 
     return {
@@ -357,9 +377,9 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
         date: event.start_at,
         type:
           event.type.toLowerCase() === "market"
-            ? "Market"
+            ? "Mercato"
             : event.type.toLowerCase() === "event"
-              ? "Event"
+              ? "Evento"
               : event.type,
         href: event.external_url,
       })),
@@ -367,7 +387,80 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
     };
   } catch (error) {
     reportQueryError("events", error);
-    return { data: [], error: "Upcoming events are temporarily unavailable." };
+    return { data: [], error: "Gli eventi in arrivo non sono temporaneamente disponibili." };
+  }
+}
+
+export async function getEventDirectory(
+  filters: EventDirectoryFilters = {},
+): Promise<EventDirectoryResult> {
+  const pageSize = EVENT_DIRECTORY_PAGE_SIZE;
+  const page = Math.max(1, filters.page ?? 1);
+  const query = filters.query?.trim() ?? "";
+  const category = filters.category?.trim() ?? "";
+  const city = filters.city?.trim() ?? "";
+
+  try {
+    const supabase = createPublicSupabaseClient();
+    let request = supabase
+      .from("events")
+      .select("id, title, slug, start_at, city, location_name, type, external_url", { count: "exact" })
+      .eq("status", "published")
+      .gte("start_at", new Date().toISOString());
+
+    if (query) request = request.or(`title.ilike.%${query}%,city.ilike.%${query}%,location_name.ilike.%${query}%,type.ilike.%${query}%`);
+    if (category) request = request.ilike("type", category);
+    if (city) request = request.ilike("city", `%${city}%`);
+
+    request = filters.sort === "name"
+      ? request.order("title", { ascending: true })
+      : request.order("start_at", { ascending: true });
+
+    const { data, error, count } = await request.range((page - 1) * pageSize, page * pageSize - 1);
+    if (error) {
+      reportQueryError("event-directory", error);
+      return { data: [], count: 0, page, pageSize, categories: [], calendarEvents: [], error: "Gli eventi non sono temporaneamente disponibili." };
+    }
+
+    const mapped = ((data ?? []) as EventRow[]).map((event) => ({
+      id: event.id,
+      title: event.title,
+      location: [event.location_name, event.city].filter(Boolean).join(", ") || null,
+      date: event.start_at,
+      type: event.type.toLowerCase() === "market" ? "Mercato" : event.type.toLowerCase() === "workshop" ? "Workshop" : event.type.toLowerCase() === "exhibition" ? "Mostra" : event.type,
+      href: event.external_url,
+    }));
+
+    const categoryResult = await createPublicSupabaseClient()
+      .from("events")
+      .select("type")
+      .eq("status", "published")
+      .gte("start_at", new Date().toISOString());
+    const categories = Array.from(new Set(((categoryResult.data ?? []) as Array<{ type: string }>).map((event) => event.type).filter(Boolean))).sort();
+
+    let calendarRequest = createPublicSupabaseClient()
+      .from("events")
+      .select("id, title, slug, start_at, city, location_name, type, external_url")
+      .eq("status", "published")
+      .gte("start_at", new Date().toISOString())
+      .order("start_at", { ascending: true });
+    if (query) calendarRequest = calendarRequest.or(`title.ilike.%${query}%,city.ilike.%${query}%,location_name.ilike.%${query}%,type.ilike.%${query}%`);
+    if (category) calendarRequest = calendarRequest.ilike("type", category);
+    if (city) calendarRequest = calendarRequest.ilike("city", `%${city}%`);
+    const { data: calendarRows } = await calendarRequest.limit(120);
+    const calendarEvents = ((calendarRows ?? []) as EventRow[]).map((event) => ({
+      id: event.id,
+      title: event.title,
+      location: [event.location_name, event.city].filter(Boolean).join(", ") || null,
+      date: event.start_at,
+      type: event.type.toLowerCase() === "market" ? "Mercato" : event.type.toLowerCase() === "workshop" ? "Workshop" : event.type.toLowerCase() === "exhibition" ? "Mostra" : event.type,
+      href: event.external_url,
+    }));
+
+    return { data: mapped, count: count ?? 0, page, pageSize, categories, calendarEvents, error: null };
+  } catch (error) {
+    reportQueryError("event-directory", error);
+    return { data: [], count: 0, page, pageSize, categories: [], calendarEvents: [], error: "Gli eventi non sono temporaneamente disponibili." };
   }
 }
 

@@ -3,7 +3,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const primaryLinks = [
   { label: "Home", href: "/" },
-  { label: "Eventi", href: "/#events" },
+  { label: "Eventi", href: "/events" },
   { label: "Chi siamo", href: null },
   { label: "Registrati", href: "/register" },
   { label: "Accedi", href: "/login" },

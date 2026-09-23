@@ -90,7 +90,7 @@ function MobileDashboardMenu({
       <div className="mt-3 grid gap-1">
         <Link href="/dashboard" onClick={closeMenu} className={itemClass("/dashboard")}><DashboardIcon name="home" className="size-4" />Home<span className="ml-auto text-base text-ink/55">›</span></Link>
         <button type="button" onClick={onDiscover} className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-left text-xs font-semibold text-ink/80 hover:bg-heather/10"><DashboardIcon name="discover" className="size-4" />Scopri<span className="ml-auto text-base text-ink/55">›</span></button>
-        <Link href="/#events" onClick={closeMenu} className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/80 hover:bg-heather/10"><DashboardIcon name="calendar" className="size-4" />Eventi<span className="ml-auto text-base text-ink/55">›</span></Link>
+        <Link href="/events" onClick={closeMenu} className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/80 hover:bg-heather/10"><DashboardIcon name="calendar" className="size-4" />Eventi<span className="ml-auto text-base text-ink/55">›</span></Link>
         <div className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/50"><DashboardIcon name="profile" className="size-4" />Chi siamo<span className="ml-auto rounded-full bg-heather/10 px-2 py-1 text-[9px] text-heather">Prossimamente</span></div>
       </div>
 
@@ -117,7 +117,7 @@ function MobileDiscoverMenu({ queryHref, back, closeMenu }: { queryHref: string;
     { label: "Tutti i creator", href: queryHref, icon: "discover" as const },
     { label: "Per categoria", href: queryHref, icon: "storefront" as const },
     { label: "Per località", href: queryHref, icon: "discover" as const },
-    { label: "Eventi", href: "/#events", icon: "calendar" as const },
+    { label: "Eventi", href: "/events", icon: "calendar" as const },
   ];
   return (
     <div className="pt-2">
