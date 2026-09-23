@@ -4,6 +4,14 @@ type EventCardProps = {
   event: HomepageEvent;
 };
 
+function eventTypeLabel(value: string) {
+  const normalized = value.toLowerCase();
+  if (normalized === "market" || normalized === "mercato") return "Mercato";
+  if (normalized === "workshop") return "Workshop";
+  if (normalized === "exhibition" || normalized === "mostra") return "Mostra";
+  return value;
+}
+
 export function EventCard({ event }: EventCardProps) {
   const date = new Date(event.date);
   const day = new Intl.DateTimeFormat("it-IT", { day: "2-digit" }).format(date);
@@ -19,7 +27,7 @@ export function EventCard({ event }: EventCardProps) {
       </time>
       <div>
         <span className="inline-flex rounded-full bg-sandstone/55 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.15em] text-ink/80">
-          {event.type}
+          {eventTypeLabel(event.type)}
         </span>
         <h3 className="mt-3 text-lg font-semibold tracking-[-0.025em] text-ink">{event.title}</h3>
         {event.location && <p className="mt-2 text-sm text-ink/75">{event.location}</p>}

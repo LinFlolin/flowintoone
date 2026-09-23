@@ -5,8 +5,8 @@ import { Header } from "@/components/layout/Header";
 import { getEventDirectory } from "@/lib/data/homepage";
 
 export const metadata: Metadata = {
-  title: "Events | Flowintoone",
-  description: "Explore published markets, workshops, and creative experiences on Flowintoone.",
+  title: "Eventi | Flowintoone",
+  description: "Esplora mercati, workshop ed esperienze creative pubblicate su Flowintoone.",
 };
 
 type EventsRouteProps = {
