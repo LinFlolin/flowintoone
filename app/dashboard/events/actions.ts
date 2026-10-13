@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireArtisan } from "@/lib/auth/roles";
-import type { Event } from "@/lib/events/queries";
+import type { Event, EventAgendaItem, EventFaqItem } from "@/lib/events/queries";
 import {
   processStorefrontImage,
   storefrontImagePath,
@@ -12,7 +12,7 @@ import {
 } from "@/lib/storefront/images";
 
 const EVENT_SELECT =
-  "id, created_by, title, slug, description, short_description, type, category, start_at, end_at, city, location_name, address, external_url, image_url, status, created_at, updated_at";
+  "id, created_by, title, slug, description, short_description, type, category, attendance_mode, start_at, end_at, city, location_name, address, external_url, image_url, price_cents, currency, included, features, agenda, faq, online_access_info, is_sold_out, is_cancelled, status, created_at, updated_at";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -24,6 +24,7 @@ export type EventInput = {
   title: string;
   slug?: string | null;
   type: string;
+  attendance_mode?: "in_person" | "online";
   start_at: string;
   end_at?: string | null;
   description?: string | null;
@@ -34,6 +35,14 @@ export type EventInput = {
   address?: string | null;
   external_url?: string | null;
   image_url?: string | null;
+  price_cents?: number | null;
+  included?: string | null;
+  features?: string[];
+  agenda?: EventAgendaItem[];
+  faq?: EventFaqItem[];
+  online_access_info?: string | null;
+  is_sold_out?: boolean;
+  is_cancelled?: boolean;
   cover_image?: File | null;
 };
 
@@ -48,6 +57,7 @@ type ValidatedEventValues = {
   title: string;
   slug: string;
   type: string;
+  attendance_mode: "in_person" | "online";
   start_at: string;
   end_at: string | null;
   description: FieldValue;
@@ -58,10 +68,30 @@ type ValidatedEventValues = {
   address: FieldValue;
   external_url: FieldValue;
   image_url: FieldValue;
+  price_cents: number | null;
+  currency: "EUR";
+  included: FieldValue;
+  features: string[];
+  agenda: EventAgendaItem[];
+  faq: EventFaqItem[];
+  online_access_info: FieldValue;
+  is_sold_out: boolean;
+  is_cancelled: boolean;
 };
 
 function resultError(error: string): EventActionResult {
   return { success: false, error };
+}
+
+const EVENT_SCHEMA_ERROR =
+  "Il database degli eventi non è aggiornato. Applica la migrazione 20261013150000_event_detail_fields.sql in Supabase e riprova.";
+
+function isMissingEventDetailSchema(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const databaseError = error as { code?: unknown; message?: unknown };
+  return databaseError.code === "PGRST204" &&
+    typeof databaseError.message === "string" &&
+    /agenda|attendance_mode|price_cents|included|features|faq|online_access_info|is_sold_out|is_cancelled|currency/.test(databaseError.message);
 }
 
 function text(value: unknown) {
@@ -121,6 +151,69 @@ function timestampValue(value: unknown, label: string, required: boolean) {
   return { value: parsed.toISOString(), error: null };
 }
 
+function priceValue(value: unknown) {
+  if (value === undefined || value === null || value === "") {
+    return { value: null, error: null };
+  }
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 0 || value > 100_000_000) {
+    return { value: null, error: "Il prezzo deve essere un importo valido e non negativo." };
+  }
+  return { value, error: null };
+}
+
+function featuresValue(value: unknown) {
+  if (value === undefined || value === null) return { value: [] as string[], error: null };
+  if (!Array.isArray(value)) return { value: [] as string[], error: "Le caratteristiche non sono valide." };
+
+  const features = value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  if (features.length > 8 || features.some((item) => item.length > 80)) {
+    return { value: [] as string[], error: "Inserisci al massimo 8 caratteristiche da 80 caratteri." };
+  }
+  return { value: Array.from(new Set(features)), error: null };
+}
+
+function agendaValue(value: unknown) {
+  if (value === undefined || value === null) return { value: [] as EventAgendaItem[], error: null };
+  if (!Array.isArray(value) || value.length > 30) {
+    return { value: [] as EventAgendaItem[], error: "Il programma non è valido." };
+  }
+
+  const agenda: EventAgendaItem[] = [];
+  for (const item of value) {
+    if (!item || typeof item !== "object") return { value: [], error: "Il programma non è valido." };
+    const record = item as Record<string, unknown>;
+    const time = text(record.time).slice(0, 20);
+    const title = text(record.title).slice(0, 160);
+    const description = text(record.description).slice(0, 500) || null;
+    if (!title) return { value: [], error: "Ogni voce del programma deve avere un titolo." };
+    agenda.push({ time, title, description });
+  }
+  return { value: agenda, error: null };
+}
+
+function faqValue(value: unknown) {
+  if (value === undefined || value === null) return { value: [] as EventFaqItem[], error: null };
+  if (!Array.isArray(value) || value.length > 20) {
+    return { value: [] as EventFaqItem[], error: "Le domande frequenti non sono valide." };
+  }
+
+  const faq: EventFaqItem[] = [];
+  for (const item of value) {
+    if (!item || typeof item !== "object") return { value: [], error: "Le domande frequenti non sono valide." };
+    const record = item as Record<string, unknown>;
+    const question = text(record.question).slice(0, 200);
+    const answer = text(record.answer).slice(0, 1500);
+    if (!question || !answer) {
+      return { value: [], error: "Ogni domanda frequente deve avere domanda e risposta." };
+    }
+    faq.push({ question, answer });
+  }
+  return { value: faq, error: null };
+}
+
 function validateEvent(input: Record<string, unknown>):
   | { values: ValidatedEventValues; error: null }
   | { values: null; error: string } {
@@ -137,6 +230,11 @@ function validateEvent(input: Record<string, unknown>):
   const type = text(input.type);
   if (!type || type.length > 80) return { values: null, error: "Il tipo di evento è obbligatorio e non può superare 80 caratteri." };
 
+  const attendanceMode = text(input.attendance_mode) || "in_person";
+  if (attendanceMode !== "in_person" && attendanceMode !== "online") {
+    return { values: null, error: "La modalità dell'evento non è valida." };
+  }
+
   const start = timestampValue(input.start_at, "La data di inizio", true);
   const end = timestampValue(input.end_at, "La data di fine", false);
   if (start.error) return { values: null, error: start.error };
@@ -151,6 +249,8 @@ function validateEvent(input: Record<string, unknown>):
     ["city", input.city, 120],
     ["location_name", input.location_name, 160],
     ["address", input.address, 300],
+    ["included", input.included, 500],
+    ["online_access_info", input.online_access_info, 1500],
   ] as const;
   const optionalValues: Record<string, string | null> = {};
   for (const [key, value, max] of fields) {
@@ -165,12 +265,21 @@ function validateEvent(input: Record<string, unknown>):
   if (externalUrl.error) return { values: null, error: externalUrl.error };
   const imageUrl = urlValue(input.image_url, "Image URL");
   if (imageUrl.error) return { values: null, error: imageUrl.error };
+  const price = priceValue(input.price_cents);
+  if (price.error) return { values: null, error: price.error };
+  const features = featuresValue(input.features);
+  if (features.error) return { values: null, error: features.error };
+  const agenda = agendaValue(input.agenda);
+  if (agenda.error) return { values: null, error: agenda.error };
+  const faq = faqValue(input.faq);
+  if (faq.error) return { values: null, error: faq.error };
 
   return {
     values: {
       title,
       slug,
       type,
+      attendance_mode: attendanceMode,
       start_at: start.value,
       end_at: end.value,
       description: optionalValues.description,
@@ -181,6 +290,15 @@ function validateEvent(input: Record<string, unknown>):
       address: optionalValues.address,
       external_url: externalUrl.value,
       image_url: imageUrl.value,
+      price_cents: price.value,
+      currency: "EUR",
+      included: optionalValues.included,
+      features: features.value,
+      agenda: agenda.value,
+      faq: faq.value,
+      online_access_info: optionalValues.online_access_info,
+      is_sold_out: input.is_sold_out === true,
+      is_cancelled: input.is_cancelled === true,
     },
     error: null,
   };
@@ -191,6 +309,7 @@ function asInput(event: Event): EventInput {
     title: event.title,
     slug: event.slug,
     type: event.type,
+    attendance_mode: event.attendance_mode,
     start_at: event.start_at,
     end_at: event.end_at,
     description: event.description,
@@ -201,6 +320,14 @@ function asInput(event: Event): EventInput {
     address: event.address,
     external_url: event.external_url,
     image_url: event.image_url,
+    price_cents: event.price_cents,
+    included: event.included,
+    features: event.features ?? [],
+    agenda: event.agenda ?? [],
+    faq: event.faq ?? [],
+    online_access_info: event.online_access_info,
+    is_sold_out: event.is_sold_out,
+    is_cancelled: event.is_cancelled,
   };
 }
 
@@ -323,6 +450,7 @@ export async function createEvent(input: EventInput): Promise<EventActionResult>
       .select(EVENT_SELECT)
       .single();
     if (error || !data) {
+      if (isMissingEventDetailSchema(error)) return resultError(EVENT_SCHEMA_ERROR);
       if (error?.code === "23505") return resultError("Questo slug è già utilizzato da un altro evento.");
       console.error("[events:create] event insert failed", error);
       return resultError("Non è stato possibile creare l'evento.");
@@ -347,6 +475,7 @@ export async function createEvent(input: EventInput): Promise<EventActionResult>
     revalidateEventPages(event.slug);
     return { success: true, event };
   } catch (error) {
+    if (isMissingEventDetailSchema(error)) return resultError(EVENT_SCHEMA_ERROR);
     console.error("[events:create] action failed", error);
     return resultError("Non è stato possibile creare l'evento.");
   }
@@ -378,6 +507,7 @@ export async function updateEvent(eventId: string, input: EventUpdateInput): Pro
       .single();
     if (error || !data) {
       if (upload.path) await supabase.storage.from(STOREFRONT_IMAGE_BUCKET).remove([upload.path]);
+      if (isMissingEventDetailSchema(error)) return resultError(EVENT_SCHEMA_ERROR);
       if (error?.code === "23505") return resultError("Questo slug è già utilizzato da un altro evento.");
       console.error("[events:update] event update failed", error);
       return resultError("Non è stato possibile aggiornare l'evento.");
@@ -388,6 +518,7 @@ export async function updateEvent(eventId: string, input: EventUpdateInput): Pro
     if (data.slug !== existing.slug) revalidateEventPages(data.slug);
     return { success: true, event: data as Event };
   } catch (error) {
+    if (isMissingEventDetailSchema(error)) return resultError(EVENT_SCHEMA_ERROR);
     console.error("[events:update] action failed", error);
     return resultError("Non è stato possibile aggiornare l'evento.");
   }

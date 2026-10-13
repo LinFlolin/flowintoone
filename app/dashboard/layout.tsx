@@ -14,7 +14,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   return (
     <div className="min-h-screen bg-cream">
       <Header dashboardMode />
-      <main className="mx-auto px-5 pb-24 pt-5 sm:px-8 sm:py-8 lg:px-10 lg:pb-8 2xl:px-12">
+      <main className="mx-auto min-w-0 px-3 pb-24 pt-4 sm:px-8 sm:py-8 lg:px-10 lg:pb-8 2xl:px-12">
         <div className="grid gap-4 lg:grid-cols-[12rem_minmax(0,1fr)] 2xl:gap-8 2xl:grid-cols-[14rem_minmax(0,1fr)]">
           <DashboardSidebar role={role} userName={userName} />
           <div className="min-w-0">{children}</div>

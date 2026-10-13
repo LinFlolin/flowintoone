@@ -34,7 +34,7 @@ export const DASHBOARD_NAVIGATION: Array<{
   { label: "Impostazioni", icon: "settings", group: "Website", ownerOnly: true },
   { label: "Scopri", href: "/discover", icon: "discover", group: "Community" },
   { label: "Seguiti", icon: "following", group: "Community" },
-  { label: "Eventi", href: "/events", icon: "calendar", group: "Community" },
+  { label: "Eventi", href: "/dashboard/events", icon: "calendar", group: "Community" },
   { label: "I miei preferiti", icon: "bookmark", group: "Community" },
   { label: "Aiuto", icon: "help", group: "Support" },
   { label: "Il mio account", href: "/dashboard/profile", icon: "profile", group: "Support" },

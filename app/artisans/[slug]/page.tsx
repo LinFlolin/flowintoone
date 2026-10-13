@@ -139,9 +139,9 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
   return (
     <>
       <Header />
-      <main className="bg-cream pb-24">
-        <section className="px-5 pt-8 sm:px-8 sm:pt-12 lg:px-10">
-          <div className="mx-auto max-w-[75%]">
+      <main className="min-w-0 overflow-x-clip bg-cream pb-16 sm:pb-24">
+        <section className="min-w-0 px-4 pt-5 sm:px-8 sm:pt-12 lg:px-10">
+          <div className="mx-auto min-w-0 w-full max-w-[1200px]">
             <Link
               href="/#artisans"
               className="inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
@@ -149,7 +149,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
               ← Torna ai creator
             </Link>
 
-            <div className="relative mt-7 aspect-[16/7] min-h-64 overflow-hidden rounded-[2rem] bg-sandstone/35 sm:min-h-80">
+            <div className="relative mt-5 h-64 w-full overflow-hidden rounded-[1.35rem] bg-sandstone/35 sm:mt-7 sm:h-80 sm:rounded-[2rem] lg:h-auto lg:aspect-[16/7]">
               <Image
                 src={storefront.cover_image_url || "/images/storefront-fallback.svg"}
                 alt={`${storefront.name} cover`}
@@ -166,11 +166,11 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
           </div>
         </section>
 
-        <section className="px-5 sm:px-8 lg:px-10">
-          <div className="mx-auto grid max-w-[1100px] gap-10 lg:grid-cols-[1fr_19rem] lg:gap-16">
-            <div>
-              <div className="-mt-14 flex flex-col items-start sm:-mt-16 sm:flex-row sm:items-start sm:gap-6">
-                <div className="relative z-10 size-28 shrink-0 overflow-hidden rounded-full border-[6px] border-cream bg-sandstone sm:size-36">
+        <section className="min-w-0 px-4 sm:px-8 lg:px-10">
+          <div className="mx-auto grid min-w-0 max-w-[1100px] gap-7 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-16">
+            <div className="min-w-0">
+              <div className="-mt-12 flex min-w-0 flex-col items-start sm:-mt-16 sm:flex-row sm:items-start sm:gap-6">
+                <div className="relative z-10 size-24 shrink-0 overflow-hidden rounded-full border-[5px] border-cream bg-sandstone sm:size-36 sm:border-[6px]">
                   {storefront.logo_url ? (
                     <Image
                       src={storefront.logo_url}
@@ -186,27 +186,27 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                   )}
                 </div>
 
-                <div className="mt-5 pb-1 sm:mt-0 sm:pt-20">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
+                <div className="mt-4 min-w-0 max-w-full pb-1 sm:mt-0 sm:pt-20">
+                  <p className="break-words text-[10px] font-bold uppercase tracking-[0.18em] text-heather sm:text-xs sm:tracking-[0.2em]">
                     {[relatedCategory?.name, storefront.city].filter(Boolean).join(" · ")}
                   </p>
-                  <h1 className="mt-2 text-4xl font-semibold tracking-[-0.05em] text-ink sm:text-5xl lg:text-6xl">
+                  <h1 className="mt-2 max-w-full [overflow-wrap:anywhere] text-4xl font-semibold tracking-[-0.05em] text-ink sm:text-5xl lg:text-6xl">
                     {storefront.name}<span className="text-candy">.</span>
                   </h1>
-                  <p className="mt-3 text-sm text-ink/55">
+                  <p className="mt-3 break-words text-sm text-ink/55">
                     {[storefront.city, storefront.country].filter(Boolean).join(", ")}
                   </p>
                 </div>
               </div>
 
               {storefront.tagline && (
-                <p className="mt-10 max-w-3xl text-2xl font-medium leading-9 tracking-[-0.025em] text-ink sm:text-3xl sm:leading-10">
+                <p className="mt-8 max-w-3xl [overflow-wrap:anywhere] text-xl font-medium leading-8 tracking-[-0.025em] text-ink sm:mt-10 sm:text-3xl sm:leading-10">
                   {storefront.tagline}
                 </p>
               )}
             </div>
 
-            <aside className="h-fit rounded-[2rem] bg-white/65 p-7 lg:mt-12">
+            <aside className="min-w-0 h-fit rounded-[1.35rem] bg-white/65 p-5 sm:rounded-[2rem] sm:p-7 lg:mt-12">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-heather">
                 Connettiti
               </p>
@@ -264,8 +264,8 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
           </div>
         </section>
 
-        <section className="px-5 pt-20 sm:px-8 sm:pt-28 lg:px-10">
-          <div className="mx-auto grid max-w-[1100px] gap-10 border-t border-heather/15 pt-12 lg:grid-cols-[14rem_1fr] lg:gap-16">
+        <section className="min-w-0 px-4 pt-14 sm:px-8 sm:pt-28 lg:px-10">
+          <div className="mx-auto grid min-w-0 max-w-[1100px] gap-6 border-t border-heather/15 pt-9 sm:gap-10 sm:pt-12 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
                 La nostra storia
@@ -274,38 +274,38 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                 Creato con cura.
               </h2>
             </div>
-            <p className="whitespace-pre-line text-base leading-8 text-ink/75 sm:text-lg sm:leading-9">
+            <p className="min-w-0 whitespace-pre-line [overflow-wrap:anywhere] text-base leading-8 text-ink/75 sm:text-lg sm:leading-9">
               {storefront.description || "Questo creator non ha ancora aggiunto la propria storia."}
             </p>
           </div>
         </section>
 
         {(storefront.materials || storefront.creative_process) && (
-          <section className="px-5 pt-16 sm:px-8 sm:pt-20 lg:px-10">
-            <div className="mx-auto grid max-w-[1100px] gap-5 md:grid-cols-2">
+          <section className="min-w-0 px-4 pt-12 sm:px-8 sm:pt-20 lg:px-10">
+            <div className="mx-auto grid min-w-0 max-w-[1100px] gap-4 sm:gap-5 md:grid-cols-2">
               {storefront.materials && (
-                <article className="rounded-[2rem] bg-sandstone/30 p-7 sm:p-10">
+                <article className="min-w-0 rounded-[1.35rem] bg-sandstone/30 p-5 sm:rounded-[2rem] sm:p-10">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
                     Materiali
                   </p>
                   <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
                     Scelti con cura.
                   </h2>
-                  <p className="mt-5 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">
+                  <p className="mt-5 whitespace-pre-line [overflow-wrap:anywhere] text-sm leading-7 text-ink/70 sm:text-base">
                     {storefront.materials}
                   </p>
                 </article>
               )}
 
               {storefront.creative_process && (
-                <article className="rounded-[2rem] bg-viridian/10 p-7 sm:p-10">
+                <article className="min-w-0 rounded-[1.35rem] bg-viridian/10 p-5 sm:rounded-[2rem] sm:p-10">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#477b7b]">
                     Processo creativo
                   </p>
                   <h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">
                     Dall&apos;idea all&apos;oggetto.
                   </h2>
-                  <p className="mt-5 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">
+                  <p className="mt-5 whitespace-pre-line [overflow-wrap:anywhere] text-sm leading-7 text-ink/70 sm:text-base">
                     {storefront.creative_process}
                   </p>
                 </article>
@@ -315,22 +315,22 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
         )}
 
         {galleryImages.length > 0 && (
-          <section className="px-5 pt-20 sm:px-8 sm:pt-28 lg:px-10">
-            <div className="mx-auto max-w-[1200px]">
+          <section className="min-w-0 px-4 pt-14 sm:px-8 sm:pt-28 lg:px-10">
+            <div className="mx-auto min-w-0 max-w-[1200px]">
               <div className="max-w-2xl">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">
                   From the studio
                 </p>
-                <h2 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl">
+                <h2 className="mt-3 [overflow-wrap:anywhere] text-3xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl">
                   Il lavoro da vicino<span className="text-candy">.</span>
                 </h2>
               </div>
 
-              <div className="mt-10 grid auto-rows-[14rem] gap-4 sm:grid-cols-2 sm:auto-rows-[18rem] lg:grid-cols-3">
+              <div className="mt-7 grid min-w-0 auto-rows-[12rem] gap-3 sm:mt-10 sm:grid-cols-2 sm:auto-rows-[18rem] sm:gap-4 lg:grid-cols-3">
                 {galleryImages.map((imageUrl, index) => (
                   <figure
                     key={imageUrl}
-                    className={`relative overflow-hidden rounded-[1.75rem] bg-sandstone/30 ${
+                    className={`relative min-w-0 overflow-hidden rounded-[1.25rem] bg-sandstone/30 sm:rounded-[1.75rem] ${
                       index === 0 && galleryImages.length > 1
                         ? "sm:row-span-2 lg:col-span-2"
                         : ""

@@ -27,6 +27,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
   min-width: 320px;
+  overflow-x: clip;
 }
 
 ::selection {

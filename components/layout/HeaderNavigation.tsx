@@ -62,11 +62,13 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
           </Link>
           <span className="hidden h-5 w-px shrink-0 bg-heather/25 md:block" aria-hidden="true" />
           <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label="Main navigation">
-            {HEADER_NAVIGATION.map((item) => (
-              item.href ? (
+            {HEADER_NAVIGATION.map((item) => {
+              const href = dashboardMode && item.href === "/events" ? "/dashboard/events" : item.href;
+              return href ? (
                 <Link
                   key={item.label}
-                  href={item.href}
+                  href={href}
+                  aria-current={pathname === href ? "page" : undefined}
                   className="text-sm font-semibold text-ink/85 transition-colors hover:text-heather focus-visible:outline-2 lg:text-base"
                 >
                   {item.label}
@@ -75,8 +77,8 @@ export function HeaderNavigation({ user, dashboardMode = false }: HeaderNavigati
                 <span key={item.label} className="cursor-default text-sm font-semibold text-ink/45" aria-disabled="true" title="Prossimamente">
                   {item.label}
                 </span>
-              )
-            ))}
+              );
+            })}
           </nav>
         </div>
 

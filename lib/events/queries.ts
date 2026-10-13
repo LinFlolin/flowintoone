@@ -3,7 +3,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 
 const EVENT_SELECT =
-  "id, created_by, title, slug, description, short_description, type, category, start_at, end_at, city, location_name, address, external_url, image_url, status, created_at, updated_at";
+  "id, created_by, title, slug, description, short_description, type, category, attendance_mode, start_at, end_at, city, location_name, address, external_url, image_url, price_cents, currency, included, features, agenda, faq, online_access_info, is_sold_out, is_cancelled, status, created_at, updated_at";
 
 const DEFAULT_LIMIT = 12;
 const MAX_LIMIT = 100;
@@ -17,6 +17,7 @@ export type Event = {
   short_description: string | null;
   type: string;
   category: string | null;
+  attendance_mode: "in_person" | "online";
   start_at: string;
   end_at: string | null;
   city: string | null;
@@ -24,9 +25,35 @@ export type Event = {
   address: string | null;
   external_url: string | null;
   image_url: string | null;
+  price_cents: number | null;
+  currency: string;
+  included: string | null;
+  features: string[];
+  agenda: EventAgendaItem[];
+  faq: EventFaqItem[];
+  online_access_info: string | null;
+  is_sold_out: boolean;
+  is_cancelled: boolean;
   status: string;
   created_at: string;
   updated_at: string;
+};
+
+export type EventAgendaItem = {
+  time: string;
+  title: string;
+  description: string | null;
+};
+
+export type EventFaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type EventOrganizer = {
+  name: string;
+  slug: string;
+  logoUrl: string | null;
 };
 
 export type SearchEventFilters = {
@@ -161,6 +188,29 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
 
   if (error) throwQueryError("load event by slug", error);
   return (data as Event | null) ?? null;
+}
+
+/** Returns the published storefront belonging to the event owner, when available. */
+export async function getEventOrganizer(ownerId: string): Promise<EventOrganizer | null> {
+  if (!ownerId) return null;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("businesses")
+    .select("name, slug, logo_url")
+    .eq("owner_id", ownerId)
+    .eq("status", "published")
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throwQueryError("load event organizer", error);
+  if (!data) return null;
+
+  return {
+    name: data.name,
+    slug: data.slug,
+    logoUrl: data.logo_url,
+  };
 }
 
 /** Searches published events, optionally constrained by city, type, and a calendar date. */
