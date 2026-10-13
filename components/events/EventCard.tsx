@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { HomepageEvent } from "@/lib/data/homepage";
 
 type EventCardProps = {
@@ -32,14 +33,12 @@ export function EventCard({ event }: EventCardProps) {
         <h3 className="mt-3 text-lg font-semibold tracking-[-0.025em] text-ink">{event.title}</h3>
         {event.location && <p className="mt-2 text-sm text-ink/75">{event.location}</p>}
         {event.href ? (
-          <a
+          <Link
             href={event.href}
-            target="_blank"
-            rel="noreferrer"
             className="mt-4 inline-flex text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4 focus-visible:outline-2"
           >
-            Vedi dettagli <span aria-hidden="true">↗</span>
-          </a>
+            Vedi dettagli <span aria-hidden="true">→</span>
+          </Link>
         ) : (
           <span className="mt-4 inline-flex text-sm font-semibold text-ink/40" aria-disabled="true">
             Dettagli prossimamente

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { EventCard } from "@/components/events/EventCard";
 import type { HomepageEvent } from "@/lib/data/homepage";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -26,9 +27,9 @@ export function UpcomingEvents({ events, error = null }: UpcomingEventsProps) {
               Scopri mercati, workshop ed esperienze creative vicino a te.
             </p>
           </div>
-          <a href="/events" className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4">
+          <Link href="/events" className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4">
             Esplora tutti gli eventi <span aria-hidden="true">→</span>
-          </a>
+          </Link>
         </div>
 
         {error ? (

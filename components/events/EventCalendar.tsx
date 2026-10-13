@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { HomepageEvent } from "@/lib/data/homepage";
 
@@ -66,7 +68,7 @@ export function EventCalendar({ events }: { events: HomepageEvent[] }) {
 
     <article className="h-full min-h-60 rounded-xl border border-heather/15 bg-white/70 p-4 lg:min-h-0 xl:p-5">
       <div className="flex items-center justify-between gap-3"><h2 className="font-semibold tracking-[-0.03em] text-ink xl:text-lg">Eventi del {selectedLabel}</h2><span className="rounded-full bg-candy/15 px-2 py-1 text-[9px] font-bold text-[#a95d76] xl:text-[10px]">{selectedEvents.length} eventi</span></div>
-      {selectedEvents.length === 0 ? <p className="mt-8 text-center text-sm text-ink/55">Nessun evento pubblicato in questa data.</p> : <div className="mt-4 grid gap-3">{selectedEvents.map((event) => <div key={event.id} className="flex items-center gap-3"><div className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-sandstone/30"><span className="absolute inset-0 grid place-items-center text-base text-heather">✦</span></div><div className="min-w-0"><p className="truncate text-xs font-semibold text-ink">{event.title}</p><p className="mt-1 truncate text-[10px] text-ink/55">{formatTime(event.date)}{event.location ? ` · ${event.location}` : ""}</p></div>{event.href ? <a href={event.href} target="_blank" rel="noreferrer" className="ml-auto text-heather">›</a> : <span className="ml-auto text-ink/35">›</span>}</div>)}</div>}
+      {selectedEvents.length === 0 ? <p className="mt-8 text-center text-sm text-ink/55">Nessun evento pubblicato in questa data.</p> : <div className="mt-4 grid gap-3">{selectedEvents.map((event) => <div key={event.id} className="flex items-center gap-3"><div className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-sandstone/30">{event.imageUrl ? <Image src={event.imageUrl} alt="" fill sizes="40px" className="object-cover" /> : <span className="absolute inset-0 grid place-items-center text-base text-heather">✦</span>}</div><div className="min-w-0"><p className="truncate text-xs font-semibold text-ink">{event.title}</p><p className="mt-1 truncate text-[10px] text-ink/55">{formatTime(event.date)}{event.location ? ` · ${event.location}` : ""}</p></div>{event.href ? <Link href={event.href} aria-label={`Apri ${event.title}`} className="ml-auto text-heather">›</Link> : <span className="ml-auto text-ink/35">›</span>}</div>)}</div>}
       <button type="button" onClick={() => { setVisibleMonth(new Date(initialDate.getFullYear(), initialDate.getMonth(), 1)); setSelectedDate(events[0] ? new Date(events[0].date) : null); }} className="mt-4 flex min-h-8 w-full items-center justify-center rounded-full border border-heather/15 text-[10px] font-semibold text-heather">Vai al prossimo evento</button>
     </article>
   </>;

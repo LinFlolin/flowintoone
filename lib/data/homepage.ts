@@ -79,6 +79,7 @@ type EventRow = {
   location_name: string | null;
   type: string;
   external_url: string | null;
+  image_url: string | null;
 };
 
 export type EventDirectoryFilters = {
@@ -108,6 +109,14 @@ function reportQueryError(section: string, error: unknown) {
         : String(error);
 
   console.error(`[homepage:${section}] Supabase query failed: ${details}`);
+}
+
+function cleanEventFilter(value: string | undefined, maxLength = 100) {
+  return value
+    ?.trim()
+    .replace(/[%,()]/g, " ")
+    .replace(/\s+/g, " ")
+    .slice(0, maxLength) ?? "";
 }
 
 export async function getHomepageCategories(): Promise<
@@ -358,7 +367,7 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
     const supabase = createPublicSupabaseClient();
     const { data, error } = await supabase
       .from("events")
-      .select("id, title, slug, start_at, city, location_name, type, external_url")
+      .select("id, title, slug, start_at, city, location_name, type, external_url, image_url")
       .eq("status", "published")
       .gte("start_at", new Date().toISOString())
       .order("start_at", { ascending: true })
@@ -381,7 +390,8 @@ export async function getHomepageEvents(): Promise<HomepageSection<HomepageEvent
             : event.type.toLowerCase() === "event"
               ? "Evento"
               : event.type,
-        href: event.external_url,
+        href: `/events/${event.slug}`,
+        imageUrl: event.image_url,
       })),
       error: null,
     };
@@ -396,15 +406,15 @@ export async function getEventDirectory(
 ): Promise<EventDirectoryResult> {
   const pageSize = EVENT_DIRECTORY_PAGE_SIZE;
   const page = Math.max(1, filters.page ?? 1);
-  const query = filters.query?.trim() ?? "";
-  const category = filters.category?.trim() ?? "";
-  const city = filters.city?.trim() ?? "";
+  const query = cleanEventFilter(filters.query);
+  const category = cleanEventFilter(filters.category, 80);
+  const city = cleanEventFilter(filters.city, 120);
 
   try {
     const supabase = createPublicSupabaseClient();
     let request = supabase
       .from("events")
-      .select("id, title, slug, start_at, city, location_name, type, external_url", { count: "exact" })
+      .select("id, title, slug, start_at, city, location_name, type, external_url, image_url", { count: "exact" })
       .eq("status", "published")
       .gte("start_at", new Date().toISOString());
 
@@ -428,7 +438,8 @@ export async function getEventDirectory(
       location: [event.location_name, event.city].filter(Boolean).join(", ") || null,
       date: event.start_at,
       type: event.type.toLowerCase() === "market" ? "Mercato" : event.type.toLowerCase() === "workshop" ? "Workshop" : event.type.toLowerCase() === "exhibition" ? "Mostra" : event.type,
-      href: event.external_url,
+      href: `/events/${event.slug}`,
+      imageUrl: event.image_url,
     }));
 
     const categoryResult = await createPublicSupabaseClient()
@@ -440,7 +451,7 @@ export async function getEventDirectory(
 
     let calendarRequest = createPublicSupabaseClient()
       .from("events")
-      .select("id, title, slug, start_at, city, location_name, type, external_url")
+      .select("id, title, slug, start_at, city, location_name, type, external_url, image_url")
       .eq("status", "published")
       .gte("start_at", new Date().toISOString())
       .order("start_at", { ascending: true });
@@ -454,7 +465,8 @@ export async function getEventDirectory(
       location: [event.location_name, event.city].filter(Boolean).join(", ") || null,
       date: event.start_at,
       type: event.type.toLowerCase() === "market" ? "Mercato" : event.type.toLowerCase() === "workshop" ? "Workshop" : event.type.toLowerCase() === "exhibition" ? "Mostra" : event.type,
-      href: event.external_url,
+      href: `/events/${event.slug}`,
+      imageUrl: event.image_url,
     }));
 
     return { data: mapped, count: count ?? 0, page, pageSize, categories, calendarEvents, error: null };

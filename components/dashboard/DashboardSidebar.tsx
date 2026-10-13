@@ -97,6 +97,7 @@ function MobileDashboardMenu({
       <MobileMenuSection title="Il mio spazio">
         <Link href="/dashboard" onClick={closeMenu} className={itemClass("/dashboard")}><DashboardIcon name="home" className="size-4" />Dashboard<span className="ml-auto text-base text-ink/55">›</span></Link>
         {role === "artisan" && <Link href="/dashboard/storefront" onClick={closeMenu} className={itemClass("/dashboard/storefront")}><DashboardIcon name="storefront" className="size-4" />Il mio sito<span className="ml-auto text-base text-ink/55">›</span></Link>}
+        {role === "artisan" && <Link href="/dashboard/events" onClick={closeMenu} className={itemClass("/dashboard/events")}><DashboardIcon name="calendar" className="size-4" />I miei eventi<span className="ml-auto text-base text-ink/55">›</span></Link>}
         <Link href="/dashboard/profile" onClick={closeMenu} className={itemClass("/dashboard/profile")}><DashboardIcon name="profile" className="size-4" />Il mio profilo<span className="ml-auto text-base text-ink/55">›</span></Link>
         {role === "artisan" && <div className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/50"><DashboardIcon name="settings" className="size-4" />Impostazioni<span className="ml-auto text-[9px] uppercase tracking-wide text-ink/40">Presto</span></div>}
       </MobileMenuSection>
