@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { toggleBusinessFollowAction } from "@/app/artisans/actions";
+import { getAuthenticatedUser } from "@/lib/auth/session";
 import { createPublicSupabaseClient } from "@/lib/supabase/public";
 
 type StorefrontPageProps = {
@@ -135,6 +137,18 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
     .map(safeGalleryImageUrl)
     .filter((url): url is string => Boolean(url))
     .slice(0, 6);
+  const viewer = await getAuthenticatedUser();
+  let isFollowing = false;
+
+  if (viewer) {
+    const { data: follow } = await viewer.supabase
+      .from("business_follows")
+      .select("id")
+      .eq("user_id", viewer.userId)
+      .eq("business_id", storefront.id)
+      .maybeSingle();
+    isFollowing = Boolean(follow);
+  }
 
   return (
     <>
@@ -214,8 +228,26 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                 Scopri il loro lavoro.
               </h2>
 
+              {viewer ? (
+                <form action={toggleBusinessFollowAction} className="mt-6">
+                  <input type="hidden" name="businessId" value={storefront.id} />
+                  <input type="hidden" name="slug" value={storefront.slug} />
+                  <button
+                    type="submit"
+                    className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition-colors focus-visible:outline-2 ${isFollowing ? "border border-heather/25 bg-transparent text-ink hover:border-candy hover:text-candy" : "bg-candy text-white hover:bg-[#a95d76]"}`}
+                  >
+                    <span aria-hidden="true">{isFollowing ? "♥" : "♡"}</span>
+                    {isFollowing ? "Segui già" : "Segui questo creator"}
+                  </button>
+                </form>
+              ) : (
+                <Link href={`/login?next=${encodeURIComponent(`/artisans/${storefront.slug}`)}`} className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-heather/25 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather">
+                  Accedi per seguire
+                </Link>
+              )}
+
               {websiteUrl || instagramUrl || etsyUrl || publicEmail ? (
-                <div className="mt-6 grid gap-3">
+                <div className="mt-4 grid gap-3">
                   {etsyUrl && (
                     <a
                       href={etsyUrl}

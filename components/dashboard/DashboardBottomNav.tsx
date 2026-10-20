@@ -10,15 +10,15 @@ type DashboardBottomNavProps = {
 
 const ownerItems = [
   { label: "Dashboard", href: "/dashboard", icon: "home" as const },
-  { label: "Sito", href: "/dashboard/storefront", icon: "storefront" as const },
   { label: "Scopri", href: "/discover", icon: "discover" as const },
+  { label: "Seguiti", href: "/dashboard/following", icon: "following" as const },
   { label: "Account", href: "/dashboard/profile", icon: "profile" as const },
 ];
 
 const visitorItems = [
   { label: "Dashboard", href: "/dashboard", icon: "home" as const },
   { label: "Scopri", href: "/discover", icon: "discover" as const },
-  { label: "Home", href: "/", icon: "storefront" as const },
+  { label: "Seguiti", href: "/dashboard/following", icon: "following" as const },
   { label: "Account", href: "/dashboard/profile", icon: "profile" as const },
 ];
 
