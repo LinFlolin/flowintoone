@@ -6,6 +6,7 @@ import { cache } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { toggleBusinessFollowAction } from "@/app/artisans/actions";
+import { toggleProductFavoriteAction } from "@/app/products/actions";
 import { getAuthenticatedUser } from "@/lib/auth/session";
 import { createPublicSupabaseClient } from "@/lib/supabase/public";
 
@@ -30,6 +31,16 @@ type PublicStorefront = {
   instagram_url: string | null;
   etsy_url: string | null;
   contact_email: string | null;
+  category: { name: string } | { name: string }[] | null;
+};
+
+type PublicProduct = {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  price_cents: number | null;
+  image_url: string | null;
   category: { name: string } | { name: string }[] | null;
 };
 
@@ -103,6 +114,17 @@ function safeGalleryImageUrl(value: unknown) {
   }
 }
 
+function safeProductImageUrl(value: string | null) {
+  if (!value) return null;
+  try {
+    const imageUrl = new URL(value);
+    const supabaseUrl = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!);
+    return imageUrl.origin === supabaseUrl.origin ? imageUrl.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata({ params }: StorefrontPageProps): Promise<Metadata> {
   const { slug } = await params;
   const storefront = await getPublishedStorefront(slug);
@@ -149,6 +171,33 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
       .maybeSingle();
     isFollowing = Boolean(follow);
   }
+  const productClient = createPublicSupabaseClient();
+  const { data: productRows } = await productClient
+    .from("products")
+    .select("id, code, name, description, price_cents, image_url, category:product_categories(name)")
+    .eq("business_id", storefront.id)
+    .eq("status", "published")
+    .order("created_at", { ascending: false });
+  const products = (productRows ?? []) as PublicProduct[];
+  const favoriteIds = new Set<string>();
+  if (viewer && products.length > 0) {
+    const { data: favorites } = await viewer.supabase
+      .from("product_favorites")
+      .select("product_id")
+      .eq("user_id", viewer.userId)
+      .in("product_id", products.map((product) => product.id));
+    (favorites ?? []).forEach((favorite) => favoriteIds.add(String(favorite.product_id)));
+  }
+  const productGroups = Array.from(
+    products.reduce((groups, product) => {
+      const category = Array.isArray(product.category) ? product.category[0] : product.category;
+      const key = category?.name || "In evidenza";
+      const current = groups.get(key) ?? [];
+      current.push(product);
+      groups.set(key, current);
+      return groups;
+    }, new Map<string, PublicProduct[]>()),
+  );
 
   return (
     <>
@@ -311,6 +360,45 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
             </p>
           </div>
         </section>
+
+        {productGroups.length > 0 && (
+          <section className="min-w-0 px-4 pt-14 sm:px-8 sm:pt-28 lg:px-10">
+            <div className="mx-auto min-w-0 max-w-[1100px]">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">Il catalogo</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl">Cose fatte per durare<span className="text-candy">.</span></h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-ink/65">Scopri i prodotti di {storefront.name} e salva i tuoi preferiti.</p>
+              <div className="mt-9 grid gap-10">
+                {productGroups.map(([category, categoryProducts]) => (
+                  <div key={category}>
+                    <h3 className="text-xl font-semibold tracking-[-0.03em] text-ink">{category}</h3>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      {categoryProducts.map((product) => {
+                        const imageUrl = safeProductImageUrl(product.image_url);
+                        const isFavorite = favoriteIds.has(product.id);
+                        return (
+                          <article key={product.id} className="overflow-hidden rounded-2xl border border-heather/15 bg-white/75">
+                            <div className="relative aspect-[4/3] overflow-hidden bg-sandstone/30">
+                              {imageUrl ? <Image src={imageUrl} alt={product.name} fill unoptimized sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" /> : <div className="absolute inset-0 grid place-items-center text-4xl text-heather/40">✦</div>}
+                            </div>
+                            <div className="p-4">
+                              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-heather">{product.code}</p>
+                              <h4 className="mt-1 text-lg font-semibold text-ink">{product.name}</h4>
+                              {product.description && <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink/65">{product.description}</p>}
+                              <div className="mt-4 flex items-center justify-between gap-3">
+                                <span className="text-sm font-semibold text-ink">{product.price_cents === null ? "Prezzo su richiesta" : new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(product.price_cents / 100)}</span>
+                                {viewer ? <form action={toggleProductFavoriteAction}><input type="hidden" name="productId" value={product.id} /><input type="hidden" name="businessSlug" value={storefront.slug} /><button type="submit" aria-label={isFavorite ? `Rimuovi ${product.name} dai preferiti` : `Aggiungi ${product.name} ai preferiti`} className={`grid size-9 place-items-center rounded-full border text-lg transition-colors ${isFavorite ? "border-candy bg-candy/10 text-candy" : "border-heather/25 text-ink/55 hover:border-candy hover:text-candy"}`}>{isFavorite ? "♥" : "♡"}</button></form> : <Link href={`/login?next=${encodeURIComponent(`/artisans/${storefront.slug}`)}`} className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4">Accedi per salvare</Link>}
+                              </div>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {(storefront.materials || storefront.creative_process) && (
           <section className="min-w-0 px-4 pt-12 sm:px-8 sm:pt-20 lg:px-10">
