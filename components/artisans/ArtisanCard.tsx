@@ -9,7 +9,7 @@ type ArtisanCardProps = {
 export function ArtisanCard({ artisan }: ArtisanCardProps) {
   return (
     <Link
-      href={`/artisans/${artisan.slug}`}
+      href={`/${artisan.websitePurpose === "events" ? "organizers" : "artisans"}/${artisan.slug}`}
       className="group overflow-hidden rounded-2xl border border-heather/15 bg-white/55 transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2"
       aria-label={`Visita il sito di ${artisan.businessName}`}
     >

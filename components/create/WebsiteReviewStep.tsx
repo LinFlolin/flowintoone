@@ -37,7 +37,7 @@ export function WebsiteReviewStep({ error }: { error: string | null }) {
           <div><dt className="text-xs font-bold uppercase tracking-[0.12em] text-ink/45">Scopo</dt><dd className="mt-1 font-semibold capitalize">{flow.purpose}</dd></div>
           <div><dt className="text-xs font-bold uppercase tracking-[0.12em] text-ink/45">Design</dt><dd className="mt-1 font-semibold capitalize">{flow.designModel}</dd></div>
           <div><dt className="text-xs font-bold uppercase tracking-[0.12em] text-ink/45">Nome del sito</dt><dd className="mt-1 font-semibold">{details.name}</dd></div>
-          <div><dt className="text-xs font-bold uppercase tracking-[0.12em] text-ink/45">URL pubblico</dt><dd className="mt-1 font-semibold text-heather">/artisans/{details.slug}</dd></div>
+          <div><dt className="text-xs font-bold uppercase tracking-[0.12em] text-ink/45">URL pubblico</dt><dd className="mt-1 font-semibold text-heather">/{flow.purpose === "events" ? "organizers" : "artisans"}/{details.slug}</dd></div>
           <div className="sm:col-span-2"><dt className="text-xs font-bold uppercase tracking-[0.12em] text-ink/45">Descrizione</dt><dd className="mt-1 leading-6 text-ink/70">{details.description}</dd></div>
         </dl>
         <form action={createWebsiteAction} className="mt-8">

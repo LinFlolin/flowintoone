@@ -32,9 +32,15 @@ inside `raw_user_meta_data`, and authenticated users can update their own name f
 `/dashboard/profile`.
 
 The creation-flow migration `supabase/migrations/20260920100000_creation_roles_and_purposes.sql`
-adds the owner-selected `profiles.role` (`visitor` or `artisan`) and the additive
+adds the owner-selected `profiles.role` (`visitor`, `artisan`, or `organizer`) and the additive
 `businesses.website_purpose` (`shop` or `events`) and `businesses.design_model` fields.
 Apply it once after the existing dashboard/storefront migrations.
+
+The organizer migration `supabase/migrations/20261021120000_organizer_profiles.sql`
+extends roles with `organizer`, supports custom storefront category text, and adds
+organizer biography, past events, event regions, categorized gallery metadata, and
+partner/sponsor links. Apply it after the creation-flow migrations before using the
+organizer editor.
 
 ## 2. Environment variables
 

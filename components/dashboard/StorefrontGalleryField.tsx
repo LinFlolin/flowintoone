@@ -14,6 +14,7 @@ type SelectedPreview = {
 
 type StorefrontGalleryFieldProps = {
   imageUrls: string[];
+  galleryItems?: Array<{ url: string; region: string | null }>;
   businessName: string;
 };
 
@@ -36,6 +37,7 @@ function validateFiles(files: File[], availableSlots: number) {
 
 export function StorefrontGalleryField({
   imageUrls,
+  galleryItems = [],
   businessName,
 }: StorefrontGalleryFieldProps) {
   const [removedUrls, setRemovedUrls] = useState<string[]>([]);
@@ -104,6 +106,7 @@ export function StorefrontGalleryField({
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {imageUrls.map((url, index) => {
             const removed = removedSet.has(url);
+            const region = galleryItems.find((item) => item.url === url)?.region ?? "";
             return (
               <div
                 key={url}
@@ -129,6 +132,10 @@ export function StorefrontGalleryField({
                 >
                   {removed ? "Keep image" : "Remove image"}
                 </button>
+                <input type="hidden" name="galleryItemUrl" value={url} />
+                <label className="block px-3 pb-3 text-[10px] font-semibold text-ink/65">Regione
+                  <input type="text" name="galleryItemRegion" defaultValue={region} maxLength={120} placeholder="es. Toscana" className="mt-1 min-h-8 w-full rounded-lg border border-heather/15 bg-white px-2 text-[11px] font-normal text-ink" />
+                </label>
               </div>
             );
           })}

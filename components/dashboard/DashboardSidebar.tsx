@@ -10,17 +10,22 @@ import { DashboardIcon } from "@/components/dashboard/DashboardIcon";
 import { DASHBOARD_NAVIGATION } from "@/components/dashboard/dashboardConfig";
 
 type DashboardSidebarProps = {
-  role: "visitor" | "artisan";
+  role: "visitor" | "artisan" | "organizer";
+  websitePurpose?: string | null;
   userName?: string;
 };
 
-export function DashboardSidebar({ role, userName = "My account" }: DashboardSidebarProps) {
+export function DashboardSidebar({ role, websitePurpose, userName = "My account" }: DashboardSidebarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [mobileView, setMobileView] = useState<"menu" | "discover">("menu");
   const groups = ["Website", "Community", "Support"] as const;
 
-  const visibleItems = DASHBOARD_NAVIGATION.filter((item) => role === "artisan" || !item.ownerOnly);
+  const canManageWebsite = role === "artisan" || role === "organizer";
+  const canManageProducts = role === "artisan" && websitePurpose !== "events";
+  const visibleItems = DASHBOARD_NAVIGATION.filter((item) =>
+    (!item.ownerOnly || canManageWebsite) && (!item.productsOnly || canManageProducts),
+  );
 
   return (
     <aside aria-label="Navigazione dashboard" className="relative h-0 border-0 bg-transparent p-0 lg:h-auto lg:min-h-[calc(100vh-8.5rem)] lg:rounded-2xl lg:border-0 lg:bg-transparent lg:p-0">
@@ -52,7 +57,7 @@ export function DashboardSidebar({ role, userName = "My account" }: DashboardSid
           <button type="button" onClick={() => { setIsOpen(false); setMobileView("menu"); }} aria-label="Chiudi navigazione dashboard" className="grid size-9 place-items-center rounded-full border border-heather/60 text-xl font-light text-ink">×</button>
         </div>
         {mobileView === "menu" ? (
-          <MobileDashboardMenu userName={userName} pathname={pathname} role={role} onDiscover={() => setMobileView("discover")} closeMenu={() => setIsOpen(false)} />
+          <MobileDashboardMenu userName={userName} pathname={pathname} role={role} websitePurpose={websitePurpose} onDiscover={() => setMobileView("discover")} closeMenu={() => setIsOpen(false)} />
         ) : (
           <MobileDiscoverMenu queryHref="/discover" back={() => setMobileView("menu")} closeMenu={() => setIsOpen(false)} />
         )}
@@ -69,12 +74,14 @@ function MobileDashboardMenu({
   userName,
   pathname,
   role,
+  websitePurpose,
   onDiscover,
   closeMenu,
 }: {
   userName: string;
   pathname: string;
-  role: "visitor" | "artisan";
+  role: "visitor" | "artisan" | "organizer";
+  websitePurpose?: string | null;
   onDiscover: () => void;
   closeMenu: () => void;
 }) {
@@ -91,15 +98,14 @@ function MobileDashboardMenu({
         <Link href="/dashboard" onClick={closeMenu} className={itemClass("/dashboard")}><DashboardIcon name="home" className="size-4" />Home<span className="ml-auto text-base text-ink/55">›</span></Link>
         <button type="button" onClick={onDiscover} className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-left text-xs font-semibold text-ink/80 hover:bg-heather/10"><DashboardIcon name="discover" className="size-4" />Scopri<span className="ml-auto text-base text-ink/55">›</span></button>
         <Link href="/dashboard/following" onClick={closeMenu} className={itemClass("/dashboard/following")}><DashboardIcon name="following" className="size-4" />Seguiti<span className="ml-auto text-base text-ink/55">›</span></Link>
-        <Link href="/dashboard/events" onClick={closeMenu} className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/80 hover:bg-heather/10"><DashboardIcon name="calendar" className="size-4" />Eventi<span className="ml-auto text-base text-ink/55">›</span></Link>
         <div className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/50"><DashboardIcon name="profile" className="size-4" />Chi siamo<span className="ml-auto rounded-full bg-heather/10 px-2 py-1 text-[9px] text-heather">Prossimamente</span></div>
       </div>
 
       <MobileMenuSection title="Il mio spazio">
         <Link href="/dashboard" onClick={closeMenu} className={itemClass("/dashboard")}><DashboardIcon name="home" className="size-4" />Dashboard<span className="ml-auto text-base text-ink/55">›</span></Link>
-        {role === "artisan" && <Link href="/dashboard/storefront" onClick={closeMenu} className={itemClass("/dashboard/storefront")}><DashboardIcon name="storefront" className="size-4" />Il mio sito<span className="ml-auto text-base text-ink/55">›</span></Link>}
-        {role === "artisan" && <Link href="/dashboard/products" onClick={closeMenu} className={itemClass("/dashboard/products")}><DashboardIcon name="bookmark" className="size-4" />I miei prodotti<span className="ml-auto text-base text-ink/55">›</span></Link>}
-        {role === "artisan" && <Link href="/dashboard/events" onClick={closeMenu} className={itemClass("/dashboard/events")}><DashboardIcon name="calendar" className="size-4" />I miei eventi<span className="ml-auto text-base text-ink/55">›</span></Link>}
+        {(role === "artisan" || role === "organizer") && <Link href="/dashboard/storefront" onClick={closeMenu} className={itemClass("/dashboard/storefront")}><DashboardIcon name="storefront" className="size-4" />Il mio sito<span className="ml-auto text-base text-ink/55">›</span></Link>}
+        {role === "artisan" && websitePurpose !== "events" && <Link href="/dashboard/products" onClick={closeMenu} className={itemClass("/dashboard/products")}><DashboardIcon name="bookmark" className="size-4" />I miei prodotti<span className="ml-auto text-base text-ink/55">›</span></Link>}
+        {(role === "artisan" || role === "organizer") && <Link href="/dashboard/events" onClick={closeMenu} className={itemClass("/dashboard/events")}><DashboardIcon name="calendar" className="size-4" />I miei eventi<span className="ml-auto text-base text-ink/55">›</span></Link>}
         <Link href="/dashboard/profile" onClick={closeMenu} className={itemClass("/dashboard/profile")}><DashboardIcon name="profile" className="size-4" />Il mio profilo<span className="ml-auto text-base text-ink/55">›</span></Link>
         <Link href="/dashboard/favorites" onClick={closeMenu} className={itemClass("/dashboard/favorites")}><DashboardIcon name="bookmark" className="size-4" />I miei preferiti<span className="ml-auto text-base text-ink/55">›</span></Link>
         {role === "artisan" && <div className="flex min-h-10 items-center gap-3 rounded-xl px-3 text-xs font-semibold text-ink/50"><DashboardIcon name="settings" className="size-4" />Impostazioni<span className="ml-auto text-[9px] uppercase tracking-wide text-ink/40">Presto</span></div>}

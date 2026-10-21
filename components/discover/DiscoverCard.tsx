@@ -9,7 +9,7 @@ type DiscoverCardProps = {
 export function DiscoverCard({ artisan }: DiscoverCardProps) {
   return (
     <article className="group overflow-hidden rounded-2xl border border-heather/15 bg-white/65 transition-transform duration-300 hover:-translate-y-1">
-      <Link href={`/artisans/${artisan.slug}`} className="block focus-visible:outline-2" aria-label={`Vedi il sito di ${artisan.businessName}`}>
+      <Link href={`/${artisan.websitePurpose === "events" ? "organizers" : "artisans"}/${artisan.slug}`} className="block focus-visible:outline-2" aria-label={`Vedi il sito di ${artisan.businessName}`}>
         <div className="relative aspect-[4/3] overflow-hidden bg-sandstone/30">
           <Image
             src={artisan.imageSrc}
@@ -43,7 +43,7 @@ export function DiscoverCard({ artisan }: DiscoverCardProps) {
           <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink/70">{artisan.description}</p>
         )}
         <Link
-          href={`/artisans/${artisan.slug}`}
+          href={`/${artisan.websitePurpose === "events" ? "organizers" : "artisans"}/${artisan.slug}`}
           className="mt-5 inline-flex text-xs font-semibold text-ink underline decoration-heather/35 underline-offset-4 transition-colors hover:text-heather focus-visible:outline-2"
         >
           Vedi il sito <span aria-hidden="true">↗</span>

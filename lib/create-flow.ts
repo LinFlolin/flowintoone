@@ -11,6 +11,7 @@ export type WebsiteDetails = {
   materials: string;
   creativeProcess: string;
   categoryId: string;
+  categoryText: string;
   city: string;
   country: string;
   websiteUrl: string;
@@ -18,6 +19,9 @@ export type WebsiteDetails = {
   etsyUrl: string;
   contactEmail: string;
   slug: string;
+  organizerBio: string;
+  pastEvents: string;
+  eventRegions: string;
 };
 
 export type CreateFlowState = {
@@ -34,6 +38,7 @@ export const emptyWebsiteDetails: WebsiteDetails = {
   materials: "",
   creativeProcess: "",
   categoryId: "",
+  categoryText: "",
   city: "",
   country: "",
   websiteUrl: "",
@@ -41,6 +46,9 @@ export const emptyWebsiteDetails: WebsiteDetails = {
   etsyUrl: "",
   contactEmail: "",
   slug: "",
+  organizerBio: "",
+  pastEvents: "",
+  eventRegions: "",
 };
 
 export const initialCreateFlowState: CreateFlowState = {

@@ -10,6 +10,7 @@ const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export async function toggleBusinessFollowAction(formData: FormData) {
   const businessId = String(formData.get("businessId") ?? "").trim();
   const slug = String(formData.get("slug") ?? "").trim();
+  const profilePath = String(formData.get("profilePath") ?? "artisans").trim() === "organizers" ? "organizers" : "artisans";
 
   if (!UUID_PATTERN.test(businessId) || !SLUG_PATTERN.test(slug) || slug.length > 120) {
     throw new Error("Creator non valido.");
@@ -48,5 +49,7 @@ export async function toggleBusinessFollowAction(formData: FormData) {
   }
 
   revalidatePath(`/artisans/${slug}`);
+  revalidatePath(`/organizers/${slug}`);
+  revalidatePath(`/${profilePath}/${slug}`);
   revalidatePath("/dashboard/following");
 }

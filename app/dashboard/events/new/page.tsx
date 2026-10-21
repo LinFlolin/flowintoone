@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { EventForm } from "@/components/events/EventForm";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 
 export default async function NewEventPage() {
-  await requireArtisan();
+  await requireCreator();
   return (
     <section className="min-w-0 w-full py-2 sm:py-8">
       <Link href="/dashboard/events" className="text-sm font-semibold text-heather underline decoration-heather/30 underline-offset-4">← Torna ai miei eventi</Link>

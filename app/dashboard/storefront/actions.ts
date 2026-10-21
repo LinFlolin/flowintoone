@@ -3,7 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 import {
   processStorefrontImage,
   STOREFRONT_IMAGE_BUCKET,
@@ -102,6 +102,23 @@ function normalizeOptionalEtsyUrl(value: string) {
   return normalized;
 }
 
+function parsePartners(value: string) {
+  return value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 12)
+    .map((line) => {
+      const [name, logoUrl = "", websiteUrl = ""] = line.split("|").map((part) => part.trim());
+      return {
+        name: name.slice(0, 120),
+        logo_url: normalizeOptionalUrl(logoUrl).value,
+        website_url: normalizeOptionalUrl(websiteUrl).value,
+      };
+    })
+    .filter((partner) => partner.name.length > 0);
+}
+
 function storefrontRedirect(type: "error" | "message", message: string): never {
   const params = new URLSearchParams({ [type]: message });
   redirect(`/dashboard/storefront?${params.toString()}`);
@@ -176,7 +193,7 @@ async function uploadImages(
 }
 
 export async function saveStorefrontAction(formData: FormData) {
-  const { supabase, userId } = await requireArtisan();
+  const { supabase, userId } = await requireCreator();
   const hasValidAuthenticatedUserId =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
       userId,
@@ -195,6 +212,7 @@ export async function saveStorefrontAction(formData: FormData) {
   const materials = getField(formData, "materials");
   const creativeProcess = getField(formData, "creativeProcess");
   const categoryId = getField(formData, "categoryId");
+  const categoryText = getField(formData, "categoryText");
   const city = getField(formData, "city");
   const country = getField(formData, "country");
   const contactEmail = getField(formData, "contactEmail").toLowerCase();
@@ -202,9 +220,17 @@ export async function saveStorefrontAction(formData: FormData) {
   const instagram = normalizeOptionalUrl(getField(formData, "instagramUrl"));
   const etsy = normalizeOptionalEtsyUrl(getField(formData, "etsyUrl"));
   const galleryFiles = getOptionalFiles(formData, "galleryImages");
+  const galleryRegion = getField(formData, "galleryRegion");
+  const organizerBio = getField(formData, "organizerBio");
+  const pastEvents = getField(formData, "pastEvents");
+  const eventRegions = getField(formData, "eventRegions");
+  const partnersText = getField(formData, "partners");
   const requestedGalleryRemovals = new Set(
     formData.getAll("removeGalleryUrl").map((value) => String(value)),
   );
+  const galleryItemUrls = formData.getAll("galleryItemUrl").map((value) => String(value));
+  const galleryItemRegions = formData.getAll("galleryItemRegion").map((value) => String(value).trim().slice(0, 120));
+  const submittedGalleryRegions = new Map(galleryItemUrls.map((url, index) => [url, galleryItemRegions[index] || null]));
 
   if (name.length < 2 || name.length > 100) {
     storefrontRedirect("error", "Il nome dell'attività deve contenere da 2 a 100 caratteri.");
@@ -212,11 +238,21 @@ export async function saveStorefrontAction(formData: FormData) {
   if (!categoryId) {
     storefrontRedirect("error", "Seleziona una categoria.");
   }
+  if (categoryId === "__custom__" && (categoryText.length < 1 || categoryText.length > 120)) {
+    storefrontRedirect("error", "Specifica una categoria personalizzata.");
+  }
+  if (categoryId !== "__custom__" && categoryText) {
+    storefrontRedirect("error", "La categoria personalizzata non è valida.");
+  }
   if (
     tagline.length > 160 ||
     description.length > 4000 ||
     materials.length > 2000 ||
     creativeProcess.length > 3000 ||
+    organizerBio.length > 4000 ||
+    pastEvents.length > 5000 ||
+    eventRegions.length > 1000 ||
+    galleryRegion.length > 120 ||
     city.length > 120 ||
     country.length > 120
   ) {
@@ -246,23 +282,25 @@ export async function saveStorefrontAction(formData: FormData) {
     storefrontRedirect("error", "A storefront gallery can contain up to six images.");
   }
 
-  const { data: category, error: categoryError } = await supabase
-    .from("categories")
-    .select("id")
-    .eq("id", categoryId)
-    .eq("is_active", true)
-    .maybeSingle();
+  if (categoryId !== "__custom__") {
+    const { data: category, error: categoryError } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("id", categoryId)
+      .eq("is_active", true)
+      .maybeSingle();
 
-  if (categoryError) {
-    logSupabaseError("category-read", categoryError, {
-      authenticated: true,
-      categoryIdPresent: Boolean(categoryId),
-    });
-    storefrontRedirect("error", "Non è stato possibile verificare la categoria selezionata.");
-  }
+    if (categoryError) {
+      logSupabaseError("category-read", categoryError, {
+        authenticated: true,
+        categoryIdPresent: Boolean(categoryId),
+      });
+      storefrontRedirect("error", "Non è stato possibile verificare la categoria selezionata.");
+    }
 
-  if (!category) {
-    storefrontRedirect("error", "La categoria selezionata non è disponibile.");
+    if (!category) {
+      storefrontRedirect("error", "La categoria selezionata non è disponibile.");
+    }
   }
 
   let existingStatus: string | null = null;
@@ -271,11 +309,12 @@ export async function saveStorefrontAction(formData: FormData) {
   let oldLogoUrl: string | null = null;
   let oldCoverUrl: string | null = null;
   let oldGalleryImageUrls: string[] = [];
+  let oldGalleryItems: Array<{ url: string; region: string | null }> = [];
 
   if (submittedBusinessId) {
     const { data: existingBusiness, error: existingError } = await supabase
       .from("businesses")
-      .select("id, status, slug, name, logo_url, cover_image_url, gallery_image_urls")
+      .select("id, status, slug, name, logo_url, cover_image_url, gallery_image_urls, gallery_items")
       .eq("id", submittedBusinessId)
       .eq("owner_id", userId)
       .maybeSingle();
@@ -302,6 +341,15 @@ export async function saveStorefrontAction(formData: FormData) {
           (url): url is string => typeof url === "string" && url.length > 0,
         )
       : [];
+    oldGalleryItems = Array.isArray(existingBusiness.gallery_items)
+      ? existingBusiness.gallery_items.filter(
+          (item): item is { url: string; region: string | null } => Boolean(item && typeof item.url === "string"),
+        )
+      : oldGalleryImageUrls.map((url) => ({ url, region: null }));
+    oldGalleryItems = oldGalleryItems.map((item) => ({
+      ...item,
+      region: submittedGalleryRegions.has(item.url) ? submittedGalleryRegions.get(item.url) ?? null : item.region,
+    }));
   } else if (intent === "publish") {
     storefrontRedirect("error", "Crea la bozza prima di pubblicarla.");
   }
@@ -310,6 +358,7 @@ export async function saveStorefrontAction(formData: FormData) {
     requestedGalleryRemovals.has(url),
   );
   const keptGalleryUrls = oldGalleryImageUrls.filter((url) => !requestedGalleryRemovals.has(url));
+  const keptGalleryItems = oldGalleryItems.filter((item) => !requestedGalleryRemovals.has(item.url));
 
   if (keptGalleryUrls.length + galleryFiles.length > 6) {
     storefrontRedirect("error", "A storefront gallery can contain up to six images.");
@@ -334,7 +383,7 @@ export async function saveStorefrontAction(formData: FormData) {
     `maker-${userId.replaceAll("-", "").slice(0, 8)}`;
   const willBePublished = intent === "publish" || existingStatus === "published";
 
-  if (willBePublished && (!description || !city || !country)) {
+  if (willBePublished && (!description || !city || !country || (!categoryId && !categoryText))) {
     storefrontRedirect(
       "error",
       "Add a description, city, and country before publishing your storefront.",
@@ -348,13 +397,18 @@ export async function saveStorefrontAction(formData: FormData) {
     description: description || null,
     materials: materials || null,
     creative_process: creativeProcess || null,
-    category_id: categoryId,
+    category_id: categoryId === "__custom__" ? null : categoryId,
+    category_text: categoryId === "__custom__" ? categoryText : null,
     city: city || null,
     country: country || null,
     website_url: website.value,
     instagram_url: instagram.value,
     etsy_url: etsy.value,
     contact_email: contactEmail || null,
+    organizer_bio: organizerBio || null,
+    past_events: pastEvents || null,
+    event_regions: eventRegions || null,
+    partners: parsePartners(partnersText),
   };
 
   let businessId = submittedBusinessId;
@@ -408,10 +462,15 @@ export async function saveStorefrontAction(formData: FormData) {
     ...keptGalleryUrls,
     ...uploadedGallery.map((image) => image.publicUrl),
   ];
+  const finalGalleryItems = [
+    ...keptGalleryItems.filter((item) => finalGalleryUrls.includes(item.url)),
+    ...uploadedGallery.map((image) => ({ url: image.publicUrl, region: galleryRegion || null })),
+  ];
   const imageValues = {
     ...(uploadedLogo ? { logo_url: uploadedLogo.publicUrl } : {}),
     ...(uploadedCover ? { cover_image_url: uploadedCover.publicUrl } : {}),
     gallery_image_urls: finalGalleryUrls,
+    gallery_items: finalGalleryItems,
   };
   const needsUpdate = !isNewStorefront || uploadedImages.length > 0;
 
@@ -473,8 +532,10 @@ export async function saveStorefrontAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/storefront");
   revalidatePath(`/artisans/${slug}`);
+  revalidatePath(`/organizers/${slug}`);
   if (existingSlug && existingSlug !== slug) {
     revalidatePath(`/artisans/${existingSlug}`);
+    revalidatePath(`/organizers/${existingSlug}`);
   }
 
   if (isNewStorefront) {

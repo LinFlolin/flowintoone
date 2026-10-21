@@ -54,6 +54,7 @@ export type EventOrganizer = {
   name: string;
   slug: string;
   logoUrl: string | null;
+  websitePurpose: string | null;
 };
 
 export type SearchEventFilters = {
@@ -197,7 +198,7 @@ export async function getEventOrganizer(ownerId: string): Promise<EventOrganizer
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("businesses")
-    .select("name, slug, logo_url")
+    .select("name, slug, logo_url, website_purpose")
     .eq("owner_id", ownerId)
     .eq("status", "published")
     .limit(1)
@@ -210,6 +211,7 @@ export async function getEventOrganizer(ownerId: string): Promise<EventOrganizer
     name: data.name,
     slug: data.slug,
     logoUrl: data.logo_url,
+    websitePurpose: data.website_purpose,
   };
 }
 

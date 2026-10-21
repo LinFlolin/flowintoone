@@ -8,6 +8,7 @@ type HeaderProfile = {
 
 type HeaderStorefront = {
   slug: string;
+  website_purpose: string | null;
 };
 
 export async function Header({ dashboardMode = false }: { dashboardMode?: boolean } = {}) {
@@ -24,10 +25,10 @@ export async function Header({ dashboardMode = false }: { dashboardMode?: boolea
       .select("full_name")
       .eq("id", user.userId)
       .maybeSingle(),
-    role === "artisan"
+    role === "artisan" || role === "organizer"
       ? user.supabase
       .from("businesses")
-      .select("slug")
+        .select("slug, website_purpose")
       .eq("owner_id", user.userId)
       .eq("status", "published")
       .limit(1)
@@ -43,7 +44,7 @@ export async function Header({ dashboardMode = false }: { dashboardMode?: boolea
       dashboardMode={dashboardMode}
       user={{
         name: profile?.full_name?.trim() || "My account",
-        storefrontHref: storefront ? `/artisans/${storefront.slug}` : null,
+        storefrontHref: storefront ? `/${storefront.website_purpose === "events" ? "organizers" : "artisans"}/${storefront.slug}` : null,
       }}
     />
   );

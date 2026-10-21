@@ -16,6 +16,7 @@ export type HomepageBusiness = {
   country: string | null;
   description: string | null;
   imageSrc: string;
+  websitePurpose: string | null;
 };
 
 export type HomepageEvent = {
@@ -67,6 +68,8 @@ type BusinessRow = {
   description: string | null;
   cover_image_url: string | null;
   logo_url: string | null;
+  website_purpose: string | null;
+  category_text: string | null;
   category: { name: string; slug: string } | { name: string; slug: string }[] | null;
 };
 
@@ -165,8 +168,8 @@ export async function getHomepageBusinesses(filters: {
       .replace(/\s+/g, " ")
       .slice(0, 80);
     const select = categorySlug
-      ? "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories!inner(name, slug)"
-      : "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories(name, slug)";
+      ? "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, website_purpose, category_text, category:categories!inner(name, slug)"
+      : "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, website_purpose, category_text, category:categories(name, slug)";
 
     let businessesQuery = supabase
       .from("businesses")
@@ -209,11 +212,12 @@ export async function getHomepageBusinesses(filters: {
           id: business.id,
           slug: business.slug,
           businessName: business.name,
-          category: relatedCategory?.name ?? null,
+          category: relatedCategory?.name ?? business.category_text ?? null,
           city: business.city,
           country: business.country,
           description: business.tagline ?? business.description,
           imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
+          websitePurpose: business.website_purpose,
         };
       }),
       error: null,
@@ -284,8 +288,8 @@ export async function getPublishedArtisans(
     }
 
     const select = categorySlug
-      ? "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories!inner(name, slug)"
-      : "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, category:categories(name, slug)";
+      ? "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, website_purpose, category_text, category:categories!inner(name, slug)"
+      : "id, name, slug, city, country, tagline, description, cover_image_url, logo_url, website_purpose, category_text, category:categories(name, slug)";
     const sort = filters.sort === "name" ? "name" : "created_at";
     let artisansQuery = supabase
       .from("businesses")
@@ -338,11 +342,12 @@ export async function getPublishedArtisans(
           id: business.id,
           slug: business.slug,
           businessName: business.name,
-          category: relatedCategory?.name ?? null,
+          category: relatedCategory?.name ?? business.category_text ?? null,
           city: business.city,
           country: business.country,
           description: business.tagline ?? business.description,
           imageSrc: business.cover_image_url ?? "/images/storefront-fallback.svg",
+          websitePurpose: business.website_purpose,
         };
       }),
       count: count ?? 0,

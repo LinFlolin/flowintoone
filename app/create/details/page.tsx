@@ -1,8 +1,8 @@
 import { WebsiteDetailsStep } from "@/components/create/WebsiteDetailsStep";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 
 export default async function CreateDetailsPage() {
-  const { supabase } = await requireArtisan();
+  const { supabase } = await requireCreator();
   const { data } = await supabase
     .from("categories")
     .select("id, name")

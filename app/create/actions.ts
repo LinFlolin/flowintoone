@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 import { normalizeStorefrontSlug } from "@/lib/storefront/slug";
 
 function field(formData: FormData, name: string) {
@@ -35,13 +35,14 @@ function fail(message: string): never {
 }
 
 export async function createWebsiteAction(formData: FormData) {
-  const { supabase, userId } = await requireArtisan();
+  const { supabase, userId } = await requireCreator();
   const purpose = field(formData, "purpose");
   const designModel = field(formData, "designModel");
   const name = field(formData, "name");
   const slug = normalizeStorefrontSlug(field(formData, "slug") || name);
   const description = field(formData, "description");
   const categoryId = field(formData, "categoryId");
+  const categoryText = field(formData, "categoryText");
   const city = field(formData, "city");
   const country = field(formData, "country");
   const contactEmail = field(formData, "contactEmail").toLowerCase();
@@ -57,19 +58,23 @@ export async function createWebsiteAction(formData: FormData) {
   if (!slug || slug.length > 80 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) fail("Inserisci uno slug valido per l'URL pubblico.");
   if (!description || description.length > 4000) fail("Aggiungi una descrizione del tuo lavoro.");
   if (!categoryId || !city || !country) fail("Completa i campi categoria, città e Paese.");
+  if (categoryId === "__custom__" && (categoryText.length < 1 || categoryText.length > 120)) fail("Specifica una categoria valida.");
+  if (categoryId !== "__custom__" && categoryText) fail("La categoria personalizzata non è valida.");
   if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) fail("Inserisci un'email di contatto valida.");
   if ([field(formData, "websiteUrl"), field(formData, "instagramUrl"), field(formData, "etsyUrl")].some((value) => value.length > 2048)) fail("I link devono contenere al massimo 2.048 caratteri.");
   if (field(formData, "websiteUrl") && !normalizeUrl(field(formData, "websiteUrl"))) fail("Enter a valid website URL.");
   if (field(formData, "instagramUrl") && !normalizeUrl(field(formData, "instagramUrl"))) fail("Enter a valid Instagram URL.");
   if (field(formData, "etsyUrl") && !normalizeEtsyUrl(field(formData, "etsyUrl"))) fail("Enter a valid Etsy shop URL.");
 
-  const { data: category, error: categoryError } = await supabase
-    .from("categories")
-    .select("id")
-    .eq("id", categoryId)
-    .eq("is_active", true)
-    .maybeSingle();
-  if (categoryError || !category) fail("La categoria selezionata non è disponibile.");
+  if (categoryId !== "__custom__") {
+    const { data: category, error: categoryError } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("id", categoryId)
+      .eq("is_active", true)
+      .maybeSingle();
+    if (categoryError || !category) fail("La categoria selezionata non è disponibile.");
+  }
 
   // The product currently supports one website per artisan. This guard also
   // makes a double-click or repeated submission idempotent.
@@ -86,7 +91,8 @@ export async function createWebsiteAction(formData: FormData) {
     name,
     slug,
     description,
-    category_id: categoryId,
+    category_id: categoryId === "__custom__" ? null : categoryId,
+    category_text: categoryId === "__custom__" ? categoryText : null,
     city,
     country,
     tagline: field(formData, "tagline") || null,
@@ -98,6 +104,9 @@ export async function createWebsiteAction(formData: FormData) {
     contact_email: contactEmail || null,
     website_purpose: purpose,
     design_model: designModel,
+    organizer_bio: purpose === "events" ? field(formData, "organizerBio") || null : null,
+    past_events: purpose === "events" ? field(formData, "pastEvents") || null : null,
+    event_regions: purpose === "events" ? field(formData, "eventRegions") || null : null,
     status: "draft",
   };
 
@@ -115,6 +124,6 @@ export async function createWebsiteAction(formData: FormData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/storefront");
-  revalidatePath(`/artisans/${slug}`);
+  revalidatePath(`/${purpose === "events" ? "organizers" : "artisans"}/${slug}`);
   redirect(`/dashboard/storefront?businessId=${business.id}&message=${encodeURIComponent("Bozza del sito creata con successo.")}`);
 }

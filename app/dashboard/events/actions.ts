@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 import type { Event, EventAgendaItem, EventFaqItem } from "@/lib/events/queries";
 import {
   processStorefrontImage,
@@ -336,7 +336,7 @@ function validEventId(eventId: string) {
 }
 
 async function slugIsTaken(
-  supabase: Awaited<ReturnType<typeof requireArtisan>>["supabase"],
+  supabase: Awaited<ReturnType<typeof requireCreator>>["supabase"],
   slug: string,
   eventId?: string,
 ) {
@@ -348,7 +348,7 @@ async function slugIsTaken(
 }
 
 async function availableEventSlug(
-  supabase: Awaited<ReturnType<typeof requireArtisan>>["supabase"],
+  supabase: Awaited<ReturnType<typeof requireCreator>>["supabase"],
   requestedSlug: string,
 ) {
   if (!(await slugIsTaken(supabase, requestedSlug))) return requestedSlug;
@@ -363,7 +363,7 @@ async function availableEventSlug(
 }
 
 async function ownedEvent(
-  supabase: Awaited<ReturnType<typeof requireArtisan>>["supabase"],
+  supabase: Awaited<ReturnType<typeof requireCreator>>["supabase"],
   eventId: string,
   userId: string,
 ) {
@@ -384,7 +384,7 @@ function revalidateEventPages(slug?: string) {
 }
 
 async function uploadEventCover(
-  supabase: Awaited<ReturnType<typeof requireArtisan>>["supabase"],
+  supabase: Awaited<ReturnType<typeof requireCreator>>["supabase"],
   userId: string,
   eventId: string,
   file: File | null | undefined,
@@ -412,7 +412,7 @@ async function uploadEventCover(
 }
 
 async function removeEventCover(
-  supabase: Awaited<ReturnType<typeof requireArtisan>>["supabase"],
+  supabase: Awaited<ReturnType<typeof requireCreator>>["supabase"],
   userId: string,
   eventId: string,
   url: string | null,
@@ -424,7 +424,7 @@ async function removeEventCover(
 }
 
 async function rollbackCreatedEvent(
-  supabase: Awaited<ReturnType<typeof requireArtisan>>["supabase"],
+  supabase: Awaited<ReturnType<typeof requireCreator>>["supabase"],
   eventId: string,
   userId: string,
 ) {
@@ -438,7 +438,7 @@ async function rollbackCreatedEvent(
 }
 
 export async function createEvent(input: EventInput): Promise<EventActionResult> {
-  const { supabase, userId } = await requireArtisan();
+  const { supabase, userId } = await requireCreator();
   try {
     const validated = validateEvent((input ?? {}) as Record<string, unknown>);
     if (validated.error || !validated.values) return resultError(validated.error ?? "I dati dell'evento non sono validi.");
@@ -482,7 +482,7 @@ export async function createEvent(input: EventInput): Promise<EventActionResult>
 }
 
 export async function updateEvent(eventId: string, input: EventUpdateInput): Promise<EventActionResult> {
-  const { supabase, userId } = await requireArtisan();
+    const { supabase, userId } = await requireCreator();
   try {
     if (!validEventId(eventId)) return resultError("L'identificativo dell'evento non è valido.");
     const existing = await ownedEvent(supabase, eventId, userId);
@@ -525,7 +525,7 @@ export async function updateEvent(eventId: string, input: EventUpdateInput): Pro
 }
 
 export async function publishEvent(eventId: string): Promise<EventActionResult> {
-  const { supabase, userId } = await requireArtisan();
+    const { supabase, userId } = await requireCreator();
   try {
     if (!validEventId(eventId)) return resultError("L'identificativo dell'evento non è valido.");
     const existing = await ownedEvent(supabase, eventId, userId);
@@ -556,7 +556,7 @@ export async function publishEvent(eventId: string): Promise<EventActionResult> 
 }
 
 export async function unpublishEvent(eventId: string): Promise<EventActionResult> {
-  const { supabase, userId } = await requireArtisan();
+    const { supabase, userId } = await requireCreator();
   try {
     if (!validEventId(eventId)) return resultError("L'identificativo dell'evento non è valido.");
     const existing = await ownedEvent(supabase, eventId, userId);
@@ -585,7 +585,7 @@ export async function unpublishEvent(eventId: string): Promise<EventActionResult
 export async function deleteEvent(eventId: string): Promise<
   { success: true } | { success: false; error: string }
 > {
-  const { supabase, userId } = await requireArtisan();
+    const { supabase, userId } = await requireCreator();
   try {
     if (!validEventId(eventId)) return resultError("L'identificativo dell'evento non è valido.");
     const existing = await ownedEvent(supabase, eventId, userId);
@@ -611,7 +611,7 @@ export async function deleteEvent(eventId: string): Promise<
 }
 
 export async function getMyEvents(): Promise<Event[]> {
-  const { supabase, userId } = await requireArtisan();
+    const { supabase, userId } = await requireCreator();
   const { data, error } = await supabase
     .from("events")
     .select(EVENT_SELECT)
@@ -626,7 +626,7 @@ export async function getMyEvents(): Promise<Event[]> {
 
 export async function getMyEvent(eventId: string): Promise<Event | null> {
   if (!validEventId(eventId)) return null;
-  const { supabase, userId } = await requireArtisan();
+    const { supabase, userId } = await requireCreator();
 
   try {
     return await ownedEvent(supabase, eventId, userId);

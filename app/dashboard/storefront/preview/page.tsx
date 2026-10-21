@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 
 type PreviewPageProps = { searchParams: Promise<{ businessId?: string }> };
 
 export default async function StorefrontPreviewPage({ searchParams }: PreviewPageProps) {
-  const { supabase, userId } = await requireArtisan();
+  const { supabase, userId } = await requireCreator();
   const params = await searchParams;
   let query = supabase
     .from("businesses")

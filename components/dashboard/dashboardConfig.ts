@@ -26,16 +26,16 @@ export const DASHBOARD_NAVIGATION: Array<{
   icon: DashboardIconName;
   group: "Website" | "Community" | "Support";
   ownerOnly?: boolean;
+  productsOnly?: boolean;
 }> = [
   { label: "Dashboard", href: "/dashboard", icon: "home", group: "Website" },
   { label: "Il mio sito", href: "/dashboard/storefront", icon: "storefront", group: "Website", ownerOnly: true },
-  { label: "I miei prodotti", href: "/dashboard/products", icon: "bookmark", group: "Website", ownerOnly: true },
+  { label: "I miei prodotti", href: "/dashboard/products", icon: "bookmark", group: "Website", ownerOnly: true, productsOnly: true },
   { label: "I miei eventi", href: "/dashboard/events", icon: "calendar", group: "Website", ownerOnly: true },
   { label: "Aspetto", icon: "appearance", group: "Website", ownerOnly: true },
   { label: "Impostazioni", icon: "settings", group: "Website", ownerOnly: true },
   { label: "Scopri", href: "/discover", icon: "discover", group: "Community" },
   { label: "Seguiti", href: "/dashboard/following", icon: "following", group: "Community" },
-  { label: "Eventi", href: "/dashboard/events", icon: "calendar", group: "Community" },
   { label: "I miei preferiti", href: "/dashboard/favorites", icon: "bookmark", group: "Community" },
   { label: "Aiuto", icon: "help", group: "Support" },
   { label: "Il mio account", href: "/dashboard/profile", icon: "profile", group: "Support" },

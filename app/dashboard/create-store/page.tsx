@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 
 export default async function CreateStorePage() {
-  await requireArtisan();
+  await requireCreator();
   // Keep the wizard's centered, no-sidebar presentation while retaining the
   // requested dashboard entry URL for artisans without a website.
   redirect("/create");

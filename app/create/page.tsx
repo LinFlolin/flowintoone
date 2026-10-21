@@ -1,9 +1,9 @@
 import { WebsitePurposeStep } from "@/components/create/WebsitePurposeStep";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 import { redirect } from "next/navigation";
 
 export default async function CreateWebsitePage() {
-  const { supabase, userId } = await requireArtisan();
+  const { supabase, userId } = await requireCreator();
   const { data: business } = await supabase
     .from("businesses")
     .select("id")

@@ -173,7 +173,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
               <ParticipationActions title={event.title} slug={event.slug} startAt={event.start_at} endAt={event.end_at} description={event.short_description || event.description} location={fullLocation || null} registrationUrl={registrationUrl} ctaLabel={ctaLabel} disabledReason={disabledReason} />
 
-              {organizer && <div className="mt-6 flex items-center justify-center gap-2 border-t border-heather/10 pt-5 text-xs text-ink/45"><span>Organizzato da</span><Link href={`/artisans/${organizer.slug}`} className="font-bold text-ink hover:text-heather focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-heather">{organizer.name}</Link></div>}
+              {organizer && <div className="mt-6 flex items-center justify-center gap-2 border-t border-heather/10 pt-5 text-xs text-ink/45"><span>Organizzato da</span><Link href={`/${organizer.websitePurpose === "events" ? "organizers" : "artisans"}/${organizer.slug}`} className="font-bold text-ink hover:text-heather focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-heather">{organizer.name}</Link></div>}
             </div>
           </aside>
         </div>

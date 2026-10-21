@@ -14,8 +14,8 @@ export async function selectRoleAction(
 ): Promise<RoleFormState> {
   void _previousState;
   const role = String(formData.get("role") ?? "").trim();
-  if (role !== "visitor" && role !== "artisan") {
-    return { error: "Scegli se vuoi visitare o creare un sito." };
+  if (role !== "visitor" && role !== "artisan" && role !== "organizer") {
+    return { error: "Scegli se vuoi esplorare, creare prodotti o organizzare eventi." };
   }
 
   const user = await requireUser();

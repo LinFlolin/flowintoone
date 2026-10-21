@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { DashboardIcon } from "@/components/dashboard/DashboardIcon";
 
 type DashboardBottomNavProps = {
-  role: "visitor" | "artisan";
+  role: "visitor" | "artisan" | "organizer";
 };
 
 const ownerItems = [
@@ -24,7 +24,7 @@ const visitorItems = [
 
 export function DashboardBottomNav({ role }: DashboardBottomNavProps) {
   const pathname = usePathname();
-  const items = role === "artisan" ? ownerItems : visitorItems;
+  const items = role === "artisan" || role === "organizer" ? ownerItems : visitorItems;
 
   return (
     <nav

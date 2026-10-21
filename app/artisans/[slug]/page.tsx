@@ -22,11 +22,18 @@ type PublicStorefront = {
   description: string | null;
   materials: string | null;
   creative_process: string | null;
+  category_text: string | null;
   city: string | null;
   country: string | null;
   logo_url: string | null;
   cover_image_url: string | null;
   gallery_image_urls: string[] | null;
+  gallery_items: Array<{ url: string; region: string | null }> | null;
+  organizer_bio: string | null;
+  past_events: string | null;
+  event_regions: string | null;
+  partners: Array<{ name: string; logo_url: string | null; website_url: string | null }> | null;
+  website_purpose: string | null;
   website_url: string | null;
   instagram_url: string | null;
   etsy_url: string | null;
@@ -51,7 +58,7 @@ const getPublishedStorefront = cache(async (slug: string) => {
   const { data, error } = await supabase
     .from("businesses")
     .select(
-      "id, name, slug, tagline, description, materials, creative_process, city, country, logo_url, cover_image_url, gallery_image_urls, website_url, instagram_url, etsy_url, contact_email, category:categories(name)",
+      "id, name, slug, tagline, description, materials, creative_process, category_text, city, country, logo_url, cover_image_url, gallery_image_urls, gallery_items, organizer_bio, past_events, event_regions, partners, website_purpose, website_url, instagram_url, etsy_url, contact_email, category:categories(name)",
     )
     .eq("slug", slug)
     .eq("status", "published")
@@ -155,10 +162,15 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
   const instagramUrl = safeExternalUrl(storefront.instagram_url);
   const etsyUrl = safeEtsyUrl(storefront.etsy_url);
   const publicEmail = safePublicEmail(storefront.contact_email);
-  const galleryImages = (storefront.gallery_image_urls ?? [])
-    .map(safeGalleryImageUrl)
-    .filter((url): url is string => Boolean(url))
+  const isOrganizer = storefront.website_purpose === "events";
+  const profilePath = isOrganizer ? "/organizers" : "/artisans";
+  const galleryItems = (Array.isArray(storefront.gallery_items) && storefront.gallery_items.length > 0
+    ? storefront.gallery_items
+    : (storefront.gallery_image_urls ?? []).map((url) => ({ url, region: null })))
+    .map((item) => ({ ...item, url: safeGalleryImageUrl(item.url) }))
+    .filter((item): item is { url: string; region: string | null } => Boolean(item.url))
     .slice(0, 6);
+  const galleryImages = galleryItems.map((item) => item.url);
   const viewer = await getAuthenticatedUser();
   let isFollowing = false;
 
@@ -172,7 +184,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
     isFollowing = Boolean(follow);
   }
   const productClient = createPublicSupabaseClient();
-  const { data: productRows } = await productClient
+  const { data: productRows } = isOrganizer ? { data: [] } : await productClient
     .from("products")
     .select("id, code, name, description, price_cents, image_url, category:product_categories(name)")
     .eq("business_id", storefront.id)
@@ -251,7 +263,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
 
                 <div className="mt-4 min-w-0 max-w-full pb-1 sm:mt-0 sm:pt-20">
                   <p className="break-words text-[10px] font-bold uppercase tracking-[0.18em] text-heather sm:text-xs sm:tracking-[0.2em]">
-                    {[relatedCategory?.name, storefront.city].filter(Boolean).join(" · ")}
+                    {[relatedCategory?.name || storefront.category_text, storefront.city].filter(Boolean).join(" · ")}
                   </p>
                   <h1 className="mt-2 max-w-full [overflow-wrap:anywhere] text-4xl font-semibold tracking-[-0.05em] text-ink sm:text-5xl lg:text-6xl">
                     {storefront.name}<span className="text-candy">.</span>
@@ -281,6 +293,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                 <form action={toggleBusinessFollowAction} className="mt-6">
                   <input type="hidden" name="businessId" value={storefront.id} />
                   <input type="hidden" name="slug" value={storefront.slug} />
+                  <input type="hidden" name="profilePath" value={profilePath.slice(1)} />
                   <button
                     type="submit"
                     className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition-colors focus-visible:outline-2 ${isFollowing ? "border border-heather/25 bg-transparent text-ink hover:border-candy hover:text-candy" : "bg-candy text-white hover:bg-[#a95d76]"}`}
@@ -290,7 +303,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                   </button>
                 </form>
               ) : (
-                <Link href={`/login?next=${encodeURIComponent(`/artisans/${storefront.slug}`)}`} className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-heather/25 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather">
+                <Link href={`/login?next=${encodeURIComponent(`${profilePath}/${storefront.slug}`)}`} className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-heather/25 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather">
                   Accedi per seguire
                 </Link>
               )}
@@ -356,7 +369,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
               </h2>
             </div>
             <p className="min-w-0 whitespace-pre-line [overflow-wrap:anywhere] text-base leading-8 text-ink/75 sm:text-lg sm:leading-9">
-              {storefront.description || "Questo creator non ha ancora aggiunto la propria storia."}
+              {storefront.description || (isOrganizer ? "Questo organizzatore non ha ancora aggiunto la propria storia." : "Questo creator non ha ancora aggiunto la propria storia.")}
             </p>
           </div>
         </section>
@@ -386,7 +399,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                               {product.description && <p className="mt-2 line-clamp-2 text-xs leading-5 text-ink/65">{product.description}</p>}
                               <div className="mt-4 flex items-center justify-between gap-3">
                                 <span className="text-sm font-semibold text-ink">{product.price_cents === null ? "Prezzo su richiesta" : new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(product.price_cents / 100)}</span>
-                                {viewer ? <form action={toggleProductFavoriteAction}><input type="hidden" name="productId" value={product.id} /><input type="hidden" name="businessSlug" value={storefront.slug} /><button type="submit" aria-label={isFavorite ? `Rimuovi ${product.name} dai preferiti` : `Aggiungi ${product.name} ai preferiti`} className={`grid size-9 place-items-center rounded-full border text-lg transition-colors ${isFavorite ? "border-candy bg-candy/10 text-candy" : "border-heather/25 text-ink/55 hover:border-candy hover:text-candy"}`}>{isFavorite ? "♥" : "♡"}</button></form> : <Link href={`/login?next=${encodeURIComponent(`/artisans/${storefront.slug}`)}`} className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4">Accedi per salvare</Link>}
+                                {viewer ? <form action={toggleProductFavoriteAction}><input type="hidden" name="productId" value={product.id} /><input type="hidden" name="businessSlug" value={storefront.slug} /><button type="submit" aria-label={isFavorite ? `Rimuovi ${product.name} dai preferiti` : `Aggiungi ${product.name} ai preferiti`} className={`grid size-9 place-items-center rounded-full border text-lg transition-colors ${isFavorite ? "border-candy bg-candy/10 text-candy" : "border-heather/25 text-ink/55 hover:border-candy hover:text-candy"}`}>{isFavorite ? "♥" : "♡"}</button></form> : <Link href={`/login?next=${encodeURIComponent(`${profilePath}/${storefront.slug}`)}`} className="text-xs font-semibold text-heather underline decoration-heather/30 underline-offset-4">Accedi per salvare</Link>}
                               </div>
                             </div>
                           </article>
@@ -400,7 +413,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
           </section>
         )}
 
-        {(storefront.materials || storefront.creative_process) && (
+        {!isOrganizer && (storefront.materials || storefront.creative_process) && (
           <section className="min-w-0 px-4 pt-12 sm:px-8 sm:pt-20 lg:px-10">
             <div className="mx-auto grid min-w-0 max-w-[1100px] gap-4 sm:gap-5 md:grid-cols-2">
               {storefront.materials && (
@@ -434,6 +447,16 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
           </section>
         )}
 
+        {isOrganizer && (storefront.organizer_bio || storefront.past_events || storefront.event_regions) && (
+          <section className="min-w-0 px-4 pt-12 sm:px-8 sm:pt-20 lg:px-10">
+            <div className="mx-auto grid min-w-0 max-w-[1100px] gap-4 sm:gap-5 md:grid-cols-2">
+              {storefront.organizer_bio && <article className="rounded-[1.35rem] bg-sandstone/30 p-5 sm:rounded-[2rem] sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">Chi siamo</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">Persone, luoghi, esperienze.</h2><p className="mt-5 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">{storefront.organizer_bio}</p></article>}
+              {storefront.past_events && <article className="rounded-[1.35rem] bg-viridian/10 p-5 sm:rounded-[2rem] sm:p-10"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#477b7b]">Eventi passati</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.035em] text-ink">Esperienze già vissute.</h2><p className="mt-5 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">{storefront.past_events}</p></article>}
+              {storefront.event_regions && <article className="rounded-[1.35rem] bg-heather/10 p-5 sm:rounded-[2rem] sm:p-10 md:col-span-2"><p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">Dove organizziamo</p><p className="mt-4 whitespace-pre-line text-sm leading-7 text-ink/70 sm:text-base">{storefront.event_regions}</p></article>}
+            </div>
+          </section>
+        )}
+
         {galleryImages.length > 0 && (
           <section className="min-w-0 px-4 pt-14 sm:px-8 sm:pt-28 lg:px-10">
             <div className="mx-auto min-w-0 max-w-[1200px]">
@@ -447,7 +470,7 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
               </div>
 
               <div className="mt-7 grid min-w-0 auto-rows-[12rem] gap-3 sm:mt-10 sm:grid-cols-2 sm:auto-rows-[18rem] sm:gap-4 lg:grid-cols-3">
-                {galleryImages.map((imageUrl, index) => (
+                        {galleryItems.map(({ url: imageUrl, region }, index) => (
                   <figure
                     key={imageUrl}
                     className={`relative min-w-0 overflow-hidden rounded-[1.25rem] bg-sandstone/30 sm:rounded-[1.75rem] ${
@@ -467,11 +490,16 @@ export default async function ArtisanStorefrontPage({ params }: StorefrontPagePr
                       }
                       className="object-cover"
                     />
+                    {region && <figcaption className="absolute inset-x-3 bottom-3 rounded-full bg-ink/65 px-3 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">{region}</figcaption>}
                   </figure>
                 ))}
               </div>
             </div>
           </section>
+        )}
+
+        {isOrganizer && (storefront.partners ?? []).length > 0 && (
+          <section className="min-w-0 px-4 pt-14 sm:px-8 sm:pt-24 lg:px-10"><div className="mx-auto max-w-[1100px] border-t border-heather/15 pt-10"><p className="text-xs font-bold uppercase tracking-[0.2em] text-heather">Partner e sponsor</p><div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{(storefront.partners ?? []).map((partner) => <a key={`${partner.name}-${partner.website_url ?? ""}`} href={safeExternalUrl(partner.website_url) ?? "#"} target={partner.website_url ? "_blank" : undefined} rel={partner.website_url ? "noreferrer" : undefined} className="flex items-center gap-4 rounded-2xl border border-heather/15 bg-white/65 p-4 hover:border-heather/40">{partner.logo_url ? <Image src={partner.logo_url} alt="" width={56} height={56} className="size-14 rounded-xl object-contain bg-white" unoptimized /> : <span className="grid size-14 place-items-center rounded-xl bg-sandstone/45 text-lg font-semibold text-heather">{partner.name.charAt(0)}</span>}<span className="text-sm font-semibold text-ink">{partner.name}</span></a>)}</div></div></section>
         )}
       </main>
       <Footer />

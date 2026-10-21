@@ -9,11 +9,13 @@ const inputClassName =
 type StorefrontNameFieldProps = {
   initialName: string;
   initialSlug: string | null;
+  publicPath?: "artisans" | "organizers";
 };
 
 export function StorefrontNameField({
   initialName,
   initialSlug,
+  publicPath = "artisans",
 }: StorefrontNameFieldProps) {
   const [name, setName] = useState(initialName);
   const normalizedSlug = normalizeStorefrontSlug(name);
@@ -42,7 +44,7 @@ export function StorefrontNameField({
           Storefront address
         </p>
         <p className="mt-1 break-all text-sm font-semibold text-heather" aria-live="polite">
-          /artisans/{slug}
+          /{publicPath}/{slug}
         </p>
         <p className="mt-1 text-xs text-ink/45">
           Updated automatically from your business name.

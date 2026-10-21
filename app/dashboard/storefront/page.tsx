@@ -4,7 +4,7 @@ import { StorefrontGalleryField } from "@/components/dashboard/StorefrontGallery
 import { StorefrontImageFields } from "@/components/dashboard/StorefrontImageFields";
 import { StorefrontNameField } from "@/components/dashboard/StorefrontNameField";
 import { StorefrontSubmitButtons } from "@/components/dashboard/StorefrontSubmitButtons";
-import { requireArtisan } from "@/lib/auth/roles";
+import { requireCreator } from "@/lib/auth/roles";
 import { saveStorefrontAction } from "./actions";
 
 type StorefrontPageProps = {
@@ -20,6 +20,7 @@ type StorefrontBusiness = {
   materials: string | null;
   creative_process: string | null;
   category_id: string;
+  category_text: string | null;
   city: string | null;
   country: string | null;
   website_url: string | null;
@@ -29,6 +30,12 @@ type StorefrontBusiness = {
   logo_url: string | null;
   cover_image_url: string | null;
   gallery_image_urls: string[] | null;
+  gallery_items: Array<{ url: string; region: string | null }> | null;
+  organizer_bio: string | null;
+  past_events: string | null;
+  event_regions: string | null;
+  partners: Array<{ name: string; logo_url: string | null; website_url: string | null }> | null;
+  website_purpose: string | null;
   status: string;
 };
 
@@ -65,12 +72,12 @@ function EditorSection({ number, title, description, children }: EditorSectionPr
 }
 
 export default async function StorefrontPage({ searchParams }: StorefrontPageProps) {
-  const { supabase, userId } = await requireArtisan();
+  const { supabase, userId, role } = await requireCreator();
   const params = await searchParams;
   const businessQuery = supabase
     .from("businesses")
     .select(
-      "id, name, slug, tagline, description, materials, creative_process, category_id, city, country, website_url, instagram_url, etsy_url, contact_email, logo_url, cover_image_url, gallery_image_urls, status",
+      "id, name, slug, tagline, description, materials, creative_process, category_id, category_text, city, country, website_url, instagram_url, etsy_url, contact_email, logo_url, cover_image_url, gallery_image_urls, gallery_items, organizer_bio, past_events, event_regions, partners, website_purpose, status",
     )
     .eq("owner_id", userId)
     .order("created_at", { ascending: true })
@@ -90,9 +97,10 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
   const galleryImageUrls = Array.isArray(business?.gallery_image_urls)
     ? business.gallery_image_urls
     : [];
+  const isOrganizer = role === "organizer" || business?.website_purpose === "events";
   const publishingChecklist = [
     { label: "Nome attività", complete: Boolean(business?.name.trim()) },
-    { label: "Categoria", complete: Boolean(business?.category_id) },
+    { label: "Categoria", complete: Boolean(business?.category_id || business?.category_text) },
     { label: "La nostra storia", complete: Boolean(business?.description?.trim()) },
     { label: "Città", complete: Boolean(business?.city?.trim()) },
     { label: "Paese", complete: Boolean(business?.country?.trim()) },
@@ -128,8 +136,9 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
           )}
         </div>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-ink/60 sm:text-base">
-          Crea uno spazio editoriale per il tuo lavoro, dalle idee e dai materiali alle
-          fotografie che lo rendono vivo.
+          {isOrganizer
+            ? "Presenta chi organizza, le esperienze che hai creato e le persone che le rendono possibili."
+            : "Crea uno spazio editoriale per il tuo lavoro, dalle idee e dai materiali alle fotografie che lo rendono vivo."}
         </p>
       </div>
 
@@ -163,6 +172,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
             <StorefrontNameField
               initialName={business?.name ?? ""}
               initialSlug={business?.slug ?? null}
+              publicPath={isOrganizer ? "organizers" : "artisans"}
             />
 
             <label className="text-sm font-semibold text-ink">
@@ -185,7 +195,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 <select
                   className={inputClassName}
                   name="categoryId"
-                  defaultValue={business?.category_id ?? categories[0]?.id ?? ""}
+                  defaultValue={business?.category_id ?? (business?.category_text ? "__custom__" : categories[0]?.id ?? "")}
                   aria-describedby={categories.length === 0 ? "category-unavailable" : undefined}
                   required
                 >
@@ -197,7 +207,9 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                       {category.name}
                     </option>
                   ))}
+                  <option value="__custom__">Altro</option>
                 </select>
+                <input className={inputClassName} name="categoryText" defaultValue={business?.category_text ?? ""} maxLength={120} placeholder="Se scegli Altro, specifica qui la categoria" />
                 {categories.length === 0 && (
                   <span id="category-unavailable" className="mt-2 block text-xs font-normal text-candy">
                     Nessuna categoria attiva disponibile. Il salvataggio è disabilitato.
@@ -229,8 +241,8 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
 
           <EditorSection
             number="02 — La nostra storia"
-            title="Il significato del tuo lavoro"
-            description="Condividi la storia, i materiali e il processo che rendono unica la tua pratica."
+            title={isOrganizer ? "Chi organizza e cosa crea" : "Il significato del tuo lavoro"}
+            description={isOrganizer ? "Racconta la tua identità, le edizioni passate e i territori in cui porti i tuoi eventi." : "Condividi la storia, i materiali e il processo che rendono unica la tua pratica."}
           >
             <label className="text-sm font-semibold text-ink">
               La tua storia
@@ -246,7 +258,11 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
               </span>
             </label>
 
-            <div className="grid gap-6 lg:grid-cols-2">
+            {isOrganizer ? <div className="grid gap-6">
+              <label className="text-sm font-semibold text-ink">Chi siamo<textarea className={`${inputClassName} min-h-36 resize-y py-3 leading-6`} name="organizerBio" defaultValue={business?.organizer_bio ?? ""} maxLength={4000} placeholder="Chi organizza gli eventi, con quale visione e per chi." /></label>
+              <label className="text-sm font-semibold text-ink">Eventi organizzati in passato<textarea className={`${inputClassName} min-h-40 resize-y py-3 leading-6`} name="pastEvents" defaultValue={business?.past_events ?? ""} maxLength={5000} placeholder="Racconta le edizioni, le collaborazioni e i risultati più importanti." /></label>
+              <label className="text-sm font-semibold text-ink">Regioni degli eventi<textarea className={`${inputClassName} min-h-24 resize-y py-3 leading-6`} name="eventRegions" defaultValue={business?.event_regions ?? ""} maxLength={1000} placeholder="es. Lombardia, Toscana, Lazio" /></label>
+            </div> : <div className="grid gap-6 lg:grid-cols-2">
               <label className="text-sm font-semibold text-ink">
                 Materiali <span className="font-normal text-ink/45">(facoltativi)</span>
                 <textarea
@@ -268,7 +284,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                   placeholder="Accompagna i visitatori dal primo schizzo all'opera finita."
                 />
               </label>
-            </div>
+            </div>}
           </EditorSection>
 
           <EditorSection
@@ -281,10 +297,8 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
               coverUrl={business?.cover_image_url ?? null}
             />
             <div className="border-t border-heather/10 pt-7">
-              <StorefrontGalleryField
-                imageUrls={galleryImageUrls}
-              businessName={business?.name ?? "Sito"}
-              />
+              <StorefrontGalleryField imageUrls={galleryImageUrls} galleryItems={business?.gallery_items ?? []} businessName={business?.name ?? "Sito"} />
+              {isOrganizer && <label className="mt-6 block text-sm font-semibold text-ink">Regione per le nuove foto<span className="font-normal text-ink/45"> (facoltativa)</span><input className={inputClassName} name="galleryRegion" maxLength={120} placeholder="es. Toscana" /><span className="mt-2 block text-xs font-normal text-ink/45">Le foto caricate insieme verranno associate a questa regione.</span></label>}
             </div>
           </EditorSection>
 
@@ -341,6 +355,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
                 </span>
               </label>
             </div>
+            {isOrganizer && <label className="text-sm font-semibold text-ink">Partner e sponsor<span className="font-normal text-ink/45"> (una riga per partner)</span><textarea className={`${inputClassName} min-h-32 resize-y py-3 leading-6`} name="partners" defaultValue={(business?.partners ?? []).map((partner) => [partner.name, partner.logo_url ?? "", partner.website_url ?? ""].join(" | ")).join("\n")} placeholder="Nome partner | URL logo | URL sito" /><span className="mt-2 block text-xs font-normal text-ink/45">Formato: Nome | link al logo | link al sito.</span></label>}
           </EditorSection>
 
           <EditorSection
@@ -377,7 +392,7 @@ export default async function StorefrontPage({ searchParams }: StorefrontPagePro
 
               {business?.status === "published" ? (
                 <Link
-                  href={`/artisans/${business.slug}`}
+                  href={`/${isOrganizer ? "organizers" : "artisans"}/${business.slug}`}
                   target="_blank"
                   className="inline-flex min-h-11 items-center justify-center rounded-full border border-heather/25 px-5 text-sm font-semibold text-ink transition-colors hover:border-heather hover:text-heather focus-visible:outline-2"
                 >

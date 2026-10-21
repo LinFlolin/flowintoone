@@ -14,6 +14,7 @@ type DashboardBusiness = {
   logo_url: string | null;
   cover_image_url: string | null;
   status: string;
+  website_purpose: string | null;
   city: string | null;
   category: { name: string } | { name: string }[] | null;
 };
@@ -34,7 +35,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const [businessResult, profileResult] = await Promise.all([
     supabase
       .from("businesses")
-      .select("name, slug, description, logo_url, cover_image_url, status, city, category:categories(name)")
+      .select("name, slug, description, logo_url, cover_image_url, status, website_purpose, city, category:categories(name)")
       .eq("owner_id", userId)
       .order("created_at", { ascending: true })
       .limit(1)
@@ -62,7 +63,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     <DashboardHome
       firstName={name}
       business={business}
-      publicStorefrontHref={business?.status === "published" ? `/artisans/${business.slug}` : null}
+      publicStorefrontHref={business?.status === "published" ? `/${business.website_purpose === "events" ? "organizers" : "artisans"}/${business.slug}` : null}
       profileReady={Boolean(profile?.avatar_path)}
       message={params.message}
     />

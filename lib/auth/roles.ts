@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireUser } from "@/lib/auth/session";
 
-export type AccountRole = "visitor" | "artisan";
+export type AccountRole = "visitor" | "artisan" | "organizer" | "admin" | "superadmin";
 
 function isAccountRole(value: unknown): value is AccountRole {
-  return value === "visitor" || value === "artisan";
+  return value === "visitor" || value === "artisan" || value === "organizer" || value === "admin" || value === "superadmin";
 }
 
 export async function getAccountRole(
@@ -26,7 +26,7 @@ export async function getPostAuthPath(
 
   if (role === "visitor") return "/dashboard";
 
-  if (role === "artisan") {
+  if (role === "artisan" || role === "organizer") {
     const { data: business } = await supabase
       .from("businesses")
       .select("id")
@@ -45,6 +45,19 @@ export async function requireArtisan() {
   const role = await getAccountRole(user.supabase, user.userId);
 
   if (role !== "artisan") {
+    redirect(role === "visitor" ? "/dashboard" : "/onboarding/role");
+  }
+
+  return { ...user, role };
+}
+
+/** Users who own a public website. Organizers can manage their storefront and events,
+ * but do not receive product-catalog permissions. */
+export async function requireCreator() {
+  const user = await requireUser();
+  const role = await getAccountRole(user.supabase, user.userId);
+
+  if (role !== "artisan" && role !== "organizer") {
     redirect(role === "visitor" ? "/dashboard" : "/onboarding/role");
   }
 
